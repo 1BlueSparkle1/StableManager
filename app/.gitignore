@@ -1,1 +1,57 @@
+# Compiled source files
+*.class
+
+# Android Studio project files
+.gradle/
+.idea/
+local.properties
+*.iml
+
+# Build output
+build/
+out/
+bin/
+*.apk
+*.apks
+*.aab
+
+# Gradle cache
+.gradle/
+
+# Local configuration file (contains local paths, passwords, etc)
+local.properties
+
+# ProGuard output files
+dump.txt
+mapping.txt
+seeds.txt
+usage.txt
+
+# Keystore files
+*.jks
+*.keystore
+
+# APK signing related files
+*.apk
+*.jks
+
+# Debug files
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Kotlin metadata cache
+.kotlin
+
+# Android build cache
+.build/
+
+# Navigation editor backup files
+*.navigation
+
+# Profile and baseline profile directories
+baselineProfiles/
+profileinstaller/
 /build
