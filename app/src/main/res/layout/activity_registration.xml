@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_brown_fon"
+    tools:context=".RegistrationActivity">
+
+    <TextView
+        android:id="@+id/titleReg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Регистрация"
+        android:textColor="@color/brown_text"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.081" />
+
+    <ImageView
+        android:id="@+id/topFlower"
+        android:layout_width="703dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toTopOf="@+id/titleReg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/flowers_top"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/buttomFlower"
+        android:layout_width="659dp"
+        android:layout_height="208dp"
+        android:layout_marginBottom="-60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/flowers_buttom" />
+
+    <Button
+        android:id="@+id/RegButton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/brown_text"
+        android:text="Зарегистрироваться"
+        android:textColor="@color/light_brown_fon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_password" />
+
+    <Button
+        android:id="@+id/emptyButton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="@color/light_brown_fon"
+        android:text="Войти"
+        android:textColor="@color/brown_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/RegButton"
+        app:strokeColor="@color/brown_text"
+        app:strokeWidth="1dp" />
+
+    <EditText
+        android:id="@+id/user_surname"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="15dp"
+        android:ems="10"
+        android:hint="Фамилия"
+        android:inputType="text"
+        android:textColor="@color/brown_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleReg" />
+
+    <EditText
+        android:id="@+id/user_name"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:hint="Имя"
+        android:inputType="text"
+        android:textColor="@color/brown_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_surname" />
+
+    <EditText
+        android:id="@+id/user_patronymic"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:hint="Отчество"
+        android:inputType="text"
+        android:textColor="@color/brown_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_name" />
+
+    <EditText
+        android:id="@+id/user_email"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:hint="Почта"
+        android:inputType="text"
+        android:textColor="@color/brown_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_patronymic" />
+
+    <EditText
+        android:id="@+id/user_login"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:hint="Логин"
+        android:inputType="text"
+        android:textColor="@color/brown_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_email" />
+
+    <EditText
+        android:id="@+id/user_password"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:hint="Пароль"
+        android:inputType="text"
+        android:textColor="@color/brown_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_login" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
