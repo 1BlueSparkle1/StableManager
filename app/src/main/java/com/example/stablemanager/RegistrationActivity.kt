@@ -32,10 +32,10 @@ class RegistrationActivity : AppCompatActivity() {
 
 
         val emptyButton: Button = findViewById(R.id.emptyButton)
-        val regButton: Button = findViewById(R.id.RegButton)
+        val regButton: Button = findViewById(R.id.regButton)
 
         emptyButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, AuthActivity::class.java)
             startActivity(intent)
         }
 

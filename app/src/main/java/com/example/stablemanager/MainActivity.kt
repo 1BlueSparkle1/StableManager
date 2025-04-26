@@ -22,11 +22,11 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val buttonOwner: Button = findViewById(R.id.RegButton)
-        val buttonEmployee: Button = findViewById(R.id.emptyButton)
+        val buttonOwner: Button = findViewById(R.id.ownerButton)
+        val buttonEmployee: Button = findViewById(R.id.employeeButton)
 
         buttonOwner.setOnClickListener {
-            val intent = Intent(this, RegistrationActivity::class.java)
+            val intent = Intent(this, AuthActivity::class.java)
             startActivity(intent)
         }
 

@@ -43,4 +43,12 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         db.close()
     }
 
+    fun getOwner(login: String, pass:String): Boolean {
+        val db = this.readableDatabase
+
+        val result = db.rawQuery("SELECT * FROM owners WHERE login = '$login' AND password = '$pass'", null)
+        return result.moveToFirst()
+
+    }
+
 }
