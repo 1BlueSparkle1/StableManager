@@ -45,6 +45,9 @@ class AuthActivity : AppCompatActivity() {
                     Toast.makeText(this, "Пользователь $login авторизован", Toast.LENGTH_SHORT).show()
                     userLogin.text.clear()
                     userPassword.text.clear()
+
+                    val intent = Intent(this, ListStableActivity::class.java)
+                    startActivity(intent)
                 }
                 else{
                     Toast.makeText(this, "Пользователь $login не найден!", Toast.LENGTH_SHORT).show()

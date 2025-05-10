@@ -16,10 +16,10 @@ bin/
 *.aab
 
 # Gradle cache
-.gradle/
+
 
 # Local configuration file (contains local paths, passwords, etc)
-local.properties
+
 
 # ProGuard output files
 dump.txt
@@ -32,8 +32,7 @@ usage.txt
 *.keystore
 
 # APK signing related files
-*.apk
-*.jks
+
 
 # Debug files
 *.log

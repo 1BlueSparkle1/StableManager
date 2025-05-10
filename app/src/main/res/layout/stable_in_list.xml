@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corners"
+    android:orientation="vertical"
+    android:layout_margin="10dp"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/stableListTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="@color/brown_text"
+        android:textSize="20pt"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stableListDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="5dp"
+        android:text="TextView"
+        android:textColor="@color/brown_text"
+        android:textSize="12pt" />
+
+    <Button
+        android:id="@+id/stableEmptyButton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/brown_text"
+        android:text="Зайти"
+        android:textColor="@color/light_brown_fon"
+        android:textSize="10pt" />
+</LinearLayout>
