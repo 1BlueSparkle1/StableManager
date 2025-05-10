@@ -39,7 +39,7 @@ class AuthActivity : AppCompatActivity() {
                 Toast.makeText(this, "Все поля должны быть заполнены", Toast.LENGTH_LONG).show()
             else {
                 val db = DBHelper(this, null)
-                val isAuth = db.getOwner(login, password)
+                val isAuth = db.getOwner(this, login, password)
 
                 if(isAuth){
                     Toast.makeText(this, "Пользователь $login авторизован", Toast.LENGTH_SHORT).show()

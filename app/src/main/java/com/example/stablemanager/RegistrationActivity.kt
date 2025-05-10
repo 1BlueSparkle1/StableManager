@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import org.mindrot.jbcrypt.BCrypt
 
 class RegistrationActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
@@ -50,7 +51,9 @@ class RegistrationActivity : AppCompatActivity() {
             if(surname == "" || name == "" || patronymic == "" || email == "" || login == "" || password == "")
                 Toast.makeText(this, "Все поля должны быть заполнены", Toast.LENGTH_LONG).show()
             else {
-                val owner = Owner(surname, name, patronymic, email, login, password, false)
+                val saltRounds = 12
+                val hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(saltRounds))
+                val owner = Owner(surname, name, patronymic, email, login, hashPassword, false)
 
                 val db = DBHelper(this, null)
                 db.addOwner(owner)

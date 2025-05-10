@@ -2,28 +2,45 @@ package com.example.stablemanager
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
+import org.mindrot.jbcrypt.BCrypt
 
 class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?) :
-    SQLiteOpenHelper(context, "horse_club", factory, 1) {
+    SQLiteOpenHelper(context, "horse_club", factory, 2) {
     override fun onCreate(db: SQLiteDatabase?) {
-        val query = "CREATE TABLE owners (\n" +
-                "    ownerId INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                "    surname TEXT NOT NULL,\n" +
-                "    name TEXT NOT NULL,\n" +
-                "    patronymic TEXT,\n" +
-                "    email TEXT UNIQUE NOT NULL,\n" +
-                "    login TEXT UNIQUE NOT NULL,\n" +
-                "    password TEXT NOT NULL,\n" +
-                "    ban INTEGER DEFAULT 0,\n" +
-                "    Image BLOB\n" +
-                ")"
-        db!!.execSQL(query)
+        val queryOwners = """
+        CREATE TABLE owners (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            surname TEXT NOT NULL,
+            name TEXT NOT NULL,
+            patronymic TEXT,
+            email TEXT UNIQUE NOT NULL,
+            login TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            ban INTEGER DEFAULT 0,
+            Image BLOB
+        )
+    """.trimIndent()
+        db!!.execSQL(queryOwners)
+
+        val queryStable = """
+        CREATE TABLE stables (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            description TEXT,
+            ownerId INTEGER,
+            FOREIGN KEY (ownerId) REFERENCES owners(Id)
+        )
+    """.trimIndent()
+        db.execSQL(queryStable)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
         db!!.execSQL("DROP TABLE IF EXISTS owners")
+        db.execSQL("DROP TABLE IF EXISTS stables")
         onCreate(db)
     }
 
@@ -43,12 +60,30 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         db.close()
     }
 
-    fun getOwner(login: String, pass:String): Boolean {
+    fun getOwner(context: Context, login: String, passwordAttempt: String): Boolean {
         val db = this.readableDatabase
-
-        val result = db.rawQuery("SELECT * FROM owners WHERE login = '$login' AND password = '$pass'", null)
-        return result.moveToFirst()
-
+        var result: Cursor? = null
+        try {
+            result = db.rawQuery("SELECT password FROM owners WHERE login = ?", arrayOf(login))
+            if (result.moveToFirst()) {
+                val hashedPassword = result.getString(0)
+                if (BCrypt.checkpw(passwordAttempt, hashedPassword)) {
+                    Log.d("Authentication", "Пароль верен!")
+                    return true
+                } else {
+                    Log.d("Authentication", "Неверный пароль!")
+                    return false
+                }
+            } else {
+                Log.d("Authentication", "Пользователь с логином $login не найден")
+                return false
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при проверке пароля: ${e.message}")
+            return false
+        } finally {
+            result?.close()
+        }
     }
 
 }
