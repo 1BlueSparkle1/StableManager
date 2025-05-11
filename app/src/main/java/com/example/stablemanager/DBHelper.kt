@@ -9,11 +9,11 @@ import android.util.Log
 import org.mindrot.jbcrypt.BCrypt
 
 class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?) :
-    SQLiteOpenHelper(context, "horse_club", factory, 2) {
+    SQLiteOpenHelper(context, "horse_club", factory, 3) {
     override fun onCreate(db: SQLiteDatabase?) {
         val queryOwners = """
         CREATE TABLE owners (
-            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             surname TEXT NOT NULL,
             name TEXT NOT NULL,
             patronymic TEXT,
@@ -64,9 +64,21 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         val db = this.readableDatabase
         var result: Cursor? = null
         try {
-            result = db.rawQuery("SELECT password FROM owners WHERE login = ?", arrayOf(login))
+            result = db.rawQuery("SELECT id, password FROM owners WHERE login = ?", arrayOf(login))
             if (result.moveToFirst()) {
-                val hashedPassword = result.getString(0)
+                val passwordColumnIndex = result.getColumnIndex("password")
+                val idColumnIndex = result.getColumnIndex("id")
+                if (passwordColumnIndex == -1 || idColumnIndex == -1) {
+                    Log.e("Database", "Один или несколько столбцов не найдены в результирующем наборе данных!")
+                    return false
+                }
+
+                val hashedPassword = result.getString(passwordColumnIndex)
+                val userId = result.getInt(idColumnIndex)
+
+                val authManager = AuthManager(context)
+                authManager.saveUserId(userId)
+
                 if (BCrypt.checkpw(passwordAttempt, hashedPassword)) {
                     Log.d("Authentication", "Пароль верен!")
                     return true
@@ -84,6 +96,53 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         } finally {
             result?.close()
         }
+    }
+
+    fun getStables(userId: Int): List<Stable>{
+        val db = this.readableDatabase
+        val stables = mutableListOf<Stable>()
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT title, description, ownerId FROM stables WHERE ownerId = ?", arrayOf(userId.toString()))
+            if (cursor.moveToFirst()) {
+                do {
+                    val titleColumnIndex = cursor.getColumnIndex("title")
+                    val descriptionColumnIndex = cursor.getColumnIndex("description")
+                    val ownerIdColumnIndex = cursor.getColumnIndex("ownerId")
+
+                    if (titleColumnIndex == -1 || descriptionColumnIndex == -1 || ownerIdColumnIndex == -1) {
+                        Log.e("Database", "Один или несколько столбцов не найдены!")
+                        return emptyList()
+                    }
+
+                    val title = cursor.getString(titleColumnIndex)
+                    val description = cursor.getString(descriptionColumnIndex)
+                    val ownerId = cursor.getInt(ownerIdColumnIndex)
+
+                    val stable = Stable(title, description, ownerId)
+                    stables.add(stable)
+
+                } while (cursor.moveToNext())
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении данных из stables: ${e.message}")
+        } finally {
+            cursor?.close()
+        }
+
+        return stables
+    }
+
+    fun addStable(stable: Stable){
+        val values = ContentValues()
+        values.put("title", stable.title)
+        values.put("description", stable.description)
+        values.put("ownerId", stable.ownerId)
+
+        val db = this.writableDatabase
+        db.insert("stables", null, values)
+
+        db.close()
     }
 
 }

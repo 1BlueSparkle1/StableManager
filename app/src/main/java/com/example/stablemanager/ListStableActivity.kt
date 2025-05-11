@@ -1,6 +1,9 @@
 package com.example.stablemanager
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -19,13 +22,26 @@ class ListStableActivity : AppCompatActivity() {
             insets
         }
 
+        val db = DBHelper(this, null)
         val stableList: RecyclerView = findViewById(R.id.stableView)
-        val stable = arrayListOf<Stable>()
-
-        stable.add(Stable(1, "Конюшня 1", "Первая конюшня", 1))
-        stable.add(Stable(2, "Конюшня 2", "Представьте себе место, где время замедляется, где суета современной жизни уступает место умиротворяющему шепоту лошадей, где воздух напоен ароматом свежего сена, кожи и теплого дерева. Это не просто конюшня, это убежище, где вековые традиции коневодства переплетаются с современными удобствами, создавая идеальную гармонию для всадников и их благородных спутников. Добро пожаловать в [Название Конюшни], место, где рождаются чемпионы, а простые прогулки верхом превращаются в незабываемые приключения.", 1))
-
+        val authManager = AuthManager(this)
         stableList.layoutManager = LinearLayoutManager(this)
-        stableList.adapter = StablesAdapter(stable, this)
+        if (authManager.isLoggedIn()) {
+            val userId = authManager.getUserId()
+            val stable = db.getStables(userId)
+            Log.e("Database", "переход к добавлению элементов '$stable'")
+
+            stableList.adapter = StablesAdapter(stable, this)
+        }
+
+        val addStableButton: Button = findViewById(R.id.addStableButton)
+
+        addStableButton.setOnClickListener {
+            val intent = Intent(this, AddStableActivity::class.java)
+            startActivity(intent)
+        }
+
+
+
     }
 }

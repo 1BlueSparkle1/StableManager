@@ -1,16 +1,20 @@
 package com.example.stablemanager
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class StablesAdapter(var stables: List<Stable>, var context: Context) : RecyclerView.Adapter<StablesAdapter.MyViewHolder>() {
-    class MyViewHolder(view: View) : RecyclerView.ViewHolder(view){
-        val title: TextView = view.findViewById(R.id.stableListTitle)
-        val description: TextView = view.findViewById(R.id.stableListDescription)
+class StablesAdapter(private var stables: List<Stable>, private var context: Context) : RecyclerView.Adapter<StablesAdapter.MyViewHolder>() {
+
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        val title: TextView = itemView.findViewById(R.id.stableListTitle)
+        val description: TextView = itemView.findViewById(R.id.stableListDescription)
+        val btn: Button = itemView.findViewById(R.id.stableEmptyButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -23,7 +27,14 @@ class StablesAdapter(var stables: List<Stable>, var context: Context) : Recycler
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.title.text = stables[position].title
-        holder.description.text = stables[position].description
+        val stable = stables[position]
+        holder.title.text = stable.title
+        holder.description.text = stable.description
+
+        holder.btn.setOnClickListener {
+            val intent = Intent(holder.itemView.context, AddStableActivity::class.java)
+
+            holder.itemView.context.startActivity(intent)
+        }
     }
 }
