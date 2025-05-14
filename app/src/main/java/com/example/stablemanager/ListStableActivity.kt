@@ -29,7 +29,6 @@ class ListStableActivity : AppCompatActivity() {
         if (authManager.isLoggedIn()) {
             val userId = authManager.getUserId()
             val stable = db.getStables(userId)
-            Log.e("Database", "переход к добавлению элементов '$stable'")
 
             stableList.adapter = StablesAdapter(stable, this)
         }
@@ -41,7 +40,12 @@ class ListStableActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val profileButton: Button = findViewById(R.id.profileButton)
 
+        profileButton.setOnClickListener {
+            val intent = Intent(this, ProfileOwnerActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 }

@@ -20,8 +20,7 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
             email TEXT UNIQUE NOT NULL,
             login TEXT UNIQUE NOT NULL,
             password TEXT NOT NULL,
-            ban INTEGER DEFAULT 0,
-            Image BLOB
+            ban INTEGER DEFAULT 0
         )
     """.trimIndent()
         db!!.execSQL(queryOwners)
@@ -143,6 +142,45 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         db.insert("stables", null, values)
 
         db.close()
+    }
+
+    fun getOwnerById(userId: Int): Owner?{
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT surname, name, patronymic, email, login, password FROM owners WHERE id = ?", arrayOf(userId.toString()))
+            if (cursor.moveToFirst()) {
+                val surnameColumnIndex = cursor.getColumnIndex("surname")
+                val nameColumnIndex = cursor.getColumnIndex("name")
+                val patronymicColumnIndex = cursor.getColumnIndex("patronymic")
+                val emailColumnIndex = cursor.getColumnIndex("email")
+                val loginColumnIndex = cursor.getColumnIndex("login")
+                val passwordColumnIndex = cursor.getColumnIndex("password")
+
+                if (surnameColumnIndex == -1 || nameColumnIndex == -1 || emailColumnIndex == -1 || patronymicColumnIndex == -1 || loginColumnIndex == -1 || passwordColumnIndex == -1) {
+                    Log.e("Database", "Один или несколько столбцов не найдены в таблице owners!")
+                    return null
+                }
+
+                val surname = cursor.getString(surnameColumnIndex)
+                val name = cursor.getString(nameColumnIndex)
+                val patronymic = cursor.getString(patronymicColumnIndex)
+                val email = cursor.getString(emailColumnIndex)
+                val login = cursor.getString(loginColumnIndex)
+                val password = cursor.getString(passwordColumnIndex)
+
+                return Owner(surname, name, patronymic, email, login, password, false)
+
+            } else {
+                Log.d("Database", "Владелец с ID $userId не найден")
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении владельца: ${e.message}")
+            return null
+        } finally {
+            cursor?.close()
+        }
     }
 
 }
