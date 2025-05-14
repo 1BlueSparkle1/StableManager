@@ -2,6 +2,7 @@ package com.example.stablemanager
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import org.mindrot.jbcrypt.BCrypt
 
 class AuthManager(context: Context) {
 
@@ -35,4 +36,6 @@ class AuthManager(context: Context) {
     fun isLoggedIn(): Boolean {
         return getUserId() != -1
     }
+
+
 }

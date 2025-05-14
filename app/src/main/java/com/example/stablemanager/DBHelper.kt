@@ -59,7 +59,7 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         db.close()
     }
 
-    fun getOwner(context: Context, login: String, passwordAttempt: String): Boolean {
+    fun authOwner(context: Context, login: String, passwordAttempt: String): Int? {
         val db = this.readableDatabase
         var result: Cursor? = null
         try {
@@ -69,7 +69,7 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
                 val idColumnIndex = result.getColumnIndex("id")
                 if (passwordColumnIndex == -1 || idColumnIndex == -1) {
                     Log.e("Database", "Один или несколько столбцов не найдены в результирующем наборе данных!")
-                    return false
+                    return null
                 }
 
                 val hashedPassword = result.getString(passwordColumnIndex)
@@ -80,18 +80,18 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
 
                 if (BCrypt.checkpw(passwordAttempt, hashedPassword)) {
                     Log.d("Authentication", "Пароль верен!")
-                    return true
+                    return userId
                 } else {
                     Log.d("Authentication", "Неверный пароль!")
-                    return false
+                    return null
                 }
             } else {
                 Log.d("Authentication", "Пользователь с логином $login не найден")
-                return false
+                return null
             }
         } catch (e: Exception) {
             Log.e("Database", "Ошибка при проверке пароля: ${e.message}")
-            return false
+            return null
         } finally {
             result?.close()
         }

@@ -1,10 +1,13 @@
 package com.example.stablemanager
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -21,6 +24,8 @@ class ProfileOwnerActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        Toast.makeText(this, "Для возврата к списку нажмите на логотип", Toast.LENGTH_LONG).show()
 
         val buttonExit: Button = findViewById(R.id.exitAccountButton)
         val buttonEdit: Button = findViewById(R.id.editProfileButton)
@@ -51,9 +56,21 @@ class ProfileOwnerActivity : AppCompatActivity() {
 
         buttonExit.setOnClickListener {
             authManager.clearAuthData()
+
+            val sharedPreferences = getSharedPreferences("user_data", Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.clear()
+            editor.apply()
+
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
+        val logoProfileImage: ImageView = findViewById(R.id.logoProfileImage)
+
+        logoProfileImage.setOnClickListener {
+            val intent = Intent(this, ListStableActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

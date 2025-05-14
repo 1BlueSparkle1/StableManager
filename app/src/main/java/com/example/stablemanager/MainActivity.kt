@@ -1,6 +1,7 @@
 package com.example.stablemanager
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -32,6 +33,22 @@ class MainActivity : AppCompatActivity() {
 
         buttonEmployee.setOnClickListener {
             Toast.makeText(this, "You navigated employee", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun checkSavedUserData() {
+        val sharedPreferences = getSharedPreferences("user_data", Context.MODE_PRIVATE)
+        val login = sharedPreferences.getString("login", null)
+        val pass = sharedPreferences.getString("pass", null)
+        val db = DBHelper(this, null)
+
+        if (login != null && pass != null) {
+            val userId = db.authOwner(this, login, pass)
+            if (userId != null) {
+                val intent = Intent(this, ListStableActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
     }
 }
