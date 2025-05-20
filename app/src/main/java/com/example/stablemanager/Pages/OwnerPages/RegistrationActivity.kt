@@ -52,26 +52,33 @@ class RegistrationActivity : AppCompatActivity() {
             val login = userLogin.text.toString().trim()
             val password = userPassword.text.toString().trim()
 
+            val db = DBHelper(this, null)
+
             if(surname == "" || name == "" || patronymic == "" || email == "" || login == "" || password == "")
                 Toast.makeText(this, "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show()
             else {
-                if(isValidEmail(email)){
-                    val saltRounds = 12
-                    val hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(saltRounds))
-                    val owner = Owner(surname, name, patronymic, email, login, hashPassword, false)
-
-                    val db = DBHelper(this, null)
-                    db.addOwner(owner)
-                    Toast.makeText(this, "Пользователь $login добавлен", Toast.LENGTH_SHORT).show()
-                    userSurname.text.clear()
-                    userName.text.clear()
-                    userPatronymic.text.clear()
-                    userEmail.text.clear()
-                    userLogin.text.clear()
-                    userPassword.text.clear()
+                if (db.doesOwnerExist(login, email)){
+                    Toast.makeText(this, "Пользователь с таким логином или почтой уже существует", Toast.LENGTH_SHORT).show()
                 }
                 else{
-                    Toast.makeText(this, "Поле почты заполнено некорректно. Заполните в формате mail@mail.ru", Toast.LENGTH_SHORT).show()
+                    if(isValidEmail(email)){
+                        val saltRounds = 12
+                        val hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(saltRounds))
+                        val owner = Owner(surname, name, patronymic, email, login, hashPassword, false)
+
+
+                        db.addOwner(owner)
+                        Toast.makeText(this, "Пользователь $login добавлен", Toast.LENGTH_SHORT).show()
+                        userSurname.text.clear()
+                        userName.text.clear()
+                        userPatronymic.text.clear()
+                        userEmail.text.clear()
+                        userLogin.text.clear()
+                        userPassword.text.clear()
+                    }
+                    else{
+                        Toast.makeText(this, "Поле почты заполнено некорректно. Заполните в формате mail@mail.ru", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
