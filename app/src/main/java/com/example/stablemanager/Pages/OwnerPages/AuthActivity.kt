@@ -1,4 +1,4 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages.OwnerPages
 
 import android.content.Context
 import android.content.Intent
@@ -11,7 +11,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import org.mindrot.jbcrypt.BCrypt
+import com.example.stablemanager.R
+import com.example.stablemanager.db.DBHelper
+import com.example.stablemanager.db.Owner
 
 class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

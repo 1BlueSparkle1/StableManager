@@ -1,4 +1,4 @@
-package com.example.stablemanager
+package com.example.stablemanager.Components
 
 import android.content.Context
 import android.content.Intent
@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.stablemanager.Pages.OwnerPages.AddStableActivity
+import com.example.stablemanager.R
+import com.example.stablemanager.db.Stable
 
 class StablesAdapter(private var stables: List<Stable>, private var context: Context) : RecyclerView.Adapter<StablesAdapter.MyViewHolder>() {
 

@@ -1,8 +1,7 @@
-package com.example.stablemanager
+package com.example.stablemanager.Components
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import org.mindrot.jbcrypt.BCrypt
 
 class AuthManager(context: Context) {
 

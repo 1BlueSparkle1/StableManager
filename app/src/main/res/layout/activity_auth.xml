@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_brown_fon"
-    tools:context=".AuthActivity">
+    tools:context=".Pages.OwnerPages.AuthActivity">
 
     <TextView
         android:id="@+id/titleAuth"

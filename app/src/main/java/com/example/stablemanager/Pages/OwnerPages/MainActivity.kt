@@ -1,4 +1,4 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages.OwnerPages
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -10,6 +10,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.stablemanager.R
+import com.example.stablemanager.db.DBHelper
 
 class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")

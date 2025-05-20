@@ -1,4 +1,4 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages.OwnerPages
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -10,6 +10,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.stablemanager.Components.isValidEmail
+import com.example.stablemanager.R
+import com.example.stablemanager.db.DBHelper
+import com.example.stablemanager.db.Owner
 import org.mindrot.jbcrypt.BCrypt
 
 class RegistrationActivity : AppCompatActivity() {
@@ -49,21 +53,26 @@ class RegistrationActivity : AppCompatActivity() {
             val password = userPassword.text.toString().trim()
 
             if(surname == "" || name == "" || patronymic == "" || email == "" || login == "" || password == "")
-                Toast.makeText(this, "Все поля должны быть заполнены", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show()
             else {
-                val saltRounds = 12
-                val hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(saltRounds))
-                val owner = Owner(surname, name, patronymic, email, login, hashPassword, false)
+                if(isValidEmail(email)){
+                    val saltRounds = 12
+                    val hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(saltRounds))
+                    val owner = Owner(surname, name, patronymic, email, login, hashPassword, false)
 
-                val db = DBHelper(this, null)
-                db.addOwner(owner)
-                Toast.makeText(this, "Пользователь $login добавлен", Toast.LENGTH_SHORT).show()
-                userSurname.text.clear()
-                userName.text.clear()
-                userPatronymic.text.clear()
-                userEmail.text.clear()
-                userLogin.text.clear()
-                userPassword.text.clear()
+                    val db = DBHelper(this, null)
+                    db.addOwner(owner)
+                    Toast.makeText(this, "Пользователь $login добавлен", Toast.LENGTH_SHORT).show()
+                    userSurname.text.clear()
+                    userName.text.clear()
+                    userPatronymic.text.clear()
+                    userEmail.text.clear()
+                    userLogin.text.clear()
+                    userPassword.text.clear()
+                }
+                else{
+                    Toast.makeText(this, "Поле почты заполнено некорректно. Заполните в формате mail@mail.ru", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

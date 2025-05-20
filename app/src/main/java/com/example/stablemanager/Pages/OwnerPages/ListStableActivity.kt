@@ -1,8 +1,7 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages.OwnerPages
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +9,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.stablemanager.Components.AuthManager
+import com.example.stablemanager.Components.StablesAdapter
+import com.example.stablemanager.R
+import com.example.stablemanager.db.DBHelper
 
 class ListStableActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

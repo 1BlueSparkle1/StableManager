@@ -17,22 +17,22 @@
         android:theme="@style/Theme.StableManager"
         tools:targetApi="31">
         <activity
-            android:name=".ProfileOwnerActivity"
+            android:name=".Pages.OwnerPages.ProfileOwnerActivity"
             android:exported="false" />
         <activity
-            android:name=".AddStableActivity"
+            android:name=".Pages.OwnerPages.AddStableActivity"
             android:exported="false" />
         <activity
-            android:name=".ListStableActivity"
+            android:name=".Pages.OwnerPages.ListStableActivity"
             android:exported="false" />
         <activity
-            android:name=".AuthActivity"
+            android:name=".Pages.OwnerPages.AuthActivity"
             android:exported="false" />
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".Pages.OwnerPages.RegistrationActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Pages.OwnerPages.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

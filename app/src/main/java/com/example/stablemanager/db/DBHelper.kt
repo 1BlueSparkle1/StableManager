@@ -1,4 +1,4 @@
-package com.example.stablemanager
+package com.example.stablemanager.db
 
 import android.content.ContentValues
 import android.content.Context
@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import com.example.stablemanager.Components.AuthManager
 import org.mindrot.jbcrypt.BCrypt
 
 class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?) :
@@ -180,6 +181,38 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
             return null
         } finally {
             cursor?.close()
+        }
+    }
+
+    fun updateOwner(surname: String, name: String, patronymic: String, email: String, login: String): Boolean{
+        val db = this.readableDatabase
+        try {
+            val values = ContentValues().apply {
+                put("surname", surname)
+                put("name", name)
+                put("patronymic", patronymic)
+                put("email", email)
+                put("login", login)
+            }
+
+            val rowsAffected = db.update(
+                "owners",
+                values,
+                "login = ?",
+                arrayOf(login)
+            )
+
+            if (rowsAffected > 0) {
+                Log.d("Database", "Владелец $login успешно обновлен.")
+                return true
+            } else {
+                Log.w("Database", "Владелец $login не найден для обновления.")
+                return false
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при обновлении владельца: ${e.message}")
+            return false
         }
     }
 

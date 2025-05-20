@@ -1,9 +1,10 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages.OwnerPages
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -12,7 +13,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.stablemanager.Components.AuthManager
+import com.example.stablemanager.Components.isValidEmail
+import com.example.stablemanager.Components.setEditable
+import com.example.stablemanager.R
+import com.example.stablemanager.db.DBHelper
 
 class ProfileOwnerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +34,7 @@ class ProfileOwnerActivity : AppCompatActivity() {
 
         val buttonExit: Button = findViewById(R.id.exitAccountButton)
         val buttonEdit: Button = findViewById(R.id.editProfileButton)
+        val buttonSave: Button = findViewById(R.id.saveProfileButton)
         val buttonEditPass: Button = findViewById(R.id.editPasswordButton)
         val userSurname: EditText = findViewById(R.id.userSurnameProfile)
         val userName: EditText = findViewById(R.id.userNameProfile)
@@ -71,6 +77,46 @@ class ProfileOwnerActivity : AppCompatActivity() {
         logoProfileImage.setOnClickListener {
             val intent = Intent(this, ListStableActivity::class.java)
             startActivity(intent)
+        }
+
+        buttonEdit.setOnClickListener {
+            userSurname.setEditable(true)
+            userName.setEditable(true)
+            userPatronymic.setEditable(true)
+            userEmail.setEditable(true)
+            userLogin.setEditable(true)
+
+            buttonEdit.visibility = View.GONE
+            buttonSave.visibility = View.VISIBLE
+        }
+
+        buttonSave.setOnClickListener {
+            val surname = userSurname.text.toString().trim()
+            val name = userName.text.toString().trim()
+            val patronymic = userPatronymic.text.toString().trim()
+            val email = userEmail.text.toString().trim()
+            val login = userLogin.text.toString().trim()
+
+            if(surname == "" || name == "" || patronymic == "" || email == "" || login == "")
+                Toast.makeText(this, "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show()
+            else {
+                if (isValidEmail(email)){
+                    userSurname.setEditable(false)
+                    userName.setEditable(false)
+                    userPatronymic.setEditable(false)
+                    userEmail.setEditable(false)
+                    userLogin.setEditable(false)
+
+                    val db = DBHelper(this, null)
+                    db.updateOwner(surname, name, patronymic, email, login)
+
+                    buttonEdit.visibility = View.VISIBLE
+                    buttonSave.visibility = View.GONE
+                }
+                else{
+                    Toast.makeText(this, "Поле почты заполнено некорректно. Заполните в формате mail@mail.ru", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 }
