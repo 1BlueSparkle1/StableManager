@@ -57,7 +57,7 @@ class RegistrationActivity : AppCompatActivity() {
             if(surname == "" || name == "" || patronymic == "" || email == "" || login == "" || password == "")
                 Toast.makeText(this, "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show()
             else {
-                if (db.doesOwnerExist(login, email)){
+                if (db.doesOwnerExist(-1, login, email)){
                     Toast.makeText(this, "Пользователь с таким логином или почтой уже существует", Toast.LENGTH_SHORT).show()
                 }
                 else{
@@ -75,6 +75,9 @@ class RegistrationActivity : AppCompatActivity() {
                         userEmail.text.clear()
                         userLogin.text.clear()
                         userPassword.text.clear()
+
+                        val intent = Intent(this, AuthActivity::class.java)
+                        startActivity(intent)
                     }
                     else{
                         Toast.makeText(this, "Поле почты заполнено некорректно. Заполните в формате mail@mail.ru", Toast.LENGTH_SHORT).show()

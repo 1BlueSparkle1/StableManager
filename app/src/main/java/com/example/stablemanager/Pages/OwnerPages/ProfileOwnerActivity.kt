@@ -45,8 +45,9 @@ class ProfileOwnerActivity : AppCompatActivity() {
 
         val db = DBHelper(this, null)
         val authManager = AuthManager(this)
+        var userId = -1
         if (authManager.isLoggedIn()) {
-            val userId = authManager.getUserId()
+            userId = authManager.getUserId()
             val user = db.getOwnerById(userId)
 
             if (user != null) {
@@ -62,11 +63,6 @@ class ProfileOwnerActivity : AppCompatActivity() {
 
         buttonExit.setOnClickListener {
             authManager.clearAuthData()
-
-            val sharedPreferences = getSharedPreferences("user_data", Context.MODE_PRIVATE)
-            val editor = sharedPreferences.edit()
-            editor.clear()
-            editor.apply()
 
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
@@ -100,21 +96,26 @@ class ProfileOwnerActivity : AppCompatActivity() {
             if(surname == "" || name == "" || patronymic == "" || email == "" || login == "")
                 Toast.makeText(this, "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show()
             else {
-                if (isValidEmail(email)){
-                    userSurname.setEditable(false)
-                    userName.setEditable(false)
-                    userPatronymic.setEditable(false)
-                    userEmail.setEditable(false)
-                    userLogin.setEditable(false)
-
-                    val db = DBHelper(this, null)
-                    db.updateOwner(surname, name, patronymic, email, login)
-
-                    buttonEdit.visibility = View.VISIBLE
-                    buttonSave.visibility = View.GONE
+                if (db.doesOwnerExist(userId, login, email)){
+                    Toast.makeText(this, "Пользователь с таким логином или почтой уже существует", Toast.LENGTH_SHORT).show()
                 }
-                else{
-                    Toast.makeText(this, "Поле почты заполнено некорректно. Заполните в формате mail@mail.ru", Toast.LENGTH_SHORT).show()
+                else {
+                    if (isValidEmail(email)){
+                        userSurname.setEditable(false)
+                        userName.setEditable(false)
+                        userPatronymic.setEditable(false)
+                        userEmail.setEditable(false)
+                        userLogin.setEditable(false)
+
+                        val db = DBHelper(this, null)
+                        db.updateOwner(surname, name, patronymic, email, login)
+
+                        buttonEdit.visibility = View.VISIBLE
+                        buttonSave.visibility = View.GONE
+                    }
+                    else{
+                        Toast.makeText(this, "Поле почты заполнено некорректно. Заполните в формате mail@mail.ru", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }

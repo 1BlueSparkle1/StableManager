@@ -216,12 +216,12 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         }
     }
 
-    fun doesOwnerExist(login: String, email: String): Boolean {
+    fun doesOwnerExist(userId: Int, login: String, email: String): Boolean {
         val db = this.readableDatabase
         var cursor: Cursor? = null
         try {
-            val query = "SELECT 1 FROM owners WHERE login = ? OR email = ?"
-            cursor = db.rawQuery(query, arrayOf(login, email))
+            val query = "SELECT 1 FROM owners WHERE (login = ? OR email = ?) AND id != ?"
+            cursor = db.rawQuery(query, arrayOf(login, email, userId.toString()))
 
             val exists = cursor.count > 0
             Log.d("Database", "Проверка существования владельца с логином '$login' или email '$email': $exists")

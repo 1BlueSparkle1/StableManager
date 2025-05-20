@@ -30,7 +30,6 @@ class AuthActivity : AppCompatActivity() {
         val buttonEmpty: Button = findViewById(R.id.authButton)
         val userLogin: EditText = findViewById(R.id.user_login)
         val userPassword: EditText = findViewById(R.id.user_password)
-        val saveSwitch: Switch = findViewById(R.id.saveSwitch)
 
         buttonReg.setOnClickListener {
             val intent = Intent(this, RegistrationActivity::class.java)
@@ -51,10 +50,6 @@ class AuthActivity : AppCompatActivity() {
                     Toast.makeText(this, "Пользователь $login авторизован", Toast.LENGTH_SHORT).show()
                     userLogin.text.clear()
                     userPassword.text.clear()
-                    val owner = db.getOwnerById(isAuth)
-                    if(owner != null && saveSwitch.isChecked){
-                        saveUserData(owner)
-                    }
 
                     val intent = Intent(this, ListStableActivity::class.java)
                     startActivity(intent)
@@ -65,18 +60,4 @@ class AuthActivity : AppCompatActivity() {
             }
         }
     }
-
-    private fun saveUserData(user: Owner) {
-        val sharedPreferences = getSharedPreferences("user_data", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString("surname", user.surname)
-        editor.putString("fullname", user.fullname)
-        editor.putString("patronymic", user.patronymic)
-        editor.putString("email", user.email)
-        editor.putString("login", user.login)
-        editor.putString("pass", user.pass)
-        editor.putBoolean("ban", user.ban)
-        editor.apply()
-    }
-
 }
