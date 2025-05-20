@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stablemanager.Pages.OwnerPages.AddStableActivity
+import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.Stable
 
@@ -35,7 +36,7 @@ class StablesAdapter(private var stables: List<Stable>, private var context: Con
         holder.description.text = stable.description
 
         holder.btn.setOnClickListener {
-            val intent = Intent(holder.itemView.context, AddStableActivity::class.java)
+            val intent = Intent(holder.itemView.context, StartOwnerPageActivity::class.java)
 
             holder.itemView.context.startActivity(intent)
         }
