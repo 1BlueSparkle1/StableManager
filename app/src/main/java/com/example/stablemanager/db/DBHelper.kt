@@ -10,7 +10,7 @@ import com.example.stablemanager.Components.AuthManager
 import org.mindrot.jbcrypt.BCrypt
 
 class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?) :
-    SQLiteOpenHelper(context, "horse_club", factory, 3) {
+    SQLiteOpenHelper(context, "horse_club", factory, 4) {
     override fun onCreate(db: SQLiteDatabase?) {
         val queryOwners = """
         CREATE TABLE owners (
@@ -32,10 +32,91 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
             title TEXT NOT NULL,
             description TEXT,
             ownerId INTEGER,
-            FOREIGN KEY (ownerId) REFERENCES owners(Id)
+            FOREIGN KEY (ownerId) REFERENCES owners(id)
         )
     """.trimIndent()
         db.execSQL(queryStable)
+
+        val queryRole = """
+        CREATE TABLE roles (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL
+        )
+    """.trimIndent()
+        db.execSQL(queryRole)
+
+        val queryEmployee = """
+        CREATE TABLE employees (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            surname TEXT NOT NULL,
+            name TEXT NOT NULL,
+            patronymic TEXT,
+            email TEXT UNIQUE NOT NULL,
+            login TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            roleId INTEGER,
+            dateOfBirth TEXT,
+            salary REAL DEFAULT 0.0 CHECK (salary >= 0.0),
+            stableId INTEGER,
+            imageProfile BLOB,
+            FOREIGN KEY (roleId) REFERENCES roles(id),
+            FOREIGN KEY (stableId) REFERENCES stables(id)
+        )
+    """.trimIndent()
+        db.execSQL(queryEmployee)
+
+        val queryTypeBreed = """
+        CREATE TABLE type_breeds (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL
+        )
+    """.trimIndent()
+        db.execSQL(queryTypeBreed)
+
+        val queryBreed = """
+        CREATE TABLE breeds (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            typeBreedId INTEGER,
+            FOREIGN KEY (typeBreedId) REFERENCES type_breeds(id)
+        )
+    """.trimIndent()
+        db.execSQL(queryBreed)
+
+        val queryGenderHorse = """
+        CREATE TABLE gender_horses (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL
+        )
+    """.trimIndent()
+        db.execSQL(queryGenderHorse)
+
+        val queryHorse = """
+        CREATE TABLE horses (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            moniker TEXT NOT NULL,
+            dateOfBirth TEXT NOT NULL,
+            healthStatus TEXT,
+            genderId INTEGER,
+            breedId INTEGER,
+            stableId INTEGER,
+            imageProfile BLOB,
+            FOREIGN KEY (genderId) REFERENCES gender_horses(id),
+            FOREIGN KEY (breedId) REFERENCES breeds(id),
+            FOREIGN KEY (stableId) REFERENCES stables(id)
+        )
+    """.trimIndent()
+        db.execSQL(queryHorse)
+
+        val queryFeed = """
+        CREATE TABLE feeds (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            quantity REAL DEFAULT 0.0 CHECK (quantity >= 0.0)
+        )
+    """.trimIndent()
+        db.execSQL(queryFeed)
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
