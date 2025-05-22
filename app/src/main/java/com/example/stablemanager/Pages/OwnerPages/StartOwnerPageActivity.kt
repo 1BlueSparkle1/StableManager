@@ -3,6 +3,7 @@ package com.example.stablemanager.Pages.OwnerPages
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -31,6 +32,8 @@ class StartOwnerPageActivity : AppCompatActivity() , BottomNavigationView.OnNavi
         if (savedInstanceState == null) {
             replaceFragment(StartStableFragment.newInstance(), StartStableFragment.TAG)
         }
+
+        Toast.makeText(this, "Для возврата на эту страницу, нажмите на логотип", Toast.LENGTH_SHORT).show()
     }
 
     private fun setupImageViewClick() {

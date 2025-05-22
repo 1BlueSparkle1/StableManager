@@ -41,7 +41,7 @@ class AuthActivity : AppCompatActivity() {
             val password = userPassword.text.toString().trim()
 
             if(login == "" || password == "")
-                Toast.makeText(this, "Все поля должны быть заполнены", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show()
             else {
                 val db = DBHelper(this, null)
                 val isAuth = db.authOwner(this, login, password)

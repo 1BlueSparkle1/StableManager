@@ -17,6 +17,9 @@
         android:theme="@style/Theme.StableManager"
         tools:targetApi="31">
         <activity
+            android:name=".Pages.OwnerPages.EditPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".Pages.OwnerPages.StartOwnerPageActivity"
             android:exported="false" />
         <activity

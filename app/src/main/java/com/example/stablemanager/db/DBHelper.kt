@@ -335,4 +335,32 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         }
     }
 
+    fun updatePassword(login: String, newPass: String): Boolean{
+        val db = this.readableDatabase
+        try {
+            val values = ContentValues().apply {
+                put("password", newPass)
+            }
+
+            val rowsAffected = db.update(
+                "owners",
+                values,
+                "login = ?",
+                arrayOf(login)
+            )
+
+            if (rowsAffected > 0) {
+                Log.d("Database", "Пароль успешно обновлен.")
+                return true
+            } else {
+                Log.w("Database", "Владелец не найден для обновления.")
+                return false
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при обновлении пароля: ${e.message}")
+            return false
+        }
+    }
+
 }
