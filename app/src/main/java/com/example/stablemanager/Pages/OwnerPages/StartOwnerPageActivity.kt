@@ -3,16 +3,12 @@ package com.example.stablemanager.Pages.OwnerPages
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.stablemanager.R
-import com.example.stablemanager.RecordFragment
-import com.example.stablemanager.StartStableFragment
+import com.example.stablemanager.Pages.OwnerPages.Fragments.StartStableFragment
 import com.example.stablemanager.utils.BottomNavigationPosition
 import com.example.stablemanager.utils.createFragment
 import com.example.stablemanager.utils.findNavigationPositionById

@@ -4,8 +4,8 @@ import androidx.fragment.app.Fragment
 import com.example.stablemanager.Pages.OwnerPages.Fragments.EmployeeFragment
 import com.example.stablemanager.Pages.OwnerPages.Fragments.HorseFragment
 import com.example.stablemanager.R
-import com.example.stablemanager.RecordFragment
-import com.example.stablemanager.WarehouseFragment
+import com.example.stablemanager.Pages.OwnerPages.Fragments.RecordFragment
+import com.example.stablemanager.Pages.OwnerPages.Fragments.WarehouseFragment
 
 enum class BottomNavigationPosition(val position: Int, val id: Int){
     FIRST(0, R.id.horseMenu),

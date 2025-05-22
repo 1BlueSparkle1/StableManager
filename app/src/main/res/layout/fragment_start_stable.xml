@@ -1,14 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StartStableFragment">
+    android:background="@color/light_brown_fon"
+    tools:context=".Pages.OwnerPages.Fragments.StartStableFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_marginBottom="11dp"
+        android:layout_marginTop="7dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/titleTextView"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="20dp"
+                android:text="Конюшня"
+                android:textColor="@color/brown_text"
+                android:textSize="20pt"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/descriptionStableStartPage"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/rounded_corners"
+                android:gravity="top|start"
+                android:hint="Описание"
+                android:inputType="textMultiLine"
+                android:maxLines="9"
+                android:padding="8dp"
+                android:scrollbars="vertical"
+                android:textColor="@color/brown_text"
+                android:textSize="12pt" />
+
+            <Button
+                android:id="@+id/EditStableStartPage"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:backgroundTint="@color/brown_text"
+                android:layout_marginTop="20dp"
+                android:text="Изменить"
+                android:textSize="10pt"
+                android:textColor="@color/light_brown_fon" />
+
+            <Button
+                android:id="@+id/SaveStableStartPage"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/brown_text"
+                android:text="Сохранить"
+                android:textColor="@color/light_brown_fon"
+                android:textSize="10pt"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/ExitStableButton"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:backgroundTint="@color/exit_red"
+                android:textSize="10pt"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="80dp"
+                android:text="Выйти из конюшни"
+                android:textColor="@color/light_brown_fon" />
+        </LinearLayout>
+
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/topFlower"
+        android:layout_width="489dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="-40dp"
+        android:layout_marginTop="-30dp"
+        app:srcCompat="@drawable/flowers_top"/>
+
+    <ImageView
+        android:id="@+id/buttomFlower"
+        android:layout_width="500dp"
+        android:layout_height="200dp"
+        android:layout_marginLeft="-45dp"
+        android:layout_marginBottom="-70dp"
+        android:layout_gravity="bottom"
+        app:srcCompat="@drawable/flowers_buttom" />
 
 </FrameLayout>

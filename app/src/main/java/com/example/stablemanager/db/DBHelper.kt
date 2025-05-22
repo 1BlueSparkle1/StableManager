@@ -149,7 +149,7 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         val db = this.readableDatabase
         var cursor: Cursor? = null
         try {
-            cursor = db.rawQuery("SELECT surname, name, patronymic, email, login, password FROM owners WHERE id = ?", arrayOf(userId.toString()))
+            cursor = db.rawQuery("SELECT surname, name, patronymic, email, login, password, ban FROM owners WHERE id = ?", arrayOf(userId.toString()))
             if (cursor.moveToFirst()) {
                 val surnameColumnIndex = cursor.getColumnIndex("surname")
                 val nameColumnIndex = cursor.getColumnIndex("name")
@@ -157,8 +157,9 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
                 val emailColumnIndex = cursor.getColumnIndex("email")
                 val loginColumnIndex = cursor.getColumnIndex("login")
                 val passwordColumnIndex = cursor.getColumnIndex("password")
+                val banColumnIndex = cursor.getColumnIndex("ban")
 
-                if (surnameColumnIndex == -1 || nameColumnIndex == -1 || emailColumnIndex == -1 || patronymicColumnIndex == -1 || loginColumnIndex == -1 || passwordColumnIndex == -1) {
+                if (surnameColumnIndex == -1 || nameColumnIndex == -1 || emailColumnIndex == -1 || patronymicColumnIndex == -1 || loginColumnIndex == -1 || passwordColumnIndex == -1 || banColumnIndex == -1) {
                     Log.e("Database", "Один или несколько столбцов не найдены в таблице owners!")
                     return null
                 }
@@ -169,8 +170,13 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
                 val email = cursor.getString(emailColumnIndex)
                 val login = cursor.getString(loginColumnIndex)
                 val password = cursor.getString(passwordColumnIndex)
+                val ban = cursor.getInt(banColumnIndex)
 
-                return Owner(surname, name, patronymic, email, login, password, false)
+                return if(ban == 1){
+                    Owner(surname, name, patronymic, email, login, password, true)
+                } else{
+                    Owner(surname, name, patronymic, email, login, password, false)
+                }
 
             } else {
                 Log.d("Database", "Владелец с ID $userId не найден")
@@ -232,6 +238,100 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
             return true
         } finally {
             cursor?.close()
+        }
+    }
+
+    fun getIdStable(title: String, description: String, ownerId: Int): Int?{
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try {
+            val query = "SELECT id FROM stables WHERE title = ? AND description = ? AND ownerId = ?"
+            cursor = db.rawQuery(query, arrayOf(title, description, ownerId.toString()))
+            if (cursor.moveToFirst()) {
+                val idColumnIndex = cursor.getColumnIndex("id")
+
+                if (idColumnIndex == -1 ) {
+                    Log.e("Database", "Один или несколько столбцов не найдены в таблице stables!")
+                    return null
+                }
+
+                val id = cursor.getInt(idColumnIndex)
+                return id
+            }
+            else {
+                Log.d("Database", "Конюшня не найдена")
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при проверке существования владельца: ${e.message}")
+            return null
+        } finally {
+            cursor?.close()
+        }
+    }
+
+
+    fun getStableById(stableId: Int): Stable?{
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT title, description, ownerId FROM stables WHERE id = ?", arrayOf(stableId.toString()))
+            if (cursor.moveToFirst()) {
+                val titleColumnIndex = cursor.getColumnIndex("title")
+                val descriptionColumnIndex = cursor.getColumnIndex("description")
+                val ownerIdColumnIndex = cursor.getColumnIndex("ownerId")
+
+                if (titleColumnIndex == -1 || descriptionColumnIndex == -1 || ownerIdColumnIndex == -1 ) {
+                    Log.e("Database", "Один или несколько столбцов не найдены в таблице stables!")
+                    return null
+                }
+
+                val title = cursor.getString(titleColumnIndex)
+                val description = cursor.getString(descriptionColumnIndex)
+                val ownerId = cursor.getInt(ownerIdColumnIndex)
+
+
+                return Stable(title, description, ownerId)
+
+            } else {
+                Log.d("Database", "Конюшня с ID $stableId не найдена")
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении конюшни: ${e.message}")
+            return null
+        } finally {
+            cursor?.close()
+        }
+    }
+
+    fun updateStable(id: Int, title: String, description: String, ownerId: Int): Boolean{
+        val db = this.readableDatabase
+        try {
+            val values = ContentValues().apply {
+                put("title", title)
+                put("description", description)
+                put("ownerId", ownerId)
+            }
+
+            val rowsAffected = db.update(
+                "stables",
+                values,
+                "id = ?",
+                arrayOf(id.toString())
+            )
+
+            if (rowsAffected > 0) {
+                Log.d("Database", "Конюшня успешно обновлена.")
+                return true
+            } else {
+                Log.w("Database", "Конюшня не найдена для обновления.")
+                return false
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при обновлении конюшни: ${e.message}")
+            return false
         }
     }
 

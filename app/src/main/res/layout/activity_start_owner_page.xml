@@ -24,10 +24,14 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="7dp"
             android:layout_marginBottom="7dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_horses" />
+
+        <ImageView
+            android:id="@+id/notifyBell"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="right|center"
+            app:srcCompat="@drawable/ic_bell" />
     </FrameLayout>
 
     <FrameLayout
@@ -45,7 +49,7 @@
         android:id="@+id/bottomNavigationOwner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/bottom_menu"
+        android:background="@color/light_brown_fon"
         android:elevation="4dp"
         app:itemIconTint="@drawable/selector_bottom_nav"
         app:itemTextColor="@drawable/selector_bottom_nav"
