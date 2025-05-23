@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_brown_fon"
+    tools:context=".Pages.AdminPages.Fragments.OptionsFragment">
+
+    <ImageView
+        android:id="@+id/topFlower"
+        android:layout_width="489dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="-40dp"
+        android:layout_marginTop="-30dp"
+        app:srcCompat="@drawable/flowers_top" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="11dp"
+        android:layout_marginTop="7dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Опции"
+                android:textColor="@color/brown_text"
+                android:textSize="20pt"
+                android:layout_marginTop="30dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/options_round_corners"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/ownerAdminButton"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Владельцы"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/options_round_corners"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/roleAdminButton"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Роли"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:background="@color/light_brown_fon" />
+
+                <Button
+                    android:id="@+id/employeeAdminButton"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Сотрудники"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/options_round_corners"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/stableAdminButton"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Конюшни"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:background="@color/light_brown_fon" />
+
+                <Button
+                    android:id="@+id/horseAdminButton"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Лошади"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:background="@color/light_brown_fon" />
+
+                <Button
+                    android:id="@+id/typeBreedAdminButton"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Типы пород"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:background="@color/light_brown_fon" />
+
+                <Button
+                    android:id="@+id/breedAdminButton"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Породы"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:background="@color/light_brown_fon" />
+
+                <Button
+                    android:id="@+id/genderHorseAdminButton"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Пол лошадей"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/options_round_corners"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/feedAdminButton"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Корма"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text" />
+
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/ExitAdminButton"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:backgroundTint="@color/exit_red"
+                android:textSize="10pt"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="80dp"
+                android:text="Выйти из аккаунта"
+                android:textColor="@color/light_brown_fon" />
+
+        </LinearLayout>
+
+
+
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/buttomFlower"
+        app:srcCompat="@drawable/flowers_buttom"
+        android:layout_width="500dp"
+        android:layout_height="200dp"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="-45dp"
+        android:layout_marginBottom="-70dp" />
+
+</FrameLayout>

@@ -5,49 +5,47 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Pages.OwnerPages.StartOwnerPageActivity">
+    android:background="@color/light_brown_fon"
+    tools:context=".Pages.AdminPages.StartAdminPageActivity">
 
+    <ImageView
+        android:id="@+id/logoProfileImage"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.044"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_horses" />
+
+    <ImageView
+        android:id="@+id/notifyBell"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="right|center"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.942"
+        app:layout_constraintStart_toEndOf="@+id/logoProfileImage"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_bell" />
 
     <FrameLayout
-        android:id="@+id/frameLayout2"
+        android:id="@+id/containerAdmin"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="70dp"
         android:background="@color/light_brown_fon"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationAdmin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/logoStartPageImage"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginBottom="7dp"
-            app:srcCompat="@drawable/ic_horses" />
-
-        <ImageView
-            android:id="@+id/notifyBell"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="right|center"
-            app:srcCompat="@drawable/ic_bell" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/container"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/light_brown_fon"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationOwner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout2">
-
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationOwner"
+        android:id="@+id/bottomNavigationAdmin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/light_brown_fon"
@@ -59,6 +57,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/navigation_owner" />
+        app:menu="@menu/navigation_admin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

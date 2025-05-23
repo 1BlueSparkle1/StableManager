@@ -1,7 +1,6 @@
-package com.example.stablemanager.Pages.OwnerPages
+package com.example.stablemanager.Pages
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -10,8 +9,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.Pages.OwnerPages.AuthActivity
 import com.example.stablemanager.R
-import com.example.stablemanager.db.DBHelper
 
 class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
@@ -34,7 +34,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         buttonEmployee.setOnClickListener {
-            Toast.makeText(this, "You navigated employee", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, StartAdminPageActivity::class.java)
+            startActivity(intent)
         }
     }
 }

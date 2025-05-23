@@ -1,6 +1,5 @@
 package com.example.stablemanager.Pages.OwnerPages
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.stablemanager.Components.AuthManager
 import com.example.stablemanager.Components.isValidEmail
 import com.example.stablemanager.Components.setEditable
+import com.example.stablemanager.Pages.MainActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 
