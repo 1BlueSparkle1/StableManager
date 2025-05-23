@@ -1,4 +1,4 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages.AdminPages.Fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,9 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stablemanager.Components.RoleAdapter
-import com.example.stablemanager.Components.StableManager
-import com.example.stablemanager.Components.StablesAdapter
-import com.example.stablemanager.Pages.AdminPages.Fragments.NotifyAdminFragment
+import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 
 class RoleAdminPageFragment : Fragment() {

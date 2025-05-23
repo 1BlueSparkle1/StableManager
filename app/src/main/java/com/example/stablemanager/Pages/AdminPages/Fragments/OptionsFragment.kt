@@ -11,9 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.Pages.MainActivity
-import com.example.stablemanager.Pages.OwnerPages.ListStableActivity
 import com.example.stablemanager.R
-import com.example.stablemanager.RoleAdminPageFragment
 
 class OptionsFragment : Fragment() {
     companion object{
