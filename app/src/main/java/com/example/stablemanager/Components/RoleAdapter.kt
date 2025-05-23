@@ -34,9 +34,8 @@ class RoleAdapter(private var roles: List<Role>, private var context: Context) :
 
         val stableManager = StableManager(context)
         val db = DBHelper(context, null)
-//        val idRole = db.getIdStable(stable.title, stable.description, stable.ownerId)
-//
-//
+
+
 //        holder.btn.setOnClickListener {
 //            val intent = Intent(holder.itemView.context, StartOwnerPageActivity::class.java)
 //            if(idStable != null){
