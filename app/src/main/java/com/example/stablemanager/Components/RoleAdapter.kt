@@ -1,19 +1,19 @@
 package com.example.stablemanager.Components
 
 import android.content.Context
-import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
+import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
+import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Role
 
-class RoleAdapter(private var roles: List<Role>, private var context: Context) : RecyclerView.Adapter<RoleAdapter.MyViewHolder>() {
+class RoleAdapter(private var roles: List<Role>, private val activity: StartAdminPageActivity, private var context: Context) : RecyclerView.Adapter<RoleAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val title: TextView = itemView.findViewById(R.id.roleListTitle)
@@ -32,16 +32,16 @@ class RoleAdapter(private var roles: List<Role>, private var context: Context) :
         val role = roles[position]
         holder.title.text = role.title
 
-        val stableManager = StableManager(context)
         val db = DBHelper(context, null)
 
+        holder.itemView.setOnClickListener {
+            val activity = activity as? StartAdminPageActivity
 
-//        holder.btn.setOnClickListener {
-//            val intent = Intent(holder.itemView.context, StartOwnerPageActivity::class.java)
-//            if(idStable != null){
-//                stableManager.saveStableId(idStable)
-//            }
-//            holder.itemView.context.startActivity(intent)
-//        }
+            if (activity != null) {
+                activity.replaceFragment(EditRoleFragment.newInstance(), EditRoleFragment.TAG)
+            } else {
+                Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
+            }
+        }
     }
 }

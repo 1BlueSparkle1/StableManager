@@ -29,7 +29,8 @@ class RoleAdminPageFragment : Fragment() {
 
         val roles = db.getRoles()
         roleList.layoutManager = LinearLayoutManager(requireContext())
-        roleList.adapter = RoleAdapter(roles, requireContext())
+        val activity = activity as StartAdminPageActivity
+        roleList.adapter = RoleAdapter(roles, activity, requireContext())
 
         addRoleBtn.setOnClickListener {
             val activity = activity as? StartAdminPageActivity

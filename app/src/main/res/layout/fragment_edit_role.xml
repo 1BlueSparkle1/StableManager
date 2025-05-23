@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Pages.AdminPages.Fragments.EditRoleFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/light_brown_fon"
+        android:gravity="center|center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Роль"
+            android:textColor="@color/brown_text"
+            android:textSize="20pt" />
+
+        <EditText
+            android:id="@+id/addTitleRole"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="50dp"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="Название"
+            android:inputType="text"
+            android:textColor="@color/brown_text"
+            android:textSize="12pt" />
+
+        <Button
+            android:id="@+id/editProfileButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="@color/brown_text"
+            android:text="Изменить"
+            android:textColor="@color/light_brown_fon"
+            android:textSize="10pt"/>
+
+        <Button
+            android:id="@+id/SaveRolePage"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/brown_text"
+            android:text="Сохранить"
+            android:textColor="@color/light_brown_fon"
+            android:textSize="10pt"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/exitAccountButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/exit_red"
+            android:text="Удалить"
+            android:textColor="@color/light_brown_fon"
+            android:textSize="10pt"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/topFlower"
+        android:layout_width="489dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="-40dp"
+        android:layout_marginTop="-30dp"
+        app:srcCompat="@drawable/flowers_top" />
+
+    <ImageView
+        android:id="@+id/buttomFlower"
+        android:layout_width="500dp"
+        android:layout_height="200dp"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="-45dp"
+        android:layout_marginBottom="-70dp"
+        app:srcCompat="@drawable/flowers_buttom" />
+
+</FrameLayout>
