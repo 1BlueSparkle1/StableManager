@@ -43,7 +43,7 @@ class StartAdminPageActivity : AppCompatActivity() , BottomNavigationView.OnNavi
         }
     }
 
-    private fun replaceFragment(fragment: Fragment, tag: String) {
+    fun replaceFragment(fragment: Fragment, tag: String) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.containerAdmin, fragment, tag)
         transaction.addToBackStack(null)

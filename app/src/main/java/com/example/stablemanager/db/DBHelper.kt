@@ -351,7 +351,6 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         }
     }
 
-
     fun getStableById(stableId: Int): Stable?{
         val db = this.readableDatabase
         var cursor: Cursor? = null
@@ -442,6 +441,49 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
             Log.e("Database", "Ошибка при обновлении пароля: ${e.message}")
             return false
         }
+    }
+
+    fun getRoles(): List<Role>{
+        val db = this.readableDatabase
+        val roles = mutableListOf<Role>()
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT id, title FROM roles", null)
+            if (cursor.moveToFirst()) {
+                do {
+                    val idColumnIndex = cursor.getColumnIndex("id")
+                    val titleColumnIndex = cursor.getColumnIndex("title")
+
+                    if (idColumnIndex == -1 || titleColumnIndex == -1) {
+                        Log.e("Database", "Один или несколько столбцов не найдены!")
+                        return emptyList()
+                    }
+
+                    val title = cursor.getString(titleColumnIndex)
+                    val id = cursor.getInt(idColumnIndex)
+
+                    val role = Role(id, title)
+                    roles.add(role)
+
+                } while (cursor.moveToNext())
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении данных из roles: ${e.message}")
+        } finally {
+            cursor?.close()
+        }
+
+        return roles
+    }
+
+    fun addRole(role: Role){
+        val values = ContentValues()
+        values.put("title", role.title)
+
+        val db = this.writableDatabase
+        db.insert("roles", null, values)
+
+        db.close()
     }
 
 }

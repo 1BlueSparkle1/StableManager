@@ -7,13 +7,6 @@
     android:background="@color/light_brown_fon"
     tools:context=".Pages.AdminPages.Fragments.OptionsFragment">
 
-    <ImageView
-        android:id="@+id/topFlower"
-        android:layout_width="489dp"
-        android:layout_height="80dp"
-        android:layout_marginLeft="-40dp"
-        android:layout_marginTop="-30dp"
-        app:srcCompat="@drawable/flowers_top" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -243,6 +236,14 @@
 
 
     </ScrollView>
+
+    <ImageView
+        android:id="@+id/topFlower"
+        android:layout_width="489dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="-40dp"
+        android:layout_marginTop="-30dp"
+        app:srcCompat="@drawable/flowers_top" />
 
     <ImageView
         android:id="@+id/buttomFlower"
