@@ -10,11 +10,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.navigation.NavController
-import com.example.stablemanager.Components.StableManager
+import com.example.stablemanager.Components.Managers.StableManager
 import com.example.stablemanager.Pages.OwnerPages.ListStableActivity
 import com.example.stablemanager.R
-import androidx.navigation.fragment.findNavController
 import com.example.stablemanager.Components.setEditable
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Stable

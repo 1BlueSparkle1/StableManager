@@ -1,4 +1,4 @@
-package com.example.stablemanager.Components
+package com.example.stablemanager.Components.Adapters
 
 import android.content.Context
 import android.content.Intent
@@ -7,9 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stablemanager.Pages.OwnerPages.AddStableActivity
+import com.example.stablemanager.Components.Managers.StableManager
 import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper

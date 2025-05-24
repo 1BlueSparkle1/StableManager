@@ -6,7 +6,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import com.example.stablemanager.Components.AuthManager
+import com.example.stablemanager.Components.Managers.AuthManager
 import org.mindrot.jbcrypt.BCrypt
 
 class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?) :
@@ -344,7 +344,7 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
                 return null
             }
         } catch (e: Exception) {
-            Log.e("Database", "Ошибка при проверке существования владельца: ${e.message}")
+            Log.e("Database", "Ошибка при проверке существования конюшни: ${e.message}")
             return null
         } finally {
             cursor?.close()
@@ -485,5 +485,94 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
 
         db.close()
     }
+
+    fun getRolesById(roleId: Int) : Role?{
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT title FROM roles WHERE id = ?", arrayOf(roleId.toString()))
+            if (cursor.moveToFirst()) {
+                val titleColumnIndex = cursor.getColumnIndex("title")
+
+                if (titleColumnIndex == -1) {
+                    Log.e("Database", "Один или несколько столбцов не найдены в таблице roles!")
+                    return null
+                }
+
+                val title = cursor.getString(titleColumnIndex)
+
+
+                return Role(roleId, title)
+
+            } else {
+                Log.d("Database", "Роль с ID $roleId не найдена")
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении роли: ${e.message}")
+            return null
+        } finally {
+            cursor?.close()
+        }
+    }
+
+    fun updateRole(roleId: Int, title: String): Boolean{
+        val db = this.readableDatabase
+        try {
+            val values = ContentValues().apply {
+                put("title", title)
+            }
+
+            val rowsAffected = db.update(
+                "roles",
+                values,
+                "id = ?",
+                arrayOf(roleId.toString())
+            )
+
+            if (rowsAffected > 0) {
+                Log.d("Database", "Роль успешно обновлена.")
+                return true
+            } else {
+                Log.w("Database", "Роль не найдена для обновления.")
+                return false
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при обновлении роли: ${e.message}")
+            return false
+        }
+    }
+
+    fun getIdRole(title: String): Int?{
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try {
+            val query = "SELECT id FROM roles WHERE title = ? "
+            cursor = db.rawQuery(query, arrayOf(title))
+            if (cursor.moveToFirst()) {
+                val idColumnIndex = cursor.getColumnIndex("id")
+
+                if (idColumnIndex == -1 ) {
+                    Log.e("Database", "Один или несколько столбцов не найдены в таблице roles!")
+                    return null
+                }
+
+                val id = cursor.getInt(idColumnIndex)
+                return id
+            }
+            else {
+                Log.d("Database", "Роль не найдена")
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при проверке существования роли: ${e.message}")
+            return null
+        } finally {
+            cursor?.close()
+        }
+    }
+
+
 
 }

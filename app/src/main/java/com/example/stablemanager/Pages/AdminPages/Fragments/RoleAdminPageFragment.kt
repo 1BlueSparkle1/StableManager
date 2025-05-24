@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stablemanager.Components.RoleAdapter
+import com.example.stablemanager.Components.Adapters.RoleAdapter
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper

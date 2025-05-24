@@ -1,4 +1,4 @@
-package com.example.stablemanager.Components
+package com.example.stablemanager.Components.Adapters
 
 import android.content.Context
 import android.util.Log
@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.stablemanager.Components.Managers.RoleManagers
+import com.example.stablemanager.Components.Managers.StableManager
 import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R
@@ -32,12 +34,17 @@ class RoleAdapter(private var roles: List<Role>, private val activity: StartAdmi
         val role = roles[position]
         holder.title.text = role.title
 
+        val roleManager = RoleManagers(context)
         val db = DBHelper(context, null)
+        val idRole = db.getIdRole(role.title)
 
         holder.itemView.setOnClickListener {
             val activity = activity as? StartAdminPageActivity
 
             if (activity != null) {
+                if(idRole != null){
+                    roleManager.saveRoleId(idRole)
+                }
                 activity.replaceFragment(EditRoleFragment.newInstance(), EditRoleFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")

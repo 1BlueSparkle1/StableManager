@@ -9,8 +9,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stablemanager.Components.AuthManager
-import com.example.stablemanager.Components.StablesAdapter
+import com.example.stablemanager.Components.Managers.AuthManager
+import com.example.stablemanager.Components.Adapters.StablesAdapter
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 

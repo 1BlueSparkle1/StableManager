@@ -24,7 +24,7 @@
             android:textSize="20pt" />
 
         <EditText
-            android:id="@+id/addTitleRole"
+            android:id="@+id/editTitleRole"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:layout_marginTop="50dp"
@@ -38,7 +38,7 @@
             android:textSize="12pt" />
 
         <Button
-            android:id="@+id/editProfileButton"
+            android:id="@+id/editRoleButton"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
@@ -48,11 +48,11 @@
             android:textSize="10pt"/>
 
         <Button
-            android:id="@+id/SaveRolePage"
+            android:id="@+id/SaveRoleButton"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|top"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:backgroundTint="@color/brown_text"
             android:text="Сохранить"
             android:textColor="@color/light_brown_fon"
@@ -60,7 +60,7 @@
             android:visibility="gone"/>
 
         <Button
-            android:id="@+id/exitAccountButton"
+            android:id="@+id/deleteRoleButton"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"

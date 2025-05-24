@@ -1,9 +1,10 @@
-package com.example.stablemanager.Components
+package com.example.stablemanager.Components.Managers
+
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 
-class AuthManager(context: Context) {
+class StableManager(context: Context) {
 
     private val masterKey = MasterKey.Builder(context)
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -11,30 +12,28 @@ class AuthManager(context: Context) {
 
     private val sharedPreferences = EncryptedSharedPreferences.create(
         context,
-        "auth_prefs",
+        "stable_prefs",
         masterKey,
         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
 
-    fun saveUserId(userId: Int) {
-        sharedPreferences.edit().putInt("user_id", userId).apply()
+    fun saveStableId(stableId: Int) {
+        sharedPreferences.edit().putInt("stable_id", stableId).apply()
     }
 
-    fun getUserId(): Int {
+    fun getStableId(): Int {
         return sharedPreferences.getInt(
-            "user_id",
+            "stable_id",
             -1
         )
     }
 
-    fun clearAuthData() {
-        sharedPreferences.edit().clear().apply()
+    fun clearStableData() {
+        sharedPreferences.edit().remove("stable_id").apply()
     }
 
-    fun isLoggedIn(): Boolean {
-        return getUserId() != -1
+    fun isStableIdSaved(): Boolean {
+        return getStableId() != -1
     }
-
-
 }
