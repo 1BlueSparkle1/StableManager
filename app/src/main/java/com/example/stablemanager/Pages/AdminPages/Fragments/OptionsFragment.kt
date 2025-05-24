@@ -26,13 +26,24 @@ class OptionsFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_options, container, false)
 
         exitAdminButton = view.findViewById(R.id.ExitAdminButton)
-         val roleAdminButton : Button = view.findViewById(R.id.roleAdminButton)
+        val roleAdminButton : Button = view.findViewById(R.id.roleAdminButton)
+        val ownerAdminButton : Button = view.findViewById(R.id.ownerAdminButton)
 
         roleAdminButton.setOnClickListener {
             val activity = activity as? StartAdminPageActivity
 
             if (activity != null) {
                 activity.replaceFragment(RoleAdminPageFragment.newInstance(), RoleAdminPageFragment.TAG)
+            } else {
+                Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
+            }
+        }
+
+        ownerAdminButton.setOnClickListener {
+            val activity = activity as? StartAdminPageActivity
+
+            if (activity != null) {
+                activity.replaceFragment(OwnerListAdminFragment.newInstance(), OwnerListAdminFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }

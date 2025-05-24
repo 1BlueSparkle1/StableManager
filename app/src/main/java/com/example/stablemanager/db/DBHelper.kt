@@ -181,6 +181,54 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         }
     }
 
+    fun getOwners(): List<Owner>?{
+        val db = this.readableDatabase
+        val owners = mutableListOf<Owner>()
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT surname, name, patronymic, email, login, password, ban FROM owners", null)
+            if (cursor.moveToFirst()) {
+                do {
+                    val surnameColumnIndex = cursor.getColumnIndex("surname")
+                    val nameColumnIndex = cursor.getColumnIndex("name")
+                    val patronymicColumnIndex = cursor.getColumnIndex("patronymic")
+                    val emailColumnIndex = cursor.getColumnIndex("email")
+                    val loginColumnIndex = cursor.getColumnIndex("login")
+                    val passwordColumnIndex = cursor.getColumnIndex("password")
+                    val banColumnIndex = cursor.getColumnIndex("ban")
+
+                    if (surnameColumnIndex == -1 || nameColumnIndex == -1 || emailColumnIndex == -1 || patronymicColumnIndex == -1 || loginColumnIndex == -1 || passwordColumnIndex == -1 || banColumnIndex == -1) {
+                        Log.e("Database", "Один или несколько столбцов не найдены в таблице owners!")
+                        return null
+                    }
+
+                    val surname = cursor.getString(surnameColumnIndex)
+                    val name = cursor.getString(nameColumnIndex)
+                    val patronymic = cursor.getString(patronymicColumnIndex)
+                    val email = cursor.getString(emailColumnIndex)
+                    val login = cursor.getString(loginColumnIndex)
+                    val password = cursor.getString(passwordColumnIndex)
+                    val ban = cursor.getInt(banColumnIndex)
+
+                    val owner = if(ban == 1){
+                        Owner(surname, name, patronymic, email, login, password, true)
+                    } else{
+                        Owner(surname, name, patronymic, email, login, password, false)
+                    }
+
+                    owners.add(owner)
+
+                } while (cursor.moveToNext())
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении данных из owners: ${e.message}")
+        } finally {
+            cursor?.close()
+        }
+
+        return owners
+    }
+
     fun getStables(userId: Int): List<Stable>{
         val db = this.readableDatabase
         val stables = mutableListOf<Stable>()
@@ -267,6 +315,35 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
             }
         } catch (e: Exception) {
             Log.e("Database", "Ошибка при получении владельца: ${e.message}")
+            return null
+        } finally {
+            cursor?.close()
+        }
+    }
+
+    fun getIdOwner(email: String, login: String): Int?{
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try {
+            val query = "SELECT id FROM owners WHERE email = ? AND login = ?"
+            cursor = db.rawQuery(query, arrayOf(email, login))
+            if (cursor.moveToFirst()) {
+                val idColumnIndex = cursor.getColumnIndex("id")
+
+                if (idColumnIndex == -1 ) {
+                    Log.e("Database", "Один или несколько столбцов не найдены в таблице owners!")
+                    return null
+                }
+
+                val id = cursor.getInt(idColumnIndex)
+                return id
+            }
+            else {
+                Log.d("Database", "Владелец не найден")
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при проверке существования владельца: ${e.message}")
             return null
         } finally {
             cursor?.close()
