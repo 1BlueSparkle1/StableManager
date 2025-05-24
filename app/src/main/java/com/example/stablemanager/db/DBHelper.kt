@@ -112,7 +112,9 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         CREATE TABLE feeds (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
-            quantity REAL DEFAULT 0.0 CHECK (quantity >= 0.0)
+            quantity REAL DEFAULT 0.0 CHECK (quantity >= 0.0),
+            stableId INTEGER,
+            FOREIGN KEY (stableId) REFERENCES stables(id)
         )
     """.trimIndent()
         db.execSQL(queryFeed)
@@ -573,6 +575,392 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         }
     }
 
+    fun getTypeBreed(): List<TypeBreed>{
+        val db = this.readableDatabase
+        val typeBreeds = mutableListOf<TypeBreed>()
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT title FROM type_breeds", null)
+            if (cursor.moveToFirst()) {
+                do {
+                    val titleColumnIndex = cursor.getColumnIndex("title")
 
+                    if (titleColumnIndex == -1) {
+                        Log.e("Database", "Один или несколько столбцов не найдены!")
+                        return emptyList()
+                    }
+
+                    val title = cursor.getString(titleColumnIndex)
+
+                    val typeBreed = TypeBreed(title)
+                    typeBreeds.add(typeBreed)
+
+                } while (cursor.moveToNext())
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении данных из type_breeds: ${e.message}")
+        } finally {
+            cursor?.close()
+        }
+
+        return typeBreeds
+    }
+
+    fun addTypeBreed(typeBreed: TypeBreed){
+        val values = ContentValues()
+        values.put("title", typeBreed.title)
+
+        val db = this.writableDatabase
+        db.insert("type_breeds", null, values)
+
+        db.close()
+    }
+
+    fun getTypeBreedById(typeBreedId: Int) : TypeBreed?{
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT title FROM type_breeds WHERE id = ?", arrayOf(typeBreedId.toString()))
+            if (cursor.moveToFirst()) {
+                val titleColumnIndex = cursor.getColumnIndex("title")
+
+                if (titleColumnIndex == -1) {
+                    Log.e("Database", "Один или несколько столбцов не найдены в таблице type_breeds!")
+                    return null
+                }
+
+                val title = cursor.getString(titleColumnIndex)
+
+
+                return TypeBreed(title)
+
+            } else {
+                Log.d("Database", "Тип породы с ID $typeBreedId не найдена")
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении типа породы: ${e.message}")
+            return null
+        } finally {
+            cursor?.close()
+        }
+    }
+
+    fun updateTypeBreed(typeBreedId: Int, title: String): Boolean{
+        val db = this.readableDatabase
+        try {
+            val values = ContentValues().apply {
+                put("title", title)
+            }
+
+            val rowsAffected = db.update(
+                "type_breeds",
+                values,
+                "id = ?",
+                arrayOf(typeBreedId.toString())
+            )
+
+            if (rowsAffected > 0) {
+                Log.d("Database", "Тип породы успешно обновлен.")
+                return true
+            } else {
+                Log.w("Database", "Тип породы не найден для обновления.")
+                return false
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при обновлении типа породы: ${e.message}")
+            return false
+        }
+    }
+
+    fun getIdTypeBreed(title: String): Int?{
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try {
+            val query = "SELECT id FROM type_breeds WHERE title = ? "
+            cursor = db.rawQuery(query, arrayOf(title))
+            if (cursor.moveToFirst()) {
+                val idColumnIndex = cursor.getColumnIndex("id")
+
+                if (idColumnIndex == -1 ) {
+                    Log.e("Database", "Один или несколько столбцов не найдены в таблице type_breeds!")
+                    return null
+                }
+
+                val id = cursor.getInt(idColumnIndex)
+                return id
+            }
+            else {
+                Log.d("Database", "Тип породы не найден")
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при проверке существования типа породы: ${e.message}")
+            return null
+        } finally {
+            cursor?.close()
+        }
+    }
+
+
+    //Здесь начало породы
+//    fun getTypeBreed(): List<TypeBreed>{
+//        val db = this.readableDatabase
+//        val typeBreeds = mutableListOf<TypeBreed>()
+//        var cursor: Cursor? = null
+//        try {
+//            cursor = db.rawQuery("SELECT title FROM type_breeds", null)
+//            if (cursor.moveToFirst()) {
+//                do {
+//                    val titleColumnIndex = cursor.getColumnIndex("title")
+//
+//                    if (titleColumnIndex == -1) {
+//                        Log.e("Database", "Один или несколько столбцов не найдены!")
+//                        return emptyList()
+//                    }
+//
+//                    val title = cursor.getString(titleColumnIndex)
+//
+//                    val typeBreed = TypeBreed(title)
+//                    typeBreeds.add(typeBreed)
+//
+//                } while (cursor.moveToNext())
+//            }
+//        } catch (e: Exception) {
+//            Log.e("Database", "Ошибка при получении данных из type_breeds: ${e.message}")
+//        } finally {
+//            cursor?.close()
+//        }
+//
+//        return typeBreeds
+//    }
+//
+//    fun addTypeBreed(typeBreed: TypeBreed){
+//        val values = ContentValues()
+//        values.put("title", typeBreed.title)
+//
+//        val db = this.writableDatabase
+//        db.insert("type_breeds", null, values)
+//
+//        db.close()
+//    }
+//
+//    fun getTypeBreedById(typeBreedId: Int) : TypeBreed?{
+//        val db = this.readableDatabase
+//        var cursor: Cursor? = null
+//        try {
+//            cursor = db.rawQuery("SELECT title FROM type_breeds WHERE id = ?", arrayOf(typeBreedId.toString()))
+//            if (cursor.moveToFirst()) {
+//                val titleColumnIndex = cursor.getColumnIndex("title")
+//
+//                if (titleColumnIndex == -1) {
+//                    Log.e("Database", "Один или несколько столбцов не найдены в таблице type_breeds!")
+//                    return null
+//                }
+//
+//                val title = cursor.getString(titleColumnIndex)
+//
+//
+//                return TypeBreed(title)
+//
+//            } else {
+//                Log.d("Database", "Тип породы с ID $typeBreedId не найдена")
+//                return null
+//            }
+//        } catch (e: Exception) {
+//            Log.e("Database", "Ошибка при получении типа породы: ${e.message}")
+//            return null
+//        } finally {
+//            cursor?.close()
+//        }
+//    }
+//
+//    fun updateTypeBreed(typeBreedId: Int, title: String): Boolean{
+//        val db = this.readableDatabase
+//        try {
+//            val values = ContentValues().apply {
+//                put("title", title)
+//            }
+//
+//            val rowsAffected = db.update(
+//                "type_breeds",
+//                values,
+//                "id = ?",
+//                arrayOf(typeBreedId.toString())
+//            )
+//
+//            if (rowsAffected > 0) {
+//                Log.d("Database", "Тип породы успешно обновлен.")
+//                return true
+//            } else {
+//                Log.w("Database", "Тип породы не найден для обновления.")
+//                return false
+//            }
+//
+//        } catch (e: Exception) {
+//            Log.e("Database", "Ошибка при обновлении типа породы: ${e.message}")
+//            return false
+//        }
+//    }
+//
+//    fun getIdTypeBreed(title: String): Int?{
+//        val db = this.readableDatabase
+//        var cursor: Cursor? = null
+//        try {
+//            val query = "SELECT id FROM type_breeds WHERE title = ? "
+//            cursor = db.rawQuery(query, arrayOf(title))
+//            if (cursor.moveToFirst()) {
+//                val idColumnIndex = cursor.getColumnIndex("id")
+//
+//                if (idColumnIndex == -1 ) {
+//                    Log.e("Database", "Один или несколько столбцов не найдены в таблице type_breeds!")
+//                    return null
+//                }
+//
+//                val id = cursor.getInt(idColumnIndex)
+//                return id
+//            }
+//            else {
+//                Log.d("Database", "Тип породы не найден")
+//                return null
+//            }
+//        } catch (e: Exception) {
+//            Log.e("Database", "Ошибка при проверке существования типа породы: ${e.message}")
+//            return null
+//        } finally {
+//            cursor?.close()
+//        }
+//    }
+
+    //здесь начало пола
+
+    fun getGenderHorse(): List<GenderHorse>{
+        val db = this.readableDatabase
+        val genderHorses = mutableListOf<GenderHorse>()
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT title FROM gender_horses", null)
+            if (cursor.moveToFirst()) {
+                do {
+                    val titleColumnIndex = cursor.getColumnIndex("title")
+
+                    if (titleColumnIndex == -1) {
+                        Log.e("Database", "Один или несколько столбцов не найдены!")
+                        return emptyList()
+                    }
+
+                    val title = cursor.getString(titleColumnIndex)
+
+                    val genderHorse = GenderHorse(title)
+                    genderHorses.add(genderHorse)
+
+                } while (cursor.moveToNext())
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении данных из gender_horses: ${e.message}")
+        } finally {
+            cursor?.close()
+        }
+
+        return genderHorses
+    }
+
+    fun addGenderHorse(genderHorse: GenderHorse){
+        val values = ContentValues()
+        values.put("title", genderHorse.title)
+
+        val db = this.writableDatabase
+        db.insert("gender_horses", null, values)
+
+        db.close()
+    }
+
+    fun getGenderHorseById(genderHorseId: Int) : GenderHorse?{
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT title FROM gender_horses WHERE id = ?", arrayOf(genderHorseId.toString()))
+            if (cursor.moveToFirst()) {
+                val titleColumnIndex = cursor.getColumnIndex("title")
+
+                if (titleColumnIndex == -1) {
+                    Log.e("Database", "Один или несколько столбцов не найдены в таблице gender_horses!")
+                    return null
+                }
+
+                val title = cursor.getString(titleColumnIndex)
+
+
+                return GenderHorse(title)
+
+            } else {
+                Log.d("Database", "Порода лошади с ID $genderHorseId не найдена")
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении Породы лошади : ${e.message}")
+            return null
+        } finally {
+            cursor?.close()
+        }
+    }
+
+    fun updateGenderHorse(genderHorseId: Int, title: String): Boolean{
+        val db = this.readableDatabase
+        try {
+            val values = ContentValues().apply {
+                put("title", title)
+            }
+
+            val rowsAffected = db.update(
+                "gender_horses",
+                values,
+                "id = ?",
+                arrayOf(genderHorseId.toString())
+            )
+
+            if (rowsAffected > 0) {
+                Log.d("Database", "Пол лошадей успешно обновлен.")
+                return true
+            } else {
+                Log.w("Database", "Пол лошадей не найден для обновления.")
+                return false
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при обновлении пола лошадей: ${e.message}")
+            return false
+        }
+    }
+
+    fun getIdGenderHorse(title: String): Int?{
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try {
+            val query = "SELECT id FROM gender_horses WHERE title = ? "
+            cursor = db.rawQuery(query, arrayOf(title))
+            if (cursor.moveToFirst()) {
+                val idColumnIndex = cursor.getColumnIndex("id")
+
+                if (idColumnIndex == -1 ) {
+                    Log.e("Database", "Один или несколько столбцов не найдены в таблице gender_horses!")
+                    return null
+                }
+
+                val id = cursor.getInt(idColumnIndex)
+                return id
+            }
+            else {
+                Log.d("Database", "Пол лошадей не найден")
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при проверке существования пола лошадей: ${e.message}")
+            return null
+        } finally {
+            cursor?.close()
+        }
+    }
 
 }
