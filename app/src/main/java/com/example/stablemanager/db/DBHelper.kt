@@ -264,6 +264,41 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         return stables
     }
 
+    fun getAllStables(): List<Stable>{
+        val db = this.readableDatabase
+        val stables = mutableListOf<Stable>()
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT title, description, ownerId FROM stables", null)
+            if (cursor.moveToFirst()) {
+                do {
+                    val titleColumnIndex = cursor.getColumnIndex("title")
+                    val descriptionColumnIndex = cursor.getColumnIndex("description")
+                    val ownerIdColumnIndex = cursor.getColumnIndex("ownerId")
+
+                    if (titleColumnIndex == -1 || descriptionColumnIndex == -1 || ownerIdColumnIndex == -1) {
+                        Log.e("Database", "Один или несколько столбцов не найдены!")
+                        return emptyList()
+                    }
+
+                    val title = cursor.getString(titleColumnIndex)
+                    val description = cursor.getString(descriptionColumnIndex)
+                    val ownerId = cursor.getInt(ownerIdColumnIndex)
+
+                    val stable = Stable(title, description, ownerId)
+                    stables.add(stable)
+
+                } while (cursor.moveToNext())
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении данных из stables: ${e.message}")
+        } finally {
+            cursor?.close()
+        }
+
+        return stables
+    }
+
     fun addStable(stable: Stable){
         val values = ContentValues()
         values.put("title", stable.title)
