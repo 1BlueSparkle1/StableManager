@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_brown_fon"
-    tools:context=".Pages.AdminPages.Fragments.HorseListAdminFragment">
+    tools:context=".TypeBreedAdminFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,12 +25,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="Лошади"
+                android:text="Типы пород"
                 android:textColor="@color/brown_text"
                 android:textSize="20pt" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/horseListView"
+                android:id="@+id/typeBreedListView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="20dp"
@@ -41,7 +41,7 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/addHorseAdminButton"
+        android:id="@+id/addTypeBreedAdminButton"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"

@@ -9,10 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import com.example.stablemanager.HorseListAdminFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.Pages.MainActivity
 import com.example.stablemanager.R
+import com.example.stablemanager.TypeBreedAdminFragment
 
 class OptionsFragment : Fragment() {
     companion object{
@@ -32,6 +32,7 @@ class OptionsFragment : Fragment() {
         val stableAdminButton: Button = view.findViewById(R.id.stableAdminButton)
         val employeeAdminButton : Button = view.findViewById(R.id.employeeAdminButton)
         val horseAdminButton : Button = view.findViewById(R.id.horseAdminButton)
+        val typeBreedButton : Button = view.findViewById(R.id.typeBreedAdminButton)
 
         roleAdminButton.setOnClickListener {
             val activity = activity as? StartAdminPageActivity
@@ -78,6 +79,16 @@ class OptionsFragment : Fragment() {
 
             if (activity != null) {
                 activity.replaceFragment(HorseListAdminFragment.newInstance(), HorseListAdminFragment.TAG)
+            } else {
+                Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
+            }
+        }
+
+        typeBreedButton.setOnClickListener {
+            val activity = activity as? StartAdminPageActivity
+
+            if (activity != null) {
+                activity.replaceFragment(TypeBreedAdminFragment.newInstance(), TypeBreedAdminFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }

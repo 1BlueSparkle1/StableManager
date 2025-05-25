@@ -10,34 +10,33 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stablemanager.Components.Adapters.EmployeeAdapter
 import com.example.stablemanager.Components.Adapters.HorseAdapter
+import com.example.stablemanager.Components.Adapters.TypeBreedAdapter
 import com.example.stablemanager.Pages.AdminPages.Fragments.AddRoleFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.EmployeeListAdminFragment
+import com.example.stablemanager.Pages.AdminPages.Fragments.HorseListAdminFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.db.DBHelper
 
-
-class HorseListAdminFragment : Fragment() {
+class TypeBreedAdminFragment : Fragment() {
     companion object{
-        val TAG: String = HorseListAdminFragment::class.java.simpleName
-        fun newInstance() = HorseListAdminFragment()
+        val TAG: String = TypeBreedAdminFragment::class.java.simpleName
+        fun newInstance() = TypeBreedAdminFragment()
     }
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_horse_list_admin, container, false)
+        val view = inflater.inflate(R.layout.fragment_type_breed_admin, container, false)
 
         val db = DBHelper(requireContext(), null)
-        val horseList: RecyclerView = view.findViewById(R.id.horseListView)
-        val addHorseBtn: Button = view.findViewById(R.id.addHorseAdminButton)
+        val typeBreedList: RecyclerView = view.findViewById(R.id.typeBreedListView)
+        val addTypeBreedBtn: Button = view.findViewById(R.id.addTypeBreedAdminButton)
 
-        val horses = db.getAllHorses()
-        horseList.layoutManager = LinearLayoutManager(requireContext())
+        val typeBreeds = db.getTypeBreed()
+        typeBreedList.layoutManager = LinearLayoutManager(requireContext())
         val activity = activity as StartAdminPageActivity
-        horseList.adapter = HorseAdapter(horses, activity, requireContext())
+        typeBreedList.adapter = TypeBreedAdapter(typeBreeds, activity, requireContext())
 
-        addHorseBtn.setOnClickListener {
+        addTypeBreedBtn.setOnClickListener {
             val activity = activity as? StartAdminPageActivity
 
             if (activity != null) {
