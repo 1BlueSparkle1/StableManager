@@ -37,20 +37,20 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="20dp" />
 
-            <Button
-                android:id="@+id/addRoleButton"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|top"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="80dp"
-                android:backgroundTint="@color/brown_text"
-                android:text="Добавить"
-                android:textColor="@color/light_brown_fon"
-                android:textSize="10pt" />
         </LinearLayout>
     </ScrollView>
 
+    <Button
+        android:id="@+id/addRoleButton"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="80dp"
+        android:backgroundTint="@color/brown_text"
+        android:text="Добавить"
+        android:textColor="@color/light_brown_fon"
+        android:textSize="10pt" />
 
     <ImageView
         android:id="@+id/topFlower"

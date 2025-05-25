@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_brown_fon"
-    tools:context=".Pages.AdminPages.Fragments.EmployeeListAdminFragment">
+    tools:context=".HorseListAdminFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,21 +25,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="Сотрудники"
+                android:text="Лошади"
                 android:textColor="@color/brown_text"
                 android:textSize="20pt" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/employeeListView"
+                android:id="@+id/horseListView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="20dp" />
+
+
         </LinearLayout>
     </ScrollView>
 
     <Button
-        android:id="@+id/addEmployeeButton"
+        android:id="@+id/addHorseAdminButton"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corners"
+    android:orientation="horizontal"
+    android:layout_margin="10dp"
+    android:padding="5dp">
+
+
+    <ImageView
+        android:id="@+id/horseLogoImage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_margin="15dp"
+        app:srcCompat="@drawable/ic_horse_menu" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/horseListMoniker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Бомбея"
+            android:textColor="@color/brown_text"
+            android:layout_marginTop="12dp"
+            android:textSize="15pt"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/horseListStable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Расположение: Конюшня"
+            android:textColor="@color/brown_text"
+            android:textSize="8pt" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1158,4 +1158,77 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         return employees
     }
 
+    fun getAllHorses(): List<Horse>{
+        val db = this.readableDatabase
+        val horses = mutableListOf<Horse>()
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT moniker, dateOfBirth, healthStatus, genderId, breedId, stableId, imageProfile FROM horses", null)
+            if (cursor.moveToFirst()) {
+                do {
+                    val monikerColumnIndex = cursor.getColumnIndex("moniker")
+                    val dateOfBirthColumnIndex = cursor.getColumnIndex("dateOfBirth")
+                    val healthStatusColumnIndex = cursor.getColumnIndex("healthStatus")
+                    val genderIdColumnIndex = cursor.getColumnIndex("genderId")
+                    val breedIdColumnIndex = cursor.getColumnIndex("breedId")
+                    val stableIdColumnIndex = cursor.getColumnIndex("stableId")
+                    val imageProfileColumnIndex = cursor.getColumnIndex("imageProfile")
+
+                    if (monikerColumnIndex == -1 || dateOfBirthColumnIndex == -1 || healthStatusColumnIndex == -1
+                        || genderIdColumnIndex == -1 || breedIdColumnIndex == -1 || stableIdColumnIndex == -1 || imageProfileColumnIndex == -1) {
+                        Log.e("Database", "Один или несколько столбцов не найдены!")
+                        return emptyList()
+                    }
+
+                    val moniker = cursor.getString(monikerColumnIndex)
+                    val dateOfBirth = cursor.getString(dateOfBirthColumnIndex)
+                    val healthStatus = cursor.getString(healthStatusColumnIndex)
+                    val genderId = cursor.getInt(genderIdColumnIndex)
+                    val breedId = cursor.getInt(breedIdColumnIndex)
+                    val stableId = cursor.getInt(stableIdColumnIndex)
+                    val image = cursor.getBlob(imageProfileColumnIndex)
+
+                    val horse = Horse(moniker, dateOfBirth, healthStatus, genderId, breedId, stableId, image)
+                    horses.add(horse)
+
+                } while (cursor.moveToNext())
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении данных из stables: ${e.message}")
+        } finally {
+            cursor?.close()
+        }
+
+        return horses
+    }
+
+    fun getIdHorse(horse: Horse): Int?{
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try {
+            val query = "SELECT id FROM horses WHERE moniker = ? AND dateOfBirth = ? AND healthStatus = ? AND genderId = ? AND breedId = ? AND stableId = ? AND image = ?"
+            cursor = db.rawQuery(query, arrayOf(horse.moniker, horse.dateOfBirth, horse.healthStatus, horse.genderId.toString(), horse.breedId.toString(), horse.stableId.toString(), horse.imageProfile.toString()))
+            if (cursor.moveToFirst()) {
+                val idColumnIndex = cursor.getColumnIndex("id")
+
+                if (idColumnIndex == -1 ) {
+                    Log.e("Database", "Один или несколько столбцов не найдены в таблице horses!")
+                    return null
+                }
+
+                val id = cursor.getInt(idColumnIndex)
+                return id
+            }
+            else {
+                Log.d("Database", "Лошадь не найдена")
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при проверке существования лошади: ${e.message}")
+            return null
+        } finally {
+            cursor?.close()
+        }
+    }
+
 }
