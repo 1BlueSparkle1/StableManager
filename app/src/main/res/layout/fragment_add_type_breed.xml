@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_brown_fon"
+    tools:context=".Pages.AdminPages.Fragments.AddTypeBreedFragment">
+
+    <ImageView
+        android:id="@+id/topFlower"
+        android:layout_width="489dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="-40dp"
+        android:layout_marginTop="-30dp"
+        app:srcCompat="@drawable/flowers_top" />
+
+    <ImageView
+        android:id="@+id/buttomFlower"
+        app:srcCompat="@drawable/flowers_buttom"
+        android:layout_width="500dp"
+        android:layout_height="200dp"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="-45dp"
+        android:layout_marginBottom="-70dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center|center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Создание типа породы"
+            android:textColor="@color/brown_text"
+            android:textSize="20pt" />
+
+        <EditText
+            android:id="@+id/addTitleTypeBreed"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="50dp"
+            android:ems="10"
+            android:hint="Название"
+            android:inputType="text"
+            android:textColor="@color/brown_text"
+            android:textSize="12pt" />
+
+        <Button
+            android:id="@+id/SaveTypeBreedPage"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/brown_text"
+            android:text="Сохранить"
+            android:textColor="@color/light_brown_fon"
+            android:textSize="10pt" />
+    </LinearLayout>
+
+</FrameLayout>

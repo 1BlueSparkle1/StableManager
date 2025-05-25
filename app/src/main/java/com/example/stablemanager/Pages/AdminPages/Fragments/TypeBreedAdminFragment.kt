@@ -38,7 +38,7 @@ class TypeBreedAdminFragment : Fragment() {
             val activity = activity as? StartAdminPageActivity
 
             if (activity != null) {
-                activity.replaceFragment(AddRoleFragment.newInstance(), AddRoleFragment.TAG)
+                activity.replaceFragment(AddTypeBreedFragment.newInstance(), AddTypeBreedFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }
