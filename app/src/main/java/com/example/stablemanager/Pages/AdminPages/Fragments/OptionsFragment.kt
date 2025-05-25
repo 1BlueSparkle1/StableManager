@@ -12,7 +12,6 @@ import android.widget.Button
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.Pages.MainActivity
 import com.example.stablemanager.R
-import com.example.stablemanager.TypeBreedAdminFragment
 
 class OptionsFragment : Fragment() {
     companion object{
@@ -33,6 +32,8 @@ class OptionsFragment : Fragment() {
         val employeeAdminButton : Button = view.findViewById(R.id.employeeAdminButton)
         val horseAdminButton : Button = view.findViewById(R.id.horseAdminButton)
         val typeBreedButton : Button = view.findViewById(R.id.typeBreedAdminButton)
+
+        val genderHorseButton: Button = view.findViewById(R.id.genderHorseAdminButton)
 
         roleAdminButton.setOnClickListener {
             val activity = activity as? StartAdminPageActivity
@@ -89,6 +90,16 @@ class OptionsFragment : Fragment() {
 
             if (activity != null) {
                 activity.replaceFragment(TypeBreedAdminFragment.newInstance(), TypeBreedAdminFragment.TAG)
+            } else {
+                Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
+            }
+        }
+
+        genderHorseButton.setOnClickListener {
+            val activity = activity as? StartAdminPageActivity
+
+            if (activity != null) {
+                activity.replaceFragment(GenderHorseAdminFragment.newInstance(), GenderHorseAdminFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }
