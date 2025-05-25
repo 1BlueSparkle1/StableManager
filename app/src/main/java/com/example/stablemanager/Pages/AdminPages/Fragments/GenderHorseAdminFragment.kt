@@ -40,7 +40,7 @@ class GenderHorseAdminFragment : Fragment() {
             val activity = activity as? StartAdminPageActivity
 
             if (activity != null) {
-                activity.replaceFragment(AddRoleFragment.newInstance(), AddRoleFragment.TAG)
+                activity.replaceFragment(AddGenderHorseFragment.newInstance(), AddGenderHorseFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }
