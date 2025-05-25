@@ -32,6 +32,7 @@ class OptionsFragment : Fragment() {
         val employeeAdminButton : Button = view.findViewById(R.id.employeeAdminButton)
         val horseAdminButton : Button = view.findViewById(R.id.horseAdminButton)
         val typeBreedButton : Button = view.findViewById(R.id.typeBreedAdminButton)
+        val breedAdminButton : Button = view.findViewById(R.id.breedAdminButton)
 
         val genderHorseButton: Button = view.findViewById(R.id.genderHorseAdminButton)
 
@@ -100,6 +101,16 @@ class OptionsFragment : Fragment() {
 
             if (activity != null) {
                 activity.replaceFragment(GenderHorseAdminFragment.newInstance(), GenderHorseAdminFragment.TAG)
+            } else {
+                Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
+            }
+        }
+
+        breedAdminButton.setOnClickListener {
+            val activity = activity as? StartAdminPageActivity
+
+            if (activity != null) {
+                activity.replaceFragment(BreedListAdminFragment.newInstance(), BreedListAdminFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }

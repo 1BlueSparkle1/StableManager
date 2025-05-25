@@ -817,37 +817,39 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
 
 
     //Здесь начало породы
-//    fun getTypeBreed(): List<TypeBreed>{
-//        val db = this.readableDatabase
-//        val typeBreeds = mutableListOf<TypeBreed>()
-//        var cursor: Cursor? = null
-//        try {
-//            cursor = db.rawQuery("SELECT title FROM type_breeds", null)
-//            if (cursor.moveToFirst()) {
-//                do {
-//                    val titleColumnIndex = cursor.getColumnIndex("title")
-//
-//                    if (titleColumnIndex == -1) {
-//                        Log.e("Database", "Один или несколько столбцов не найдены!")
-//                        return emptyList()
-//                    }
-//
-//                    val title = cursor.getString(titleColumnIndex)
-//
-//                    val typeBreed = TypeBreed(title)
-//                    typeBreeds.add(typeBreed)
-//
-//                } while (cursor.moveToNext())
-//            }
-//        } catch (e: Exception) {
-//            Log.e("Database", "Ошибка при получении данных из type_breeds: ${e.message}")
-//        } finally {
-//            cursor?.close()
-//        }
-//
-//        return typeBreeds
-//    }
-//
+    fun getBreeds(): List<Breed>{
+        val db = this.readableDatabase
+        val breeds = mutableListOf<Breed>()
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT title, typeBreedId FROM breeds", null)
+            if (cursor.moveToFirst()) {
+                do {
+                    val titleColumnIndex = cursor.getColumnIndex("title")
+                    val typeBreedIdColumnIndex = cursor.getColumnIndex("typeBreedId")
+
+                    if (titleColumnIndex == -1 || typeBreedIdColumnIndex == -1) {
+                        Log.e("Database", "Один или несколько столбцов не найдены!")
+                        return emptyList()
+                    }
+
+                    val title = cursor.getString(titleColumnIndex)
+                    val typeBreedId = cursor.getInt(typeBreedIdColumnIndex)
+
+                    val breed = Breed(title, typeBreedId)
+                    breeds.add(breed)
+
+                } while (cursor.moveToNext())
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении данных из type_breeds: ${e.message}")
+        } finally {
+            cursor?.close()
+        }
+
+        return breeds
+    }
+
 //    fun addTypeBreed(typeBreed: TypeBreed){
 //        val values = ContentValues()
 //        values.put("title", typeBreed.title)
@@ -915,35 +917,35 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
 //            return false
 //        }
 //    }
-//
-//    fun getIdTypeBreed(title: String): Int?{
-//        val db = this.readableDatabase
-//        var cursor: Cursor? = null
-//        try {
-//            val query = "SELECT id FROM type_breeds WHERE title = ? "
-//            cursor = db.rawQuery(query, arrayOf(title))
-//            if (cursor.moveToFirst()) {
-//                val idColumnIndex = cursor.getColumnIndex("id")
-//
-//                if (idColumnIndex == -1 ) {
-//                    Log.e("Database", "Один или несколько столбцов не найдены в таблице type_breeds!")
-//                    return null
-//                }
-//
-//                val id = cursor.getInt(idColumnIndex)
-//                return id
-//            }
-//            else {
-//                Log.d("Database", "Тип породы не найден")
-//                return null
-//            }
-//        } catch (e: Exception) {
-//            Log.e("Database", "Ошибка при проверке существования типа породы: ${e.message}")
-//            return null
-//        } finally {
-//            cursor?.close()
-//        }
-//    }
+
+    fun getIdBreed(title: String, typeBreedId: Int): Int?{
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try {
+            val query = "SELECT id FROM breeds WHERE title = ? AND typeBreedId = ?"
+            cursor = db.rawQuery(query, arrayOf(title, typeBreedId.toString()))
+            if (cursor.moveToFirst()) {
+                val idColumnIndex = cursor.getColumnIndex("id")
+
+                if (idColumnIndex == -1 ) {
+                    Log.e("Database", "Один или несколько столбцов не найдены в таблице breeds!")
+                    return null
+                }
+
+                val id = cursor.getInt(idColumnIndex)
+                return id
+            }
+            else {
+                Log.d("Database", "Порода не найдена")
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при проверке существования породы: ${e.message}")
+            return null
+        } finally {
+            cursor?.close()
+        }
+    }
 
     //здесь начало пола
 
