@@ -1,0 +1,65 @@
+package com.example.stablemanager.Components.Adapters
+
+import android.annotation.SuppressLint
+import android.content.Context
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.example.stablemanager.Components.Managers.EmployeeManager
+import com.example.stablemanager.Components.Managers.StableAdminAdapter
+import com.example.stablemanager.Components.Managers.StableManager
+import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
+import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.R
+import com.example.stablemanager.db.DBHelper
+import com.example.stablemanager.db.Employee
+import com.example.stablemanager.db.Stable
+
+class EmployeeAdapter(private var employees: List<Employee>, private val activity: StartAdminPageActivity, private var context: Context) : RecyclerView.Adapter<EmployeeAdapter.MyViewHolder>(){
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        val image: ImageView = itemView.findViewById(R.id.employeeLogoImage)
+        val fullname: TextView = itemView.findViewById(R.id.employeeListFullname)
+        val role: TextView = itemView.findViewById(R.id.employeeListRole)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.employee_admin_in_list, parent, false)
+        return MyViewHolder(view)
+    }
+
+    override fun getItemCount(): Int {
+        return employees.count()
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        val db = DBHelper(context, null)
+        val employee = employees[position]
+        holder.fullname.text = "${employee.surname} ${employee.name} ${employee.patronymic}"
+        val role = db.getRolesById(employee.roleId)
+        if(role != null){
+            holder.role.text = role.title
+        }
+
+
+        val employeeManager = EmployeeManager(context)
+        val idEmployee = db.getIdEmployee(employee.email, employee.login)
+
+        holder.itemView.setOnClickListener {
+            val activity = activity as? StartAdminPageActivity
+
+            if (activity != null) {
+                if(idEmployee != null){
+                    employeeManager.saveEmployeeId(idEmployee)
+                }
+                activity.replaceFragment(EditRoleFragment.newInstance(), EditRoleFragment.TAG)
+            } else {
+                Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
+            }
+        }
+    }
+}

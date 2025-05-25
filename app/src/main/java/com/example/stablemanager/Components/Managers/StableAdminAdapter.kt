@@ -17,7 +17,7 @@ import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Owner
 import com.example.stablemanager.db.Stable
 
-class StableAdminAdapter(private var stables: List<Stable>, private val activity: StartAdminPageActivity, private var context: Context) : RecyclerView.Adapter<StableAdminAdapter.MyViewHolder>()  {
+class StableAdminAdapter(private var stables: List<Stable>, private val activity: StartAdminPageActivity, private var context: Context) : RecyclerView.Adapter<StableAdminAdapter.MyViewHolder>(){
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val title: TextView = itemView.findViewById(R.id.stableAdminListTitle)
         val owner: TextView = itemView.findViewById(R.id.stableListOwner)

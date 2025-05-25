@@ -1,4 +1,4 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages.AdminPages.Fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -10,12 +10,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stablemanager.Components.Adapters.OwnerAdapter
-import com.example.stablemanager.Components.Adapters.StablesAdapter
 import com.example.stablemanager.Components.Managers.StableAdminAdapter
-import com.example.stablemanager.Pages.AdminPages.Fragments.AddRoleFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.OwnerListAdminFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 
 class StableListAdminFragment : Fragment() {

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corners"
+    android:orientation="horizontal"
+    android:layout_margin="10dp"
+    android:padding="5dp">
+
+
+    <ImageView
+        android:id="@+id/employeeLogoImage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_margin="15dp"
+        app:srcCompat="@drawable/ic_employee_menu" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/employeeListFullname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Назарычева Валерия Дмитриевна"
+            android:textColor="@color/brown_text"
+            android:layout_marginTop="12dp"
+            android:textSize="10pt"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/employeeListRole"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Роль"
+            android:textColor="@color/brown_text"
+            android:textSize="8pt" />
+
+    </LinearLayout>
+
+</LinearLayout>

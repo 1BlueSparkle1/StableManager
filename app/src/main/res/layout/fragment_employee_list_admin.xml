@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_brown_fon"
-    tools:context=".Pages.AdminPages.Fragments.StableListAdminFragment">
+    tools:context=".Pages.AdminPages.Fragments.EmployeeListAdminFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,19 +25,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="Конюшни"
+                android:text="Сотрудники"
                 android:textColor="@color/brown_text"
                 android:textSize="20pt" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/stableListView"
+                android:id="@+id/employeeListView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="20dp" />
 
             <Button
-                android:id="@+id/addStableAdminButton"
+                android:id="@+id/addEmployeeButton"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|top"
