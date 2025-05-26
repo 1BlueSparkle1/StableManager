@@ -1,4 +1,4 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -12,8 +12,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.stablemanager.Components.Managers.AuthEmployeeManager
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
-import com.example.stablemanager.Pages.OwnerPages.ListStableActivity
-import com.example.stablemanager.Pages.OwnerPages.RegistrationActivity
+import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 
 class AuthEmployeeActivity : AppCompatActivity() {

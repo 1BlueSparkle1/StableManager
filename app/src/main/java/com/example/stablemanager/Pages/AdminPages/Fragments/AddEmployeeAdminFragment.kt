@@ -1,4 +1,4 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages.AdminPages.Fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -12,7 +12,6 @@ import android.widget.ImageView
 import android.widget.Toast
 import android.content.Intent
 import android.graphics.Bitmap
-import android.widget.*
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Employee
 import java.io.ByteArrayOutputStream
@@ -20,11 +19,8 @@ import androidx.appcompat.app.AlertDialog
 import android.app.Activity.RESULT_OK
 import android.util.Log
 import com.example.stablemanager.Components.isValidEmail
-import com.example.stablemanager.Pages.AdminPages.Fragments.AddRoleFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.EmployeeListAdminFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
-import com.example.stablemanager.Pages.OwnerPages.AuthActivity
-import com.example.stablemanager.db.Owner
+import com.example.stablemanager.R
 import org.mindrot.jbcrypt.BCrypt
 
 

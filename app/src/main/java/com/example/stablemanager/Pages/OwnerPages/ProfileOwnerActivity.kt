@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.stablemanager.Components.Managers.AuthManager
+import com.example.stablemanager.Components.Managers.StableManager
 import com.example.stablemanager.Components.isValidEmail
 import com.example.stablemanager.Components.setEditable
 import com.example.stablemanager.Pages.MainActivity
@@ -62,6 +63,8 @@ class ProfileOwnerActivity : AppCompatActivity() {
         }
 
         buttonExit.setOnClickListener {
+            val stableManager = StableManager(this)
+            stableManager.clearStableData()
             authManager.clearAuthData()
 
             val intent = Intent(this, MainActivity::class.java)

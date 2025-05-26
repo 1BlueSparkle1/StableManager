@@ -9,6 +9,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import com.example.stablemanager.Components.Managers.AuthEmployeeManager
+import com.example.stablemanager.Components.Managers.BreedManager
+import com.example.stablemanager.Components.Managers.EmployeeManager
+import com.example.stablemanager.Components.Managers.GenderHorseManager
+import com.example.stablemanager.Components.Managers.HorseManager
+import com.example.stablemanager.Components.Managers.OwnerManager
+import com.example.stablemanager.Components.Managers.RoleManagers
+import com.example.stablemanager.Components.Managers.StableManager
+import com.example.stablemanager.Components.Managers.TypeBreedManager
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.Pages.MainActivity
 import com.example.stablemanager.R
@@ -119,6 +128,25 @@ class OptionsFragment : Fragment() {
         exitAdminButton.setOnClickListener {
             val intent = Intent(context, MainActivity::class.java)
             startActivity(intent)
+
+            val authEmployeeManager = AuthEmployeeManager(requireContext())
+            val breedManager = BreedManager(requireContext())
+            val employeeManager = EmployeeManager(requireContext())
+            val genderHorseManager = GenderHorseManager(requireContext())
+            val horseManager = HorseManager(requireContext())
+            val ownerManager = OwnerManager(requireContext())
+            val roleManager = RoleManagers(requireContext())
+            val stableManager = StableManager(requireContext())
+            val typeBreedManager = TypeBreedManager(requireContext())
+            authEmployeeManager.clearAuthData()
+            breedManager.clearBreedData()
+            employeeManager.clearEmployeeData()
+            genderHorseManager.clearGenderHorseData()
+            horseManager.clearHorseData()
+            ownerManager.clearOwnerData()
+            roleManager.clearRoleData()
+            stableManager.clearStableData()
+            typeBreedManager.clearTypeBreedData()
         }
 
         return view

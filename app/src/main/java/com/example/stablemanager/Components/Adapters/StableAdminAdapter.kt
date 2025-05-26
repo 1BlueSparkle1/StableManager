@@ -1,4 +1,4 @@
-package com.example.stablemanager.Components.Managers
+package com.example.stablemanager.Components.Adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,14 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stablemanager.Components.Adapters.OwnerAdapter
+import com.example.stablemanager.Components.Managers.StableManager
 import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
-import com.example.stablemanager.db.Owner
 import com.example.stablemanager.db.Stable
 
 class StableAdminAdapter(private var stables: List<Stable>, private val activity: StartAdminPageActivity, private var context: Context) : RecyclerView.Adapter<StableAdminAdapter.MyViewHolder>(){
