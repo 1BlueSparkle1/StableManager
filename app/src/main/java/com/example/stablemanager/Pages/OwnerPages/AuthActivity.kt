@@ -49,13 +49,19 @@ class AuthActivity : AppCompatActivity() {
                 val authManager = AuthManager(this)
 
                 if(isAuth != null){
-                    Toast.makeText(this, "Пользователь $login авторизован", Toast.LENGTH_SHORT).show()
-                    authManager.saveUserId(isAuth)
-                    userLogin.text.clear()
-                    userPassword.text.clear()
+                    val owner = db.getOwnerById(isAuth)
+                    if(owner!!.ban){
+                        Toast.makeText(this, "Ваш аккаунт заблокирован, обратитесь в поддержку.", Toast.LENGTH_SHORT).show()
+                    }
+                    else{
+                        Toast.makeText(this, "Пользователь $login авторизован", Toast.LENGTH_SHORT).show()
+                        authManager.saveUserId(isAuth)
+                        userLogin.text.clear()
+                        userPassword.text.clear()
 
-                    val intent = Intent(this, ListStableActivity::class.java)
-                    startActivity(intent)
+                        val intent = Intent(this, ListStableActivity::class.java)
+                        startActivity(intent)
+                    }
                 }
                 else{
                     Toast.makeText(this, "Пользователь $login не найден!", Toast.LENGTH_SHORT).show()

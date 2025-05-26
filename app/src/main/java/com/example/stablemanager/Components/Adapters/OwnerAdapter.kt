@@ -6,12 +6,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stablemanager.Components.Managers.OwnerManager
 import com.example.stablemanager.Components.Managers.RoleManagers
 import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
+import com.example.stablemanager.Pages.AdminPages.Fragments.OwnerListAdminFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
@@ -24,6 +26,7 @@ class OwnerAdapter(private var owners: List<Owner>, private val activity: StartA
         val title: TextView = itemView.findViewById(R.id.ownerListTitle)
         val email: TextView = itemView.findViewById(R.id.ownerListEmail)
         val ban: TextView = itemView.findViewById(R.id.ownerListBan)
+        val banButton: Button = itemView.findViewById(R.id.banButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -37,15 +40,20 @@ class OwnerAdapter(private var owners: List<Owner>, private val activity: StartA
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val owner = owners[position]
+        var owner = owners[position]
         holder.title.text = "${owner.surname} ${owner.fullname} ${owner.patronymic}"
         holder.email.text = owner.email
         if(owner.ban){
             holder.ban.setTextColor(ContextCompat.getColor(context, R.color.exit_red))
             holder.ban.text = "Заблокирован"
+            holder.banButton.text = "Разбанить"
+            holder.banButton.setBackgroundColor(ContextCompat.getColor(context, R.color.brown_text))
         }
         else{
+            holder.ban.setTextColor(ContextCompat.getColor(context, R.color.brown_text))
             holder.ban.text = "Доступен"
+            holder.banButton.text = "Забанить"
+            holder.banButton.setBackgroundColor(ContextCompat.getColor(context, R.color.exit_red))
         }
 
         val ownerManager = OwnerManager(context)
@@ -63,6 +71,23 @@ class OwnerAdapter(private var owners: List<Owner>, private val activity: StartA
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }
+        }
+
+        holder.banButton.setOnClickListener {
+            if(owner.ban){
+                holder.ban.setTextColor(ContextCompat.getColor(context, R.color.brown_text))
+                holder.ban.text = "Доступен"
+                holder.banButton.text = "Забанить"
+                holder.banButton.setBackgroundColor(ContextCompat.getColor(context, R.color.exit_red))
+            }
+            else{
+                holder.ban.setTextColor(ContextCompat.getColor(context, R.color.exit_red))
+                holder.ban.text = "Заблокирован"
+                holder.banButton.text = "Разбанить"
+                holder.banButton.setBackgroundColor(ContextCompat.getColor(context, R.color.brown_text))
+            }
+            db.putBanOwner(idOwner!!, !owner.ban)
+            activity.replaceFragment(OwnerListAdminFragment.newInstance(), OwnerListAdminFragment.TAG)
         }
     }
 }

@@ -229,88 +229,6 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         return owners
     }
 
-    fun getStables(userId: Int): List<Stable>{
-        val db = this.readableDatabase
-        val stables = mutableListOf<Stable>()
-        var cursor: Cursor? = null
-        try {
-            cursor = db.rawQuery("SELECT title, description, ownerId FROM stables WHERE ownerId = ?", arrayOf(userId.toString()))
-            if (cursor.moveToFirst()) {
-                do {
-                    val titleColumnIndex = cursor.getColumnIndex("title")
-                    val descriptionColumnIndex = cursor.getColumnIndex("description")
-                    val ownerIdColumnIndex = cursor.getColumnIndex("ownerId")
-
-                    if (titleColumnIndex == -1 || descriptionColumnIndex == -1 || ownerIdColumnIndex == -1) {
-                        Log.e("Database", "Один или несколько столбцов не найдены!")
-                        return emptyList()
-                    }
-
-                    val title = cursor.getString(titleColumnIndex)
-                    val description = cursor.getString(descriptionColumnIndex)
-                    val ownerId = cursor.getInt(ownerIdColumnIndex)
-
-                    val stable = Stable(title, description, ownerId)
-                    stables.add(stable)
-
-                } while (cursor.moveToNext())
-            }
-        } catch (e: Exception) {
-            Log.e("Database", "Ошибка при получении данных из stables: ${e.message}")
-        } finally {
-            cursor?.close()
-        }
-
-        return stables
-    }
-
-    fun getAllStables(): List<Stable>{
-        val db = this.readableDatabase
-        val stables = mutableListOf<Stable>()
-        var cursor: Cursor? = null
-        try {
-            cursor = db.rawQuery("SELECT title, description, ownerId FROM stables", null)
-            if (cursor.moveToFirst()) {
-                do {
-                    val titleColumnIndex = cursor.getColumnIndex("title")
-                    val descriptionColumnIndex = cursor.getColumnIndex("description")
-                    val ownerIdColumnIndex = cursor.getColumnIndex("ownerId")
-
-                    if (titleColumnIndex == -1 || descriptionColumnIndex == -1 || ownerIdColumnIndex == -1) {
-                        Log.e("Database", "Один или несколько столбцов не найдены!")
-                        return emptyList()
-                    }
-
-                    val title = cursor.getString(titleColumnIndex)
-                    val description = cursor.getString(descriptionColumnIndex)
-                    val ownerId = cursor.getInt(ownerIdColumnIndex)
-
-                    val stable = Stable(title, description, ownerId)
-                    stables.add(stable)
-
-                } while (cursor.moveToNext())
-            }
-        } catch (e: Exception) {
-            Log.e("Database", "Ошибка при получении данных из stables: ${e.message}")
-        } finally {
-            cursor?.close()
-        }
-
-        return stables
-    }
-
-    fun addStable(stable: Stable){
-        val values = ContentValues()
-        values.put("title", stable.title)
-        values.put("description", stable.description)
-        values.put("ownerId", stable.ownerId)
-
-        val db = this.writableDatabase
-        db.insert("stables", null, values)
-
-        db.close()
-    }
-
     fun getOwnerById(userId: Int): Owner?{
         val db = this.readableDatabase
         var cursor: Cursor? = null
@@ -436,6 +354,144 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         }
     }
 
+    fun updatePassword(login: String, newPass: String): Boolean{
+        val db = this.readableDatabase
+        try {
+            val values = ContentValues().apply {
+                put("password", newPass)
+            }
+
+            val rowsAffected = db.update(
+                "owners",
+                values,
+                "login = ?",
+                arrayOf(login)
+            )
+
+            if (rowsAffected > 0) {
+                Log.d("Database", "Пароль успешно обновлен.")
+                return true
+            } else {
+                Log.w("Database", "Владелец не найден для обновления.")
+                return false
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при обновлении пароля: ${e.message}")
+            return false
+        }
+    }
+
+    fun putBanOwner(ownerId: Int, ban: Boolean): Boolean{
+        val db = this.readableDatabase
+        try {
+            val values = ContentValues().apply {
+                put("ban", ban)
+            }
+
+            val rowsAffected = db.update(
+                "owners",
+                values,
+                "id = ?",
+                arrayOf(ownerId.toString())
+            )
+
+            if (rowsAffected > 0) {
+                Log.d("Database", "Бан успешно обновлен.")
+                return true
+            } else {
+                Log.w("Database", "Владелец не найден для обновления.")
+                return false
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при обновлении бана: ${e.message}")
+            return false
+        }
+    }
+
+    fun getStables(userId: Int): List<Stable>{
+        val db = this.readableDatabase
+        val stables = mutableListOf<Stable>()
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT title, description, ownerId FROM stables WHERE ownerId = ?", arrayOf(userId.toString()))
+            if (cursor.moveToFirst()) {
+                do {
+                    val titleColumnIndex = cursor.getColumnIndex("title")
+                    val descriptionColumnIndex = cursor.getColumnIndex("description")
+                    val ownerIdColumnIndex = cursor.getColumnIndex("ownerId")
+
+                    if (titleColumnIndex == -1 || descriptionColumnIndex == -1 || ownerIdColumnIndex == -1) {
+                        Log.e("Database", "Один или несколько столбцов не найдены!")
+                        return emptyList()
+                    }
+
+                    val title = cursor.getString(titleColumnIndex)
+                    val description = cursor.getString(descriptionColumnIndex)
+                    val ownerId = cursor.getInt(ownerIdColumnIndex)
+
+                    val stable = Stable(title, description, ownerId)
+                    stables.add(stable)
+
+                } while (cursor.moveToNext())
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении данных из stables: ${e.message}")
+        } finally {
+            cursor?.close()
+        }
+
+        return stables
+    }
+
+    fun getAllStables(): List<Stable>{
+        val db = this.readableDatabase
+        val stables = mutableListOf<Stable>()
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT title, description, ownerId FROM stables", null)
+            if (cursor.moveToFirst()) {
+                do {
+                    val titleColumnIndex = cursor.getColumnIndex("title")
+                    val descriptionColumnIndex = cursor.getColumnIndex("description")
+                    val ownerIdColumnIndex = cursor.getColumnIndex("ownerId")
+
+                    if (titleColumnIndex == -1 || descriptionColumnIndex == -1 || ownerIdColumnIndex == -1) {
+                        Log.e("Database", "Один или несколько столбцов не найдены!")
+                        return emptyList()
+                    }
+
+                    val title = cursor.getString(titleColumnIndex)
+                    val description = cursor.getString(descriptionColumnIndex)
+                    val ownerId = cursor.getInt(ownerIdColumnIndex)
+
+                    val stable = Stable(title, description, ownerId)
+                    stables.add(stable)
+
+                } while (cursor.moveToNext())
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении данных из stables: ${e.message}")
+        } finally {
+            cursor?.close()
+        }
+
+        return stables
+    }
+
+    fun addStable(stable: Stable){
+        val values = ContentValues()
+        values.put("title", stable.title)
+        values.put("description", stable.description)
+        values.put("ownerId", stable.ownerId)
+
+        val db = this.writableDatabase
+        db.insert("stables", null, values)
+
+        db.close()
+    }
+
     fun getIdStable(title: String, description: String, ownerId: Int): Int?{
         val db = this.readableDatabase
         var cursor: Cursor? = null
@@ -525,34 +581,6 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
 
         } catch (e: Exception) {
             Log.e("Database", "Ошибка при обновлении конюшни: ${e.message}")
-            return false
-        }
-    }
-
-    fun updatePassword(login: String, newPass: String): Boolean{
-        val db = this.readableDatabase
-        try {
-            val values = ContentValues().apply {
-                put("password", newPass)
-            }
-
-            val rowsAffected = db.update(
-                "owners",
-                values,
-                "login = ?",
-                arrayOf(login)
-            )
-
-            if (rowsAffected > 0) {
-                Log.d("Database", "Пароль успешно обновлен.")
-                return true
-            } else {
-                Log.w("Database", "Владелец не найден для обновления.")
-                return false
-            }
-
-        } catch (e: Exception) {
-            Log.e("Database", "Ошибка при обновлении пароля: ${e.message}")
             return false
         }
     }
@@ -815,8 +843,6 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         }
     }
 
-
-    //Здесь начало породы
     fun getBreeds(): List<Breed>{
         val db = this.readableDatabase
         val breeds = mutableListOf<Breed>()
@@ -946,8 +972,6 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
             cursor?.close()
         }
     }
-
-    //здесь начало пола
 
     fun getGenderHorse(): List<GenderHorse>{
         val db = this.readableDatabase

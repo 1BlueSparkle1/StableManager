@@ -1,4 +1,4 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages.OwnerPages.Fragments
 
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
@@ -17,9 +17,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.stablemanager.Components.Managers.StableManager
 import com.example.stablemanager.Components.isValidEmail
-import com.example.stablemanager.Pages.AdminPages.Fragments.AddEmployeeAdminFragment
 import com.example.stablemanager.Pages.AdminPages.Fragments.EmployeeListAdminFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Employee
 import org.mindrot.jbcrypt.BCrypt

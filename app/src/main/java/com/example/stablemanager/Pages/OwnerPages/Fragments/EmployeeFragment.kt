@@ -10,11 +10,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stablemanager.AddEmployeeFragment
 import com.example.stablemanager.Components.Adapters.EmployeeAdapter
 import com.example.stablemanager.Components.Managers.StableManager
-import com.example.stablemanager.Pages.AdminPages.Fragments.AddEmployeeAdminFragment
-import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
