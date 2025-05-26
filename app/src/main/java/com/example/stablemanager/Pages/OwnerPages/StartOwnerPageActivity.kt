@@ -42,7 +42,7 @@ class StartOwnerPageActivity : AppCompatActivity() , BottomNavigationView.OnNavi
         }
     }
 
-    private fun replaceFragment(fragment: Fragment, tag: String) {
+    fun replaceFragment(fragment: Fragment, tag: String) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, fragment, tag)
         transaction.addToBackStack(null)

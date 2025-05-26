@@ -1,6 +1,7 @@
 package com.example.stablemanager.Components.Adapters
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,7 +19,7 @@ import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Employee
 
-class EmployeeAdapter(private var employees: List<Employee>, private val activity: StartAdminPageActivity, private var context: Context, private val admin: Boolean) : RecyclerView.Adapter<EmployeeAdapter.MyViewHolder>(){
+class EmployeeAdapter(private var employees: List<Employee>, private val activity: Activity, private var context: Context, private val admin: Boolean) : RecyclerView.Adapter<EmployeeAdapter.MyViewHolder>(){
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val image: ImageView = itemView.findViewById(R.id.employeeLogoImage)
         val fullname: TextView = itemView.findViewById(R.id.employeeListFullname)

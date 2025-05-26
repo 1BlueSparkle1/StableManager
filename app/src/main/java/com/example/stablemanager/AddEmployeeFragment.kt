@@ -52,7 +52,7 @@ class AddEmployeeFragment : Fragment() {
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_add_employee_admin, container, false)
+        val view = inflater.inflate(R.layout.fragment_add_employee, container, false)
 
         surnameEditText = view.findViewById(R.id.addSurnameEmployee)
         nameEditText = view.findViewById(R.id.addNameEmployee)

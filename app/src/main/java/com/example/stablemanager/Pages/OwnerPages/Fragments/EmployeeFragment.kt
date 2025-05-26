@@ -15,6 +15,7 @@ import com.example.stablemanager.Components.Adapters.EmployeeAdapter
 import com.example.stablemanager.Components.Managers.StableManager
 import com.example.stablemanager.Pages.AdminPages.Fragments.AddEmployeeAdminFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 
@@ -36,11 +37,11 @@ class EmployeeFragment : Fragment() {
 
         val employees = db.getEmployees(stableManager.getStableId())
         employeeList.layoutManager = LinearLayoutManager(requireContext())
-        val activity = activity as StartAdminPageActivity
+        val activity = activity as StartOwnerPageActivity
         employeeList.adapter = EmployeeAdapter(employees, activity, requireContext(), false)
 
         addEmployeeBtn.setOnClickListener {
-            val activity = activity as? StartAdminPageActivity
+            val activity = activity as? StartOwnerPageActivity
 
             if (activity != null) {
                 activity.replaceFragment(AddEmployeeFragment.newInstance(), AddEmployeeFragment.TAG)
