@@ -110,8 +110,7 @@ class ProfileOwnerActivity : AppCompatActivity() {
                         userEmail.setEditable(false)
                         userLogin.setEditable(false)
 
-                        val db = DBHelper(this, null)
-                        db.updateOwner(surname, name, patronymic, email, login)
+                        db.updateOwner(userId, surname, name, patronymic, email, login)
 
                         buttonEdit.visibility = View.VISIBLE
                         buttonSave.visibility = View.GONE

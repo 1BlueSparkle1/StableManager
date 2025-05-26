@@ -385,7 +385,7 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         }
     }
 
-    fun updateOwner(surname: String, name: String, patronymic: String, email: String, login: String): Boolean{
+    fun updateOwner(id: Int, surname: String, name: String, patronymic: String, email: String, login: String): Boolean{
         val db = this.readableDatabase
         try {
             val values = ContentValues().apply {
@@ -399,8 +399,8 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
             val rowsAffected = db.update(
                 "owners",
                 values,
-                "login = ?",
-                arrayOf(login)
+                "id = ?",
+                arrayOf(id.toString())
             )
 
             if (rowsAffected > 0) {
@@ -1265,6 +1265,58 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         } catch (e: Exception) {
             Log.e("Database", "Ошибка при получении сотрудника: ${e.message}")
             return null
+        } finally {
+            cursor?.close()
+        }
+    }
+
+    fun updateEmployee(id: Int, surname: String, name: String, patronymic: String, dateOfBirth: String, email: String, login: String): Boolean{
+        val db = this.readableDatabase
+        try {
+            val values = ContentValues().apply {
+                put("surname", surname)
+                put("name", name)
+                put("patronymic", patronymic)
+                put("dateOfBirth", dateOfBirth)
+                put("email", email)
+                put("login", login)
+            }
+
+            val rowsAffected = db.update(
+                "employees",
+                values,
+                "id = ?",
+                arrayOf(id.toString())
+            )
+
+            if (rowsAffected > 0) {
+                Log.d("Database", "Сотрудник $login успешно обновлен.")
+                return true
+            } else {
+                Log.w("Database", "Сотрудник $login не найден для обновления.")
+                return false
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при обновлении сотрудника: ${e.message}")
+            return false
+        }
+    }
+
+    fun doesEmployeeExist(userId: Int, login: String, email: String): Boolean {
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try {
+            val query = "SELECT 1 FROM employees WHERE (login = ? OR email = ?) AND id != ?"
+            cursor = db.rawQuery(query, arrayOf(login, email, userId.toString()))
+
+            val exists = cursor.count > 0
+            Log.d("Database", "Проверка существования сотрудника с логином '$login' или email '$email': $exists")
+            return exists
+
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при проверке существования сотрудника: ${e.message}")
+            return true
         } finally {
             cursor?.close()
         }
