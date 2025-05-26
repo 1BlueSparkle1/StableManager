@@ -19,6 +19,13 @@ import java.io.ByteArrayOutputStream
 import androidx.appcompat.app.AlertDialog
 import android.app.Activity.RESULT_OK
 import android.util.Log
+import com.example.stablemanager.Components.isValidEmail
+import com.example.stablemanager.Pages.AdminPages.Fragments.AddRoleFragment
+import com.example.stablemanager.Pages.AdminPages.Fragments.EmployeeListAdminFragment
+import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.Pages.OwnerPages.AuthActivity
+import com.example.stablemanager.db.Owner
+import org.mindrot.jbcrypt.BCrypt
 
 
 class AddEmployeeAdminFragment : Fragment() {
@@ -156,9 +163,35 @@ class AddEmployeeAdminFragment : Fragment() {
             return
         }
 
-        val employee = Employee(surname, name, patronymic, email, login, password, selectedRoleId, dateOfBirth, salary, selectedStableId, imageByteArray ?: ByteArray(0))
-        db.addEmployee(employee)
-        Toast.makeText(requireContext(), "Сотрудник добавлен", Toast.LENGTH_SHORT).show()
+        if(isValidEmail(email)){
+            val saltRounds = 12
+            val hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(saltRounds))
+
+
+            val employee = Employee(surname, name, patronymic, email, login, hashPassword, selectedRoleId, dateOfBirth, salary, selectedStableId, imageByteArray ?: ByteArray(0))
+            db.addEmployee(employee)
+            Toast.makeText(requireContext(), "Сотрудник добавлен", Toast.LENGTH_SHORT).show()
+            surnameEditText.text.clear()
+            nameEditText.text.clear()
+            patronymicEditText.text.clear()
+            emailEditText.text.clear()
+            loginEditText.text.clear()
+            passwordEditText.text.clear()
+            dateOfBirthEditText.text.clear()
+            salaryEditText.text.clear()
+
+            val activity = activity as? StartAdminPageActivity
+
+            if (activity != null) {
+                activity.replaceFragment(EmployeeListAdminFragment.newInstance(), EmployeeListAdminFragment.TAG)
+            } else {
+                Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
+            }
+        }
+        else{
+            Toast.makeText(context, "Поле почты заполнено некорректно. Заполните в формате mail@mail.ru", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
 }

@@ -1180,6 +1180,96 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         db.close()
     }
 
+    fun authEmployee(context: Context, login: String, passwordAttempt: String): Int? {
+        val db = this.readableDatabase
+        var result: Cursor? = null
+        try {
+            result = db.rawQuery("SELECT id, password FROM employees WHERE login = ?", arrayOf(login))
+            if (result.moveToFirst()) {
+                val passwordColumnIndex = result.getColumnIndex("password")
+                val idColumnIndex = result.getColumnIndex("id")
+                if (passwordColumnIndex == -1 || idColumnIndex == -1) {
+                    Log.e("Database", "Один или несколько столбцов не найдены в результирующем наборе данных!")
+                    return null
+                }
+
+                val hashedPassword = result.getString(passwordColumnIndex)
+                val userId = result.getInt(idColumnIndex)
+
+                val authManager = AuthManager(context)
+                authManager.saveUserId(userId)
+
+                if (BCrypt.checkpw(passwordAttempt, hashedPassword)) {
+                    Log.d("Authentication", "Пароль верен!")
+                    return userId
+                } else {
+                    Log.d("Authentication", "Неверный пароль!")
+                    return null
+                }
+            } else {
+                Log.d("Authentication", "Пользователь с логином $login не найден")
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при проверке пароля: ${e.message}")
+            return null
+        } finally {
+            result?.close()
+        }
+    }
+
+    fun getEmployeeById(employeeId: Int): Employee?{
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT surname, name, patronymic, email, login, password, roleId, dateOfBirth, salary, stableId, imageProfile FROM employees WHERE id = ?", arrayOf(employeeId.toString()))
+            if (cursor.moveToFirst()) {
+                val surnameColumnIndex = cursor.getColumnIndex("surname")
+                val nameColumnIndex = cursor.getColumnIndex("name")
+                val patronymicColumnIndex = cursor.getColumnIndex("patronymic")
+                val emailColumnIndex = cursor.getColumnIndex("email")
+                val loginColumnIndex = cursor.getColumnIndex("login")
+                val passwordColumnIndex = cursor.getColumnIndex("password")
+                val roleIdColumnIndex = cursor.getColumnIndex("roleId")
+                val dateOfBirthColumnIndex = cursor.getColumnIndex("dateOfBirth")
+                val salaryColumnIndex = cursor.getColumnIndex("salary")
+                val stableIdColumnIndex = cursor.getColumnIndex("stableId")
+                val imageProfileColumnIndex = cursor.getColumnIndex("imageProfile")
+
+                if (surnameColumnIndex == -1 || nameColumnIndex == -1 || emailColumnIndex == -1 || patronymicColumnIndex == -1
+                    || loginColumnIndex == -1 || passwordColumnIndex == -1 || roleIdColumnIndex == -1 || dateOfBirthColumnIndex == -1
+                    || salaryColumnIndex == -1 || stableIdColumnIndex == -1 || imageProfileColumnIndex == -1) {
+                    Log.e("Database", "Один или несколько столбцов не найдены в таблице employees!")
+                    return null
+                }
+
+                val surname = cursor.getString(surnameColumnIndex)
+                val name = cursor.getString(nameColumnIndex)
+                val patronymic = cursor.getString(patronymicColumnIndex)
+                val email = cursor.getString(emailColumnIndex)
+                val login = cursor.getString(loginColumnIndex)
+                val password = cursor.getString(passwordColumnIndex)
+                val roleId = cursor.getInt(roleIdColumnIndex)
+                val dateOfBirth = cursor.getString(dateOfBirthColumnIndex)
+                val salary = cursor.getDouble(salaryColumnIndex)
+                val stableId = cursor.getInt(stableIdColumnIndex)
+                val image = cursor.getBlob(imageProfileColumnIndex)
+
+
+                return Employee(surname, name, patronymic, email, login, password, roleId, dateOfBirth, salary, stableId, image)
+
+            } else {
+                Log.d("Database", "Сотрудник с ID $employeeId не найден")
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении сотрудника: ${e.message}")
+            return null
+        } finally {
+            cursor?.close()
+        }
+    }
+
     fun getAllHorses(): List<Horse>{
         val db = this.readableDatabase
         val horses = mutableListOf<Horse>()
