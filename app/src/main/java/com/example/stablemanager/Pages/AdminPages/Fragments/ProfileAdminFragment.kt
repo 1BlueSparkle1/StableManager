@@ -15,12 +15,9 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import com.example.stablemanager.Components.Managers.AuthEmployeeManager
-import com.example.stablemanager.Components.Managers.AuthManager
 import com.example.stablemanager.Components.byteArrayToBitmap
 import com.example.stablemanager.Components.isValidEmail
 import com.example.stablemanager.Components.setEditable
-import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
-import com.example.stablemanager.Pages.OwnerPages.EditPasswordActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import java.io.ByteArrayOutputStream

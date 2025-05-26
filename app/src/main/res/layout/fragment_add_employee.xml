@@ -5,14 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_brown_fon"
-    tools:context=".Pages.AdminPages.Fragments.AddEmployeeAdminFragment">
+    tools:context=".AddEmployeeFragment">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="7dp"
-        android:layout_marginBottom="80dp"
-        >
+        android:layout_marginBottom="80dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,8 +38,8 @@
                     android:id="@+id/AddEmployeeLogo"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_marginTop="30dp"
                     android:layout_marginLeft="50dp"
+                    android:layout_marginTop="30dp"
                     android:src="@drawable/ic_employee_menu" />
 
                 <Button
@@ -52,7 +51,7 @@
                     android:backgroundTint="@color/brown_text"
                     android:text="Добавить картинку"
                     android:textColor="@color/light_brown_fon"
-                    android:textSize="10pt"/>
+                    android:textSize="10pt" />
 
             </LinearLayout>
 
@@ -105,7 +104,7 @@
                 android:hint="Почта"
                 android:inputType="textWebEmailAddress"
                 android:textColor="@color/brown_text"
-                android:textSize="12pt"/>
+                android:textSize="12pt" />
 
             <EditText
                 android:id="@+id/addLoginEmployee"
@@ -123,9 +122,9 @@
                 android:layout_height="50dp"
                 android:ems="10"
                 android:hint="Пароль"
+                android:inputType="textPassword"
                 android:textColor="@color/brown_text"
-                android:textSize="12pt"
-                android:inputType="textPassword" />
+                android:textSize="12pt" />
 
             <EditText
                 android:id="@+id/addSalaryEmployee"
@@ -151,32 +150,12 @@
                 android:id="@+id/addRoleEmployeeButton"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
                 android:layout_gravity="center_horizontal|bottom"
                 android:backgroundTint="@color/brown_text"
                 android:text="Выбрать роль"
                 android:textColor="@color/light_brown_fon"
-                android:textSize="10pt"  />
-
-            <EditText
-                android:id="@+id/addStableIdEmployee"
-                android:layout_width="350dp"
-                android:layout_height="50dp"
-                android:ems="10"
-                android:hint="Конюшня"
-                android:inputType="text"
-                android:textColor="@color/brown_text"
-                android:textSize="12pt" />
-
-            <Button
-                android:id="@+id/addStableEmployeeButton"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|bottom"
-                android:backgroundTint="@color/brown_text"
-                android:text="Выбрать конюшню"
-                android:textColor="@color/light_brown_fon"
-                android:textSize="10pt"
-                android:layout_marginBottom="80dp"/>
+                android:textSize="10pt" />
 
         </LinearLayout>
 

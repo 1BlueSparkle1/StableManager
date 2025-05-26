@@ -33,7 +33,7 @@ class EmployeeListAdminFragment : Fragment() {
         employeeList.layoutManager = LinearLayoutManager(requireContext())
         val activity = activity as StartAdminPageActivity
         if(employees != null){
-            employeeList.adapter = EmployeeAdapter(employees, activity, requireContext())
+            employeeList.adapter = EmployeeAdapter(employees, activity, requireContext(), true)
         }
 
         addEmployeeBtn.setOnClickListener {

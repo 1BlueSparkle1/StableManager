@@ -18,7 +18,7 @@ import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Employee
 
-class EmployeeAdapter(private var employees: List<Employee>, private val activity: StartAdminPageActivity, private var context: Context) : RecyclerView.Adapter<EmployeeAdapter.MyViewHolder>(){
+class EmployeeAdapter(private var employees: List<Employee>, private val activity: StartAdminPageActivity, private var context: Context, private val admin: Boolean) : RecyclerView.Adapter<EmployeeAdapter.MyViewHolder>(){
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val image: ImageView = itemView.findViewById(R.id.employeeLogoImage)
         val fullname: TextView = itemView.findViewById(R.id.employeeListFullname)
@@ -61,7 +61,12 @@ class EmployeeAdapter(private var employees: List<Employee>, private val activit
                 if(idEmployee != null){
                     employeeManager.saveEmployeeId(idEmployee)
                 }
-                activity.replaceFragment(EditRoleFragment.newInstance(), EditRoleFragment.TAG)
+                if(admin){
+                    activity.replaceFragment(EditRoleFragment.newInstance(), EditRoleFragment.TAG)
+                }
+                else{
+                    activity.replaceFragment(EditRoleFragment.newInstance(), EditRoleFragment.TAG)
+                }
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }
