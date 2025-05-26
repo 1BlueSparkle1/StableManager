@@ -1160,6 +1160,26 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         return employees
     }
 
+    fun addEmployee(employee: Employee){
+        val values = ContentValues()
+        values.put("surname", employee.surname)
+        values.put("name", employee.name)
+        values.put("patronymic", employee.patronymic)
+        values.put("email", employee.email)
+        values.put("login", employee.login)
+        values.put("password", employee.password)
+        values.put("dateOfBirth", employee.dateOfBirth)
+        values.put("roleId", employee.roleId)
+        values.put("salary", employee.salary)
+        values.put("stableId", employee.stableId)
+        values.put("imageProfile", employee.imageProfile)
+
+        val db = this.writableDatabase
+        db.insert("employees", null, values)
+
+        db.close()
+    }
+
     fun getAllHorses(): List<Horse>{
         val db = this.readableDatabase
         val horses = mutableListOf<Horse>()

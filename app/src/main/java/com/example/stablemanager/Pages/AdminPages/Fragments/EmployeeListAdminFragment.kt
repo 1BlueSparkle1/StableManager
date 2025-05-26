@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.stablemanager.AddEmployeeAdminFragment
 import com.example.stablemanager.Components.Adapters.EmployeeAdapter
 import com.example.stablemanager.Components.Managers.StableAdminAdapter
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
@@ -41,7 +42,7 @@ class EmployeeListAdminFragment : Fragment() {
             val activity = activity as? StartAdminPageActivity
 
             if (activity != null) {
-                activity.replaceFragment(AddRoleFragment.newInstance(), AddRoleFragment.TAG)
+                activity.replaceFragment(AddEmployeeAdminFragment.newInstance(), AddEmployeeAdminFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }

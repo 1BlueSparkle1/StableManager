@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_brown_fon"
+    tools:context=".AddEmployeeAdminFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="80dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Создание сотрудников"
+                android:textColor="@color/brown_text"
+                android:textSize="20pt" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/AddEmployeeLogo"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="50dp"
+                    android:src="@drawable/ic_employee_menu" />
+
+                <Button
+                    android:id="@+id/addImageEmployeeButton"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:backgroundTint="@color/brown_text"
+                    android:text="Добавить картинку"
+                    android:textColor="@color/light_brown_fon"
+                    android:textSize="10pt"/>
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/addSurnameEmployee"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:hint="Фамилия"
+                android:inputType="text"
+                android:textColor="@color/brown_text"
+                android:textSize="12pt" />
+
+            <EditText
+                android:id="@+id/addNameEmployee"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:hint="Имя"
+                android:inputType="text"
+                android:textColor="@color/brown_text"
+                android:textSize="12pt" />
+
+            <EditText
+                android:id="@+id/addPatronymicEmployee"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:hint="Отчество"
+                android:inputType="text"
+                android:textColor="@color/brown_text"
+                android:textSize="12pt" />
+
+            <EditText
+                android:id="@+id/addDateOfBirthEmployee"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:hint="Дата рождения"
+                android:inputType="date"
+                android:textColor="@color/brown_text"
+                android:textSize="12pt" />
+
+            <EditText
+                android:id="@+id/addEmailEmployee"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:hint="Почта"
+                android:inputType="textWebEmailAddress"
+                android:textColor="@color/brown_text"
+                android:textSize="12pt"/>
+
+            <EditText
+                android:id="@+id/addLoginEmployee"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:hint="Логин"
+                android:inputType="text"
+                android:textColor="@color/brown_text"
+                android:textSize="12pt" />
+
+            <EditText
+                android:id="@+id/addPasswordEmployee"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:hint="Пароль"
+                android:textColor="@color/brown_text"
+                android:textSize="12pt"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/addSalaryEmployee"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:hint="Зарплата"
+                android:inputType="text"
+                android:textColor="@color/brown_text"
+                android:textSize="12pt" />
+
+            <EditText
+                android:id="@+id/addRoleIdEmployee"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:hint="Роль"
+                android:inputType="text"
+                android:textColor="@color/brown_text"
+                android:textSize="12pt" />
+
+            <Button
+                android:id="@+id/addRoleEmployeeButton"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:backgroundTint="@color/brown_text"
+                android:text="Выбрать роль"
+                android:textColor="@color/light_brown_fon"
+                android:textSize="10pt"  />
+
+            <EditText
+                android:id="@+id/addStableIdEmployee"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:hint="Конюшня"
+                android:inputType="text"
+                android:textColor="@color/brown_text"
+                android:textSize="12pt" />
+
+            <Button
+                android:id="@+id/addStableEmployeeButton"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:backgroundTint="@color/brown_text"
+                android:text="Выбрать конюшню"
+                android:textColor="@color/light_brown_fon"
+                android:textSize="10pt"
+                android:layout_marginBottom="80dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/SaveEmployeeAdminPage"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="60dp"
+        android:backgroundTint="@color/brown_text"
+        android:text="Сохранить"
+        android:textColor="@color/light_brown_fon"
+        android:textSize="10pt" />
+
+    <ImageView
+        android:id="@+id/topFlower"
+        android:layout_width="489dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="-40dp"
+        android:layout_marginTop="-30dp"
+        app:srcCompat="@drawable/flowers_top" />
+
+    <ImageView
+        android:id="@+id/buttomFlower"
+        app:srcCompat="@drawable/flowers_buttom"
+        android:layout_width="500dp"
+        android:layout_height="200dp"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="-45dp"
+        android:layout_marginBottom="-70dp" />
+
+</FrameLayout>

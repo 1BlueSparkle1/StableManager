@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stablemanager.Components.Managers.EmployeeManager
+import com.example.stablemanager.Components.byteArrayToBitmap
 import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R
@@ -40,6 +42,12 @@ class EmployeeAdapter(private var employees: List<Employee>, private val activit
         val role = db.getRolesById(employee.roleId)
         if(role != null){
             holder.role.text = role.title
+        }
+        val byteArray: ByteArray = employee.imageProfile
+        val bitmap = byteArrayToBitmap(byteArray)
+
+        if (bitmap != null) {
+            holder.image.setImageBitmap(bitmap)
         }
 
 
