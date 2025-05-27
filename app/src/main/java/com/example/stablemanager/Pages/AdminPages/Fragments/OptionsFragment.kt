@@ -12,6 +12,7 @@ import android.widget.Button
 import com.example.stablemanager.Components.Managers.AuthEmployeeManager
 import com.example.stablemanager.Components.Managers.BreedManager
 import com.example.stablemanager.Components.Managers.EmployeeManager
+import com.example.stablemanager.Components.Managers.FeedManager
 import com.example.stablemanager.Components.Managers.GenderHorseManager
 import com.example.stablemanager.Components.Managers.HorseManager
 import com.example.stablemanager.Components.Managers.OwnerManager
@@ -42,6 +43,7 @@ class OptionsFragment : Fragment() {
         val horseAdminButton : Button = view.findViewById(R.id.horseAdminButton)
         val typeBreedButton : Button = view.findViewById(R.id.typeBreedAdminButton)
         val breedAdminButton : Button = view.findViewById(R.id.breedAdminButton)
+        val feedAdminButton : Button = view.findViewById(R.id.feedAdminButton)
 
         val genderHorseButton: Button = view.findViewById(R.id.genderHorseAdminButton)
 
@@ -125,6 +127,16 @@ class OptionsFragment : Fragment() {
             }
         }
 
+        feedAdminButton.setOnClickListener {
+            val activity = activity as? StartAdminPageActivity
+
+            if (activity != null) {
+                activity.replaceFragment(FeedListAdminFragment.newInstance(), FeedListAdminFragment.TAG)
+            } else {
+                Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
+            }
+        }
+
         exitAdminButton.setOnClickListener {
             val intent = Intent(context, MainActivity::class.java)
             startActivity(intent)
@@ -138,6 +150,7 @@ class OptionsFragment : Fragment() {
             val roleManager = RoleManagers(requireContext())
             val stableManager = StableManager(requireContext())
             val typeBreedManager = TypeBreedManager(requireContext())
+            val feedManager = FeedManager(requireContext())
             authEmployeeManager.clearAuthData()
             breedManager.clearBreedData()
             employeeManager.clearEmployeeData()
@@ -147,6 +160,7 @@ class OptionsFragment : Fragment() {
             roleManager.clearRoleData()
             stableManager.clearStableData()
             typeBreedManager.clearTypeBreedData()
+            feedManager.clearFeedData()
         }
 
         return view

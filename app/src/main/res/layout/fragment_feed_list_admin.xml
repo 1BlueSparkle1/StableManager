@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_brown_fon"
-    tools:context=".Pages.OwnerPages.Fragments.EmployeeFragment">
+    tools:context=".Pages.AdminPages.Fragments.FeedListAdminFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,22 +25,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="Сотрудники"
+                android:text="Корма"
                 android:textColor="@color/brown_text"
                 android:textSize="20pt" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/employeeListView"
+                android:id="@+id/feedListView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="100dp"/>
+                android:layout_marginBottom="100dp" />
+
+
         </LinearLayout>
     </ScrollView>
 
     <Button
-        android:id="@+id/addEmployeeButton"
+        android:id="@+id/addFeedAdminButton"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
@@ -67,4 +69,5 @@
         android:layout_gravity="bottom"
         android:layout_marginLeft="-45dp"
         android:layout_marginBottom="-70dp" />
+
 </FrameLayout>

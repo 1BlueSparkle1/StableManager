@@ -9,7 +9,7 @@ import android.util.Log
 import com.example.stablemanager.Components.Managers.AuthManager
 import org.mindrot.jbcrypt.BCrypt
 
-class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?) :
+class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, "horse_club", factory, 4) {
     override fun onCreate(db: SQLiteDatabase?) {
         val queryOwners = """
@@ -124,6 +124,13 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
         db!!.execSQL("DROP TABLE IF EXISTS owners")
         db.execSQL("DROP TABLE IF EXISTS stables")
+        db.execSQL("DROP TABLE IF EXISTS roles")
+        db.execSQL("DROP TABLE IF EXISTS employees")
+        db.execSQL("DROP TABLE IF EXISTS type_breeds")
+        db.execSQL("DROP TABLE IF EXISTS breeds")
+        db.execSQL("DROP TABLE IF EXISTS gender_horses")
+        db.execSQL("DROP TABLE IF EXISTS horses")
+        db.execSQL("DROP TABLE IF EXISTS feeds")
         onCreate(db)
     }
 
@@ -1469,6 +1476,53 @@ class DBHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
         } finally {
             cursor?.close()
         }
+    }
+
+    fun getAllFeeds(): List<Feed>{
+        val db = this.readableDatabase
+        val feeds = mutableListOf<Feed>()
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT * FROM feeds", null)
+            if (cursor.moveToFirst()) {
+                do {
+                    val titleColumnIndex = cursor.getColumnIndex("title")
+                    val quantityColumnIndex = cursor.getColumnIndex("quantity")
+                    val stableIdColumnIndex = cursor.getColumnIndex("stableId")
+
+                    if (titleColumnIndex == -1 || quantityColumnIndex == -1 || stableIdColumnIndex == -1) {
+                        Log.e("Database", "Один или несколько столбцов не найдены!")
+                        return emptyList()
+                    }
+
+                    val title = cursor.getString(titleColumnIndex)
+                    val quantity = cursor.getDouble(quantityColumnIndex)
+                    val stableId = cursor.getInt(stableIdColumnIndex)
+
+                    val feed = Feed(title, quantity, stableId)
+                    feeds.add(feed)
+
+                } while (cursor.moveToNext())
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении данных из feeds: ${e.message}")
+        } finally {
+            cursor?.close()
+        }
+
+        return feeds
+    }
+
+    fun addFeed(feed: Feed){
+        val values = ContentValues()
+        values.put("title", feed.title)
+        values.put("quantity", feed.quantity)
+        values.put("stableId", feed.stableId)
+
+        val db = this.writableDatabase
+        db.insert("feeds", null, values)
+
+        db.close()
     }
 
 }
