@@ -42,7 +42,7 @@ class OwnerListAdminFragment : Fragment() {
             val activity = activity as? StartAdminPageActivity
 
             if (activity != null) {
-                activity.replaceFragment(AddRoleFragment.newInstance(), AddRoleFragment.TAG)
+                activity.replaceFragment(AddOwnerAdminFragment.newInstance(), AddOwnerAdminFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }

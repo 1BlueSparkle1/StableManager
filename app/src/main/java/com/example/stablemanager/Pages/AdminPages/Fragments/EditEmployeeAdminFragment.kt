@@ -1,4 +1,4 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages.AdminPages.Fragments
 
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
@@ -20,12 +20,9 @@ import androidx.core.content.ContextCompat
 import com.example.stablemanager.Components.Managers.EmployeeManager
 import com.example.stablemanager.Components.byteArrayToBitmap
 import com.example.stablemanager.Components.setEditable
-import com.example.stablemanager.Pages.AdminPages.Fragments.EmployeeListAdminFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.RoleAdminPageFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
-import com.example.stablemanager.Pages.OwnerPages.Fragments.EditEmployeeFragment
-import com.example.stablemanager.Pages.OwnerPages.Fragments.EmployeeFragment
 import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
+import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Employee
 import java.io.ByteArrayOutputStream
@@ -137,11 +134,17 @@ class EditEmployeeAdminFragment : Fragment() {
             dateOfBirthEditText.setEditable(true)
             salaryEditText.setEditable(true)
             roleButton.isEnabled = true
-            roleButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.brown_text))
+            roleButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),
+                R.color.brown_text
+            ))
             stableButton.isEnabled = true
-            stableButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.brown_text))
+            stableButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),
+                R.color.brown_text
+            ))
             imageButton.isEnabled = true
-            imageButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.brown_text))
+            imageButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),
+                R.color.brown_text
+            ))
 
             editEmployeeButton.visibility = View.GONE
             saveEmployeeButton.visibility = View.VISIBLE
@@ -168,11 +171,17 @@ class EditEmployeeAdminFragment : Fragment() {
                 dateOfBirthEditText.setEditable(false)
                 salaryEditText.setEditable(false)
                 roleButton.isEnabled = false
-                roleButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_brown_text))
+                roleButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),
+                    R.color.light_brown_text
+                ))
                 stableButton.isEnabled = false
-                stableButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_brown_text))
+                stableButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),
+                    R.color.light_brown_text
+                ))
                 imageButton.isEnabled = false
-                imageButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_brown_text))
+                imageButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(),
+                    R.color.light_brown_text
+                ))
 
                 if (selectedRoleId == -1){
                     selectedRoleId = employee.roleId

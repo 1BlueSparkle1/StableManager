@@ -9,12 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stablemanager.Components.Managers.EmployeeManager
 import com.example.stablemanager.Components.byteArrayToBitmap
-import com.example.stablemanager.EditEmployeeAdminFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
+import com.example.stablemanager.Pages.AdminPages.Fragments.EditEmployeeAdminFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.Pages.OwnerPages.Fragments.EditEmployeeFragment
 import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity

@@ -11,7 +11,7 @@ import com.example.stablemanager.Components.Managers.AuthManager
 import org.mindrot.jbcrypt.BCrypt
 
 class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorFactory?) :
-    SQLiteOpenHelper(context, "horse_club", factory, 4) {
+    SQLiteOpenHelper(context, "horse_club", factory, 5) {
     override fun onCreate(db: SQLiteDatabase?) {
         val queryOwners = """
         CREATE TABLE owners (
@@ -720,6 +720,27 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             return null
         } finally {
             cursor?.close()
+        }
+    }
+
+    fun deleteRole(id: Int){
+        val db = this.readableDatabase
+
+        try {
+            val selection = "id = ?"
+            val selectionArgs = arrayOf(id.toString())
+
+            val deletedRows = db.delete("roles", selection, selectionArgs)
+
+            if (deletedRows > 0) {
+                Log.d("DBHelper", "Роль с ID $id успешно удалена.")
+            } else {
+                Log.w("DBHelper", "Не удалось удалить роль с ID $id. Возможно, такой роли не существует.")
+            }
+        } catch (e: SQLException) {
+            Log.e("DBHelper", "Ошибка при удалении роли:", e)
+        } finally {
+            db.close()
         }
     }
 

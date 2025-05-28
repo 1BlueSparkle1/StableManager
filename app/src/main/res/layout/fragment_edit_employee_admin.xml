@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_brown_fon"
-    tools:context=".EditEmployeeAdminFragment">
+    tools:context=".Pages.AdminPages.Fragments.EditEmployeeAdminFragment">
 
     <ScrollView
         android:layout_width="match_parent"

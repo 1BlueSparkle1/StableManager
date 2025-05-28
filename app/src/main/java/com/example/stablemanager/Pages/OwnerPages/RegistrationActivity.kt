@@ -54,8 +54,8 @@ class RegistrationActivity : AppCompatActivity() {
 
             val db = DBHelper(this, null)
 
-            if(surname == "" || name == "" || patronymic == "" || email == "" || login == "" || password == "")
-                Toast.makeText(this, "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show()
+            if(surname == "" || name == "" || email == "" || login == "" || password == "")
+                Toast.makeText(this, "Все основные поля должны быть заполнены", Toast.LENGTH_SHORT).show()
             else {
                 if (db.doesOwnerExist(-1, login, email)){
                     Toast.makeText(this, "Пользователь с таким логином или почтой уже существует", Toast.LENGTH_SHORT).show()
