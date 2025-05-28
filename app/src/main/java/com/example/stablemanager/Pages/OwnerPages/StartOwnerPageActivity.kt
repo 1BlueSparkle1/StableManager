@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.example.stablemanager.NotifyOwnerFragment
 import com.example.stablemanager.R
 import com.example.stablemanager.Pages.OwnerPages.Fragments.StartStableFragment
 import com.example.stablemanager.utils.BottomNavigationPosition
@@ -20,17 +21,23 @@ class StartOwnerPageActivity : AppCompatActivity() , BottomNavigationView.OnNavi
     private var navPosition: BottomNavigationPosition = BottomNavigationPosition.FIRST
     private lateinit var bottomNavigationOwner: BottomNavigationView
     private lateinit var myImageView: ImageView
+    private lateinit var notifyButton: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start_owner_page)
         bottomNavigationOwner = findViewById(R.id.bottomNavigationOwner)
         myImageView = findViewById(R.id.logoStartPageImage)
+        notifyButton = findViewById(R.id.notifyBell)
         initBottomNavigation()
         setupImageViewClick()
 
         if (savedInstanceState == null) {
             replaceFragment(StartStableFragment.newInstance(), StartStableFragment.TAG)
+        }
+
+        notifyButton.setOnClickListener {
+            replaceFragment(NotifyOwnerFragment.newInstance(), NotifyOwnerFragment.TAG)
         }
 
         Toast.makeText(this, "Для возврата на эту страницу, нажмите на логотип", Toast.LENGTH_SHORT).show()

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.example.stablemanager.Components.Managers.RoleManagers
 import com.example.stablemanager.Components.setEditable
@@ -38,6 +39,7 @@ class EditRoleFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_edit_role, container, false)
 
         val titleRole: EditText = view.findViewById(R.id.editTitleRole)
+        val deleteButton: Button = view.findViewById(R.id.deleteRoleButton)
         val db = DBHelper(requireContext(), null)
         val roleId = roleManager.getRoleId()
         var role = Role(0, "")
@@ -81,6 +83,27 @@ class EditRoleFragment : Fragment() {
                 editRoleButton.visibility = View.VISIBLE
                 saveRoleButton.visibility = View.GONE
             }
+        }
+
+        deleteButton.setOnClickListener {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Удаление роли")
+            builder.setMessage("Вы уверены, что хотите удалить эту роль?\nОна будет убрана у всех сотрудников.")
+            builder.setPositiveButton("Да") { dialog, which ->
+                db.deleteRole(roleId)
+                val activity = activity as? StartAdminPageActivity
+
+                if (activity != null) {
+                    activity.replaceFragment(RoleAdminPageFragment.newInstance(), RoleAdminPageFragment.TAG)
+                } else {
+                    Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
+                }
+                Toast.makeText(requireContext(), "Роль удалена", Toast.LENGTH_SHORT).show()
+            }
+            builder.setNegativeButton("Отмена") { dialog, which ->
+            }
+
+            builder.show()
         }
 
         return view
