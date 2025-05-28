@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import com.example.stablemanager.NotifyOwnerFragment
+import com.example.stablemanager.Pages.OwnerPages.Fragments.NotifyOwnerFragment
 import com.example.stablemanager.R
 import com.example.stablemanager.Pages.OwnerPages.Fragments.StartStableFragment
 import com.example.stablemanager.utils.BottomNavigationPosition

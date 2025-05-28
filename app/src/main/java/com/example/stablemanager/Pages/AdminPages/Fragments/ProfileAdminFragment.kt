@@ -18,6 +18,7 @@ import com.example.stablemanager.Components.Managers.AuthEmployeeManager
 import com.example.stablemanager.Components.byteArrayToBitmap
 import com.example.stablemanager.Components.isValidEmail
 import com.example.stablemanager.Components.setEditable
+import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Employee
@@ -134,13 +135,13 @@ class ProfileAdminFragment : Fragment() {
         }
 
         buttonEditPass.setOnClickListener {
-//            val activity = activity as? StartAdminPageActivity
-//
-//            if (activity != null) {
-//                activity.replaceFragment(EmployeeListAdminFragment.newInstance(), EmployeeListAdminFragment.TAG)
-//            } else {
-//                Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
-//            }
+            val activity = activity as? StartAdminPageActivity
+
+            if (activity != null) {
+                activity.replaceFragment(EditPasswordEmployeeFragment.newInstance(), EditPasswordEmployeeFragment.TAG)
+            } else {
+                Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
+            }
         }
 
         return view

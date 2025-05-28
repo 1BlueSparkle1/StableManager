@@ -1,4 +1,4 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages.AdminPages.Fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -12,16 +12,12 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.stablemanager.Components.Managers.OwnerManager
-import com.example.stablemanager.Components.Managers.RoleManagers
 import com.example.stablemanager.Components.isValidEmail
 import com.example.stablemanager.Components.setEditable
-import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.OwnerListAdminFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.RoleAdminPageFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Owner
-import com.example.stablemanager.db.Role
 
 
 class EditOwnerFragment : Fragment() {

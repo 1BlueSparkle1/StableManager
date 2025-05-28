@@ -1507,6 +1507,34 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         return employees
     }
 
+    fun updatePasswordEmployee(login: String, newPass: String): Boolean{
+        val db = this.readableDatabase
+        try {
+            val values = ContentValues().apply {
+                put("password", newPass)
+            }
+
+            val rowsAffected = db.update(
+                "employees",
+                values,
+                "login = ?",
+                arrayOf(login)
+            )
+
+            if (rowsAffected > 0) {
+                Log.d("Database", "Пароль успешно обновлен.")
+                return true
+            } else {
+                Log.w("Database", "Сотрудник не найден для обновления.")
+                return false
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при обновлении пароля: ${e.message}")
+            return false
+        }
+    }
+
     fun getAllHorses(): List<Horse>{
         val db = this.readableDatabase
         val horses = mutableListOf<Horse>()

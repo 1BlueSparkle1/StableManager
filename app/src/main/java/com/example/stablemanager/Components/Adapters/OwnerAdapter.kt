@@ -11,15 +11,12 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stablemanager.Components.Managers.OwnerManager
-import com.example.stablemanager.Components.Managers.RoleManagers
-import com.example.stablemanager.EditOwnerFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
+import com.example.stablemanager.Pages.AdminPages.Fragments.EditOwnerFragment
 import com.example.stablemanager.Pages.AdminPages.Fragments.OwnerListAdminFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Owner
-import com.example.stablemanager.db.Role
 
 class OwnerAdapter(private var owners: List<Owner>, private val activity: StartAdminPageActivity, private var context: Context) : RecyclerView.Adapter<OwnerAdapter.MyViewHolder>()  {
 
