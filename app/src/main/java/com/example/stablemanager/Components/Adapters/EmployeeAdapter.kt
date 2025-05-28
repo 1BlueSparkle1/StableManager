@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stablemanager.Components.Managers.EmployeeManager
 import com.example.stablemanager.Components.byteArrayToBitmap
+import com.example.stablemanager.EditEmployeeAdminFragment
 import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.Pages.OwnerPages.Fragments.EditEmployeeFragment
@@ -64,7 +65,7 @@ class EmployeeAdapter(private var employees: List<Employee>, private val activit
             if(admin){
                 val activity = activity as? StartAdminPageActivity
                 if (activity != null) {
-                    activity.replaceFragment(EditRoleFragment.newInstance(), EditRoleFragment.TAG)
+                    activity.replaceFragment(EditEmployeeAdminFragment.newInstance(), EditEmployeeAdminFragment.TAG)
                 } else {
                     Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
                 }

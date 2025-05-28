@@ -1,4 +1,4 @@
-package com.example.stablemanager.Pages.OwnerPages.Fragments
+package com.example.stablemanager
 
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
@@ -7,6 +7,7 @@ import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,26 +17,24 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.example.stablemanager.Components.Managers.EmployeeManager
-import com.example.stablemanager.Components.Managers.RoleManagers
 import com.example.stablemanager.Components.byteArrayToBitmap
 import com.example.stablemanager.Components.setEditable
-import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
+import com.example.stablemanager.Pages.AdminPages.Fragments.EmployeeListAdminFragment
 import com.example.stablemanager.Pages.AdminPages.Fragments.RoleAdminPageFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.Pages.OwnerPages.Fragments.EditEmployeeFragment
+import com.example.stablemanager.Pages.OwnerPages.Fragments.EmployeeFragment
 import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
-import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Employee
-import com.example.stablemanager.db.Role
 import java.io.ByteArrayOutputStream
 
 
-class EditEmployeeFragment : Fragment() {
+class EditEmployeeAdminFragment : Fragment() {
     companion object{
-        val TAG: String = EditEmployeeFragment::class.java.simpleName
-        fun newInstance() = EditEmployeeFragment()
+        val TAG: String = EditEmployeeAdminFragment::class.java.simpleName
+        fun newInstance() = EditEmployeeAdminFragment()
         private const val PICK_IMAGE_REQUEST = 1
     }
 
@@ -48,6 +47,8 @@ class EditEmployeeFragment : Fragment() {
     private lateinit var loginEditText: EditText
     private lateinit var roleTextView: EditText
     private lateinit var roleButton: Button
+    private lateinit var stableTextView: EditText
+    private lateinit var stableButton: Button
     private lateinit var imageView: ImageView
     private lateinit var imageButton: Button
     private lateinit var dateOfBirthEditText: EditText
@@ -56,6 +57,7 @@ class EditEmployeeFragment : Fragment() {
     private  lateinit var removeButton: Button
 
     private var selectedRoleId: Int = -1
+    private var selectedStableId: Int = -1
     private var imageByteArray: ByteArray? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +67,7 @@ class EditEmployeeFragment : Fragment() {
 
     @SuppressLint("MissingInflatedId", "SetTextI18n")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_edit_employee, container, false)
+        val view = inflater.inflate(R.layout.fragment_edit_employee_admin, container, false)
 
         surnameEditText = view.findViewById(R.id.addSurnameEmployee)
         nameEditText = view.findViewById(R.id.addNameEmployee)
@@ -74,6 +76,8 @@ class EditEmployeeFragment : Fragment() {
         loginEditText = view.findViewById(R.id.addLoginEmployee)
         roleTextView = view.findViewById(R.id.addRoleIdEmployee)
         roleButton = view.findViewById(R.id.addRoleEmployeeButton)
+        stableTextView = view.findViewById(R.id.addStableIdEmployee)
+        stableButton = view.findViewById(R.id.addStableEmployeeButton)
         imageView = view.findViewById(R.id.AddEmployeeLogo)
         imageButton = view.findViewById(R.id.addImageEmployeeButton)
         dateOfBirthEditText = view.findViewById(R.id.addDateOfBirthEmployee)
@@ -82,6 +86,7 @@ class EditEmployeeFragment : Fragment() {
 
         roleButton.setOnClickListener { showRoleSelectionDialog() }
         imageButton.setOnClickListener { chooseImageFromGallery() }
+        stableButton.setOnClickListener { showStableSelectionDialog() }
 
         val db = DBHelper(requireContext(), null)
         val employeeId = employeeManager.getEmployeeId()
@@ -96,6 +101,10 @@ class EditEmployeeFragment : Fragment() {
             val role = db.getRolesById(employee.roleId)
             if (role != null){
                 roleTextView.setText(role.title)
+            }
+            val stable = db.getStableById(employee.stableId)
+            if (stable != null){
+                roleTextView.setText(stable.title)
             }
             val byteArray: ByteArray = employee.imageProfile
             val bitmap = byteArrayToBitmap(byteArray)
@@ -129,6 +138,8 @@ class EditEmployeeFragment : Fragment() {
             salaryEditText.setEditable(true)
             roleButton.isEnabled = true
             roleButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.brown_text))
+            stableButton.isEnabled = true
+            stableButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.brown_text))
             imageButton.isEnabled = true
             imageButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.brown_text))
 
@@ -158,6 +169,8 @@ class EditEmployeeFragment : Fragment() {
                 salaryEditText.setEditable(false)
                 roleButton.isEnabled = false
                 roleButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_brown_text))
+                stableButton.isEnabled = false
+                stableButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_brown_text))
                 imageButton.isEnabled = false
                 imageButton.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.light_brown_text))
 
@@ -167,8 +180,11 @@ class EditEmployeeFragment : Fragment() {
                 if (imageByteArray == null){
                     imageByteArray = employee.imageProfile
                 }
+                if (selectedStableId == -1){
+                    selectedStableId = employee.stableId
+                }
 
-                db.updateEmployee(employeeId, surname, name, patronymic, birth, email, login, imageByteArray!!, selectedRoleId, salary.toDouble(), employee.stableId)
+                db.updateEmployee(employeeId, surname, name, patronymic, birth, email, login, imageByteArray!!, selectedRoleId, salary.toDouble(), selectedStableId)
                 Toast.makeText(requireContext(), "Сотрудник изменен", Toast.LENGTH_SHORT).show()
 
                 editEmployeeButton.visibility = View.VISIBLE
@@ -182,12 +198,12 @@ class EditEmployeeFragment : Fragment() {
             builder.setMessage("Вы уверены, что хотите уволить этого сотрудника?\nВместе с ним будут удалены все записи, в которых он участвует.")
             builder.setPositiveButton("Да") { dialog, which ->
                 db.removeEmployee(employeeId)
-                val activity = activity as? StartOwnerPageActivity
+                val activity = activity as? StartAdminPageActivity
 
                 if (activity != null) {
-                    activity.replaceFragment(EmployeeFragment.newInstance(), EmployeeFragment.TAG)
+                    activity.replaceFragment(EmployeeListAdminFragment.newInstance(), EmployeeListAdminFragment.TAG)
                 } else {
-                    Log.e("OptionsFragment", "StartOwnerPageActivity не найдена")
+                    Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
                 }
                 Toast.makeText(requireContext(), "Сотрудник уволен", Toast.LENGTH_SHORT).show()
             }
@@ -198,6 +214,22 @@ class EditEmployeeFragment : Fragment() {
         }
 
         return view
+    }
+
+    private fun showStableSelectionDialog() {
+        // TODO: Реализовать диалоговое окно для выбора конюшни
+        // Заменить на реальные данные из базы данных
+        val db = DBHelper(requireContext(), null)
+        val stables = db.getAllStables()
+        val stableTitles = stables.map { it.title }.toTypedArray()
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Выберите конюшню")
+        builder.setItems(stableTitles) { _, which ->
+            selectedStableId = db.getIdStable(stables[which].title, stables[which].description, stables[which].ownerId)!!
+            stableTextView.setText(stables[which].title)
+        }
+        builder.show()
     }
 
     private fun showRoleSelectionDialog() {
@@ -245,5 +277,4 @@ class EditEmployeeFragment : Fragment() {
             return ByteArray(0)
         }
     }
-
 }
