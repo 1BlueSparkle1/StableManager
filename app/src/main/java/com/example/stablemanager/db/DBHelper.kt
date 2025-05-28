@@ -418,6 +418,27 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         }
     }
 
+    fun deleteOwner(id: Int){
+        val db = this.readableDatabase
+
+        try {
+            val selection = "id = ?"
+            val selectionArgs = arrayOf(id.toString())
+
+            val deletedRows = db.delete("owners", selection, selectionArgs)
+
+            if (deletedRows > 0) {
+                Log.d("DBHelper", "Владелец с ID $id успешно удален.")
+            } else {
+                Log.w("DBHelper", "Не удалось удалить владельца с ID $id. Возможно, такого владельца не существует.")
+            }
+        } catch (e: SQLException) {
+            Log.e("DBHelper", "Ошибка при удалении владельца:", e)
+        } finally {
+            db.close()
+        }
+    }
+
     fun getStables(userId: Int): List<Stable>{
         val db = this.readableDatabase
         val stables = mutableListOf<Stable>()

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.example.stablemanager.Components.isValidEmail
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
@@ -47,16 +48,21 @@ class AddOwnerAdminFragment : Fragment() {
                 Toast.makeText(requireContext(), "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show()
             }
             else{
-                val saltRounds = 12
-                val hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(saltRounds))
-                db.addOwner(Owner(surname, name, patronymic, email, login, hashPassword, false))
-                Toast.makeText(requireContext(), "Владелец сохранен", Toast.LENGTH_SHORT).show()
-                val activity = activity as? StartAdminPageActivity
+                if(isValidEmail(email)){
+                    val saltRounds = 12
+                    val hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(saltRounds))
+                    db.addOwner(Owner(surname, name, patronymic, email, login, hashPassword, false))
+                    Toast.makeText(requireContext(), "Владелец сохранен", Toast.LENGTH_SHORT).show()
+                    val activity = activity as? StartAdminPageActivity
 
-                if (activity != null) {
-                    activity.replaceFragment(OwnerListAdminFragment.newInstance(), OwnerListAdminFragment.TAG)
-                } else {
-                    Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
+                    if (activity != null) {
+                        activity.replaceFragment(OwnerListAdminFragment.newInstance(), OwnerListAdminFragment.TAG)
+                    } else {
+                        Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
+                    }
+                }
+                else{
+                    Toast.makeText(requireContext(), "Поле почты заполнено некорректно. Заполните в формате mail@mail.ru", Toast.LENGTH_SHORT).show()
                 }
             }
         }

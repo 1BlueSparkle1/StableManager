@@ -122,8 +122,8 @@ class EditEmployeeAdminFragment : Fragment() {
             }
         }
 
-        val editEmployeeButton: Button = view.findViewById(R.id.EditEmployeePage)
-        val saveEmployeeButton: Button = view.findViewById(R.id.SaveEmployeePage)
+        val editEmployeeButton: Button = view.findViewById(R.id.EditOwnerButton)
+        val saveEmployeeButton: Button = view.findViewById(R.id.SaveOwnerButton)
 
         editEmployeeButton.setOnClickListener {
             surnameEditText.setEditable(true)

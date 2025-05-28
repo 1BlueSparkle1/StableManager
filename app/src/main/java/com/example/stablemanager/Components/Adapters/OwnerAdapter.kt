@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stablemanager.Components.Managers.OwnerManager
 import com.example.stablemanager.Components.Managers.RoleManagers
+import com.example.stablemanager.EditOwnerFragment
 import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
 import com.example.stablemanager.Pages.AdminPages.Fragments.OwnerListAdminFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
@@ -67,7 +68,7 @@ class OwnerAdapter(private var owners: List<Owner>, private val activity: StartA
                 if(idOwner != null){
                     ownerManager.saveOwnerId(idOwner)
                 }
-                activity.replaceFragment(EditRoleFragment.newInstance(), EditRoleFragment.TAG)
+                activity.replaceFragment(EditOwnerFragment.newInstance(), EditOwnerFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }
