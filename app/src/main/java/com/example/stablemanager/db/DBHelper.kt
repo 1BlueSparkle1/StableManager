@@ -3,6 +3,7 @@ package com.example.stablemanager.db
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
@@ -1301,7 +1302,7 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         }
     }
 
-    fun updateEmployee(id: Int, surname: String, name: String, patronymic: String, dateOfBirth: String, email: String, login: String): Boolean{
+    fun updateEmployeeProfile(id: Int, surname: String, name: String, patronymic: String, dateOfBirth: String, email: String, login: String, image: ByteArray): Boolean{
         val db = this.readableDatabase
         try {
             val values = ContentValues().apply {
@@ -1311,6 +1312,7 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
                 put("dateOfBirth", dateOfBirth)
                 put("email", email)
                 put("login", login)
+                put("imageProfile", image)
             }
 
             val rowsAffected = db.update(
@@ -1331,6 +1333,64 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         } catch (e: Exception) {
             Log.e("Database", "Ошибка при обновлении сотрудника: ${e.message}")
             return false
+        }
+    }
+
+    fun updateEmployee(id: Int, surname: String, name: String, patronymic: String, dateOfBirth: String, email: String, login: String, image: ByteArray, roleId: Int, salary: Double, stableId: Int): Boolean{
+        val db = this.readableDatabase
+        try {
+            val values = ContentValues().apply {
+                put("surname", surname)
+                put("name", name)
+                put("patronymic", patronymic)
+                put("dateOfBirth", dateOfBirth)
+                put("email", email)
+                put("login", login)
+                put("roleId", roleId)
+                put("salary", salary)
+                put("stableId", stableId)
+                put("imageProfile", image)
+            }
+
+            val rowsAffected = db.update(
+                "employees",
+                values,
+                "id = ?",
+                arrayOf(id.toString())
+            )
+
+            if (rowsAffected > 0) {
+                Log.d("Database", "Сотрудник $login успешно обновлен.")
+                return true
+            } else {
+                Log.w("Database", "Сотрудник $login не найден для обновления.")
+                return false
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при обновлении сотрудника: ${e.message}")
+            return false
+        }
+    }
+
+    fun removeEmployee(id: Int) {
+        val db = this.readableDatabase
+
+        try {
+            val selection = "id = ?"
+            val selectionArgs = arrayOf(id.toString())
+
+            val deletedRows = db.delete("employees", selection, selectionArgs)
+
+            if (deletedRows > 0) {
+                Log.d("DBHelper", "Сотрудник с ID $id успешно удален.")
+            } else {
+                Log.w("DBHelper", "Не удалось удалить сотрудника с ID $id. Возможно, такого сотрудника не существует.")
+            }
+        } catch (e: SQLException) {
+            Log.e("DBHelper", "Ошибка при удалении сотрудника:", e)
+        } finally {
+            db.close()
         }
     }
 

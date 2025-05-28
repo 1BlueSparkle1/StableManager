@@ -20,6 +20,7 @@ import com.example.stablemanager.Components.isValidEmail
 import com.example.stablemanager.Components.setEditable
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
+import com.example.stablemanager.db.Employee
 import java.io.ByteArrayOutputStream
 
 
@@ -30,6 +31,7 @@ class ProfileAdminFragment : Fragment() {
         private const val PICK_IMAGE_REQUEST = 1
     }
 
+    private lateinit var user: Employee
     private lateinit var userImage: ImageView
     private var imageByteArray: ByteArray? = null
 
@@ -55,9 +57,9 @@ class ProfileAdminFragment : Fragment() {
         var userId = -1
         if (authEmployeeManager.isLoggedIn()) {
             userId = authEmployeeManager.getEmployeeId()
-            val user = db.getEmployeeById(userId)
 
-            if (user != null) {
+            if (db.getEmployeeById(userId) != null) {
+                user = db.getEmployeeById(userId)!!
                 userSurname.setText(user.surname)
                 userName.setText(user.name)
                 userPatronymic.setText(user.patronymic)
@@ -113,7 +115,12 @@ class ProfileAdminFragment : Fragment() {
                         userEmail.setEditable(false)
                         userLogin.setEditable(false)
 
-                        db.updateEmployee(userId, surname, name, patronymic, dateOfBirth, email, login)
+                        if(imageByteArray != null){
+                            db.updateEmployeeProfile(userId, surname, name, patronymic, dateOfBirth, email, login, imageByteArray!!)
+                        }
+                        else{
+                            db.updateEmployeeProfile(userId, surname, name, patronymic, dateOfBirth, email, login, user.imageProfile)
+                        }
 
                         buttonEdit.visibility = View.VISIBLE
                         buttonSave.visibility = View.GONE

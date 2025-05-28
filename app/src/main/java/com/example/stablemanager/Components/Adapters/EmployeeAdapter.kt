@@ -15,6 +15,8 @@ import com.example.stablemanager.Components.Managers.EmployeeManager
 import com.example.stablemanager.Components.byteArrayToBitmap
 import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.Pages.OwnerPages.Fragments.EditEmployeeFragment
+import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Employee
@@ -56,20 +58,24 @@ class EmployeeAdapter(private var employees: List<Employee>, private val activit
         val idEmployee = db.getIdEmployee(employee.email, employee.login)
 
         holder.itemView.setOnClickListener {
-            val activity = activity as? StartAdminPageActivity
-
-            if (activity != null) {
-                if(idEmployee != null){
-                    employeeManager.saveEmployeeId(idEmployee)
-                }
-                if(admin){
+            if(idEmployee != null){
+                employeeManager.saveEmployeeId(idEmployee)
+            }
+            if(admin){
+                val activity = activity as? StartAdminPageActivity
+                if (activity != null) {
                     activity.replaceFragment(EditRoleFragment.newInstance(), EditRoleFragment.TAG)
+                } else {
+                    Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
                 }
-                else{
-                    activity.replaceFragment(EditRoleFragment.newInstance(), EditRoleFragment.TAG)
+            }
+            else{
+                val activity = activity as? StartOwnerPageActivity
+                if (activity != null) {
+                    activity.replaceFragment(EditEmployeeFragment.newInstance(), EditEmployeeFragment.TAG)
+                } else {
+                    Log.e("OptionsFragment", "StartOwnerPageActivity не найдена")
                 }
-            } else {
-                Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }
         }
     }
