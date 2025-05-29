@@ -122,8 +122,8 @@ class EditEmployeeAdminFragment : Fragment() {
             }
         }
 
-        val editEmployeeButton: Button = view.findViewById(R.id.EditOwnerButton)
-        val saveEmployeeButton: Button = view.findViewById(R.id.SaveOwnerButton)
+        val editEmployeeButton: Button = view.findViewById(R.id.EditEmployeePage)
+        val saveEmployeeButton: Button = view.findViewById(R.id.SaveEmployeePage)
 
         editEmployeeButton.setOnClickListener {
             surnameEditText.setEditable(true)
@@ -148,6 +148,7 @@ class EditEmployeeAdminFragment : Fragment() {
 
             editEmployeeButton.visibility = View.GONE
             saveEmployeeButton.visibility = View.VISIBLE
+            Toast.makeText(requireContext(), "Сотрудник изменен", Toast.LENGTH_SHORT).show()
         }
 
         saveEmployeeButton.setOnClickListener {

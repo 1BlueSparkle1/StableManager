@@ -78,10 +78,11 @@ class EditRoleFragment : Fragment() {
             else{
                 titleRole.setEditable(false)
 
-                db.updateRole(roleId, title, )
+                db.updateRole(roleId, title)
 
                 editRoleButton.visibility = View.VISIBLE
                 saveRoleButton.visibility = View.GONE
+                Toast.makeText(requireContext(), "Роль изменена", Toast.LENGTH_SHORT).show()
             }
         }
 

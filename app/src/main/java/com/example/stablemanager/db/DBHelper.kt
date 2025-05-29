@@ -893,6 +893,27 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         }
     }
 
+    fun deleteTypeBreed(id: Int){
+        val db = this.readableDatabase
+
+        try {
+            val selection = "id = ?"
+            val selectionArgs = arrayOf(id.toString())
+
+            val deletedRows = db.delete("type_breeds", selection, selectionArgs)
+
+            if (deletedRows > 0) {
+                Log.d("DBHelper", "Тип породы с ID $id успешно удален.")
+            } else {
+                Log.w("DBHelper", "Не удалось удалить тип породы с ID $id. Возможно, такого типа породы не существует.")
+            }
+        } catch (e: SQLException) {
+            Log.e("DBHelper", "Ошибка при удалении типа породы:", e)
+        } finally {
+            db.close()
+        }
+    }
+
     fun getBreeds(): List<Breed>{
         val db = this.readableDatabase
         val breeds = mutableListOf<Breed>()

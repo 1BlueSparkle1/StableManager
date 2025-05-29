@@ -102,6 +102,7 @@ class EditOwnerFragment : Fragment() {
 
                     editOwnerButton.visibility = View.VISIBLE
                     saveOwnerButton.visibility = View.GONE
+                    Toast.makeText(requireContext(), "Владелец изменен", Toast.LENGTH_SHORT).show()
                 }
                 else{
                     Toast.makeText(requireContext(), "Поле почты заполнено некорректно. Заполните в формате mail@mail.ru", Toast.LENGTH_SHORT).show()

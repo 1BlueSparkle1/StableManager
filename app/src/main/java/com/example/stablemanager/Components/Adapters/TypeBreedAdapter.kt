@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stablemanager.Components.Managers.HorseManager
 import com.example.stablemanager.Components.Managers.TypeBreedManager
+import com.example.stablemanager.EditTypeBreedFragment
 import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R
@@ -47,7 +48,7 @@ class TypeBreedAdapter(private var typeBreeds: List<TypeBreed>, private val acti
                 if(idTypeBreed != null){
                     typeBreedManager.saveTypeBreedId(idTypeBreed)
                 }
-                activity.replaceFragment(EditRoleFragment.newInstance(), EditRoleFragment.TAG)
+                activity.replaceFragment(EditTypeBreedFragment.newInstance(), EditTypeBreedFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }
