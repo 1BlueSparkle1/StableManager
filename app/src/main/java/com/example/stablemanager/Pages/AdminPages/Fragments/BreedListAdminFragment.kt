@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.stablemanager.AddBreedAdminFragment
 import com.example.stablemanager.Components.Adapters.BreedAdapter
 import com.example.stablemanager.Components.Adapters.GenderHorseAdapter
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
@@ -40,7 +41,7 @@ class BreedListAdminFragment : Fragment() {
             val activity = activity as? StartAdminPageActivity
 
             if (activity != null) {
-                activity.replaceFragment(AddRoleFragment.newInstance(), AddRoleFragment.TAG)
+                activity.replaceFragment(AddBreedAdminFragment.newInstance(), AddBreedAdminFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }

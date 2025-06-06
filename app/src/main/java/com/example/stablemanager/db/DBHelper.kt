@@ -1124,16 +1124,17 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         return breeds
     }
 
-//    fun addTypeBreed(typeBreed: TypeBreed){
-//        val values = ContentValues()
-//        values.put("title", typeBreed.title)
-//
-//        val db = this.writableDatabase
-//        db.insert("type_breeds", null, values)
-//
-//        db.close()
-//    }
-//
+    fun addBreed(breed: Breed){
+        val values = ContentValues()
+        values.put("title", breed.title)
+        values.put("typeBreedId", breed.typeBreedId)
+
+        val db = this.writableDatabase
+        db.insert("breeds", null, values)
+
+        db.close()
+    }
+
 //    fun getTypeBreedById(typeBreedId: Int) : TypeBreed?{
 //        val db = this.readableDatabase
 //        var cursor: Cursor? = null
