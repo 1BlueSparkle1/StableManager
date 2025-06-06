@@ -94,17 +94,23 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
 
         val queryHorse = """
         CREATE TABLE horses (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            moniker TEXT NOT NULL,
-            dateOfBirth TEXT NOT NULL,
-            healthStatus TEXT,
-            genderId INTEGER,
-            breedId INTEGER,
-            stableId INTEGER,
-            imageProfile BLOB,
-            FOREIGN KEY (genderId) REFERENCES gender_horses(id),
-            FOREIGN KEY (breedId) REFERENCES breeds(id),
-            FOREIGN KEY (stableId) REFERENCES stables(id)
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Moniker TEXT NOT NULL,
+            BirthDate TEXT,
+            GenderId INTEGER,
+            BreedId INTEGER,
+            FeedingConditionId INTEGER,
+            TurnoutConditionId INTEGER,
+            HealthCondition TEXT,
+            FarrierId INTEGER,
+            VeterinarianId INTEGER,
+            Image BLOB,
+            FOREIGN KEY (GenderId) REFERENCES Genders(Id),
+            FOREIGN KEY (BreedId) REFERENCES Breeds(Id),
+            FOREIGN KEY (FeedingConditionId) REFERENCES FeedingConditions(Id),
+            FOREIGN KEY (TurnoutConditionId) REFERENCES TurnoutConditions(Id),
+            FOREIGN KEY (FarrierId) REFERENCES Farriers(Id),
+            FOREIGN KEY (VeterinarianId) REFERENCES Veterinarians(Id)
         )
     """.trimIndent()
         db.execSQL(queryHorse)
@@ -120,6 +126,164 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
     """.trimIndent()
         db.execSQL(queryFeed)
 
+        val queryVeterinarians = """
+        CREATE TABLE Veterinarians (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            FullName TEXT NOT NULL,
+            PhoneNumber TEXT,
+            StableId INTEGER,
+            FOREIGN KEY (StableId) REFERENCES Stables(Id)
+        );
+    """.trimIndent()
+        db.execSQL(queryVeterinarians)
+
+        val queryFarriers = """
+        CREATE TABLE Farriers (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            FullName TEXT NOT NULL,
+            PhoneNumber TEXT,
+            StableId INTEGER,
+            FOREIGN KEY (StableId) REFERENCES Stables(Id)
+        );
+    """.trimIndent()
+        db.execSQL(queryFarriers)
+
+        // Таблица "Услуга" (Service)
+        val queryServices = """
+        CREATE TABLE Services (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Title TEXT NOT NULL,
+            Price REAL NOT NULL,
+            Description TEXT
+        );
+    """.trimIndent()
+        db.execSQL(queryServices)
+
+        // Таблица "Запись" (Appointment)
+        val queryAppointments = """
+        CREATE TABLE Appointments (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            ServiceId INTEGER NOT NULL,
+            HorseId INTEGER NOT NULL,
+            EmployeeId INTEGER NOT NULL,
+            ClientName TEXT NOT NULL,
+            ClientPhone TEXT NOT NULL,
+            AppointmentDateTime DATETIME NOT NULL,
+            StableId INTEGER NOT NULL,
+            Confirmation INTEGER DEFAULT 0, 
+            FOREIGN KEY (ServiceId) REFERENCES Services(Id),
+            FOREIGN KEY (HorseId) REFERENCES Horses(Id),
+            FOREIGN KEY (EmployeeId) REFERENCES Employees(Id),
+            FOREIGN KEY (StableId) REFERENCES Stables(Id)
+        );
+    """.trimIndent()
+        db.execSQL(queryAppointments)
+
+        // Таблица "Уровень подготовки" (TrainingLevel)
+        val queryTrainingLevels = """
+        CREATE TABLE TrainingLevels (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Title TEXT NOT NULL
+        );
+    """.trimIndent()
+        db.execSQL(queryTrainingLevels)
+
+        // Таблица "Уровень подготовки сотрудников" (EmployeeTrainingLevel)
+        val queryEmployeeTrainingLevels = """
+        CREATE TABLE EmployeeTrainingLevels (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            TrainingLevelId INTEGER NOT NULL,
+            EmployeeId INTEGER NOT NULL,
+            FOREIGN KEY (TrainingLevelId) REFERENCES TrainingLevels(Id),
+            FOREIGN KEY (EmployeeId) REFERENCES Employees(Id)
+        );
+    """.trimIndent()
+        db.execSQL(queryEmployeeTrainingLevels)
+
+        // Таблица "Уровень подготовки лошадей" (HorseTrainingLevel)
+        val queryHorseTrainingLevels = """
+        CREATE TABLE HorseTrainingLevels (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            TrainingLevelId INTEGER NOT NULL,
+            HorseId INTEGER NOT NULL,
+            FOREIGN KEY (TrainingLevelId) REFERENCES TrainingLevels(Id),
+            FOREIGN KEY (HorseId) REFERENCES Horses(Id)
+        );
+    """.trimIndent()
+        db.execSQL(queryHorseTrainingLevels)
+
+        // Таблица "Выгул" (Turnout)
+        val queryTurnouts = """
+        CREATE TABLE Turnouts (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            NumberOfHorses INTEGER NOT NULL,
+            StartTime TIME NOT NULL,
+            EndTime TIME NOT NULL,
+            StableId INTEGER NOT NULL,
+            FOREIGN KEY (StableId) REFERENCES Stables(Id)
+        );
+    """.trimIndent()
+        db.execSQL(queryTurnouts)
+
+        // Таблица "Расписание выгула" (TurnoutSchedule)
+        val queryTurnoutSchedules = """
+        CREATE TABLE TurnoutSchedules (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            TurnoutId INTEGER NOT NULL,
+            HorseId INTEGER NOT NULL,
+            FOREIGN KEY (TurnoutId) REFERENCES Turnouts(Id),
+            FOREIGN KEY (HorseId) REFERENCES Horses(Id)
+        );
+    """.trimIndent()
+        db.execSQL(queryTurnoutSchedules)
+
+        // Таблица "Выполнение выгула" (TurnoutExecution)
+        val queryTurnoutExecutions = """
+        CREATE TABLE TurnoutExecutions (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            TurnoutScheduleId INTEGER NOT NULL,
+            ExecutionDate DATE NOT NULL,
+            FOREIGN KEY (TurnoutScheduleId) REFERENCES TurnoutSchedules(Id)
+        );
+    """.trimIndent()
+        db.execSQL(queryTurnoutExecutions)
+
+        // Таблица "Время кормления" (FeedingTime)
+        val queryFeedingTimes = """
+        CREATE TABLE FeedingTimes (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Title TEXT NOT NULL
+        );
+    """.trimIndent()
+        db.execSQL(queryFeedingTimes)
+
+        // Таблица "Расписание кормления" (FeedingSchedule)
+        val queryFeedingSchedules = """
+        CREATE TABLE FeedingSchedules (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            FeedingTimeId INTEGER NOT NULL,
+            FeedId INTEGER NOT NULL,
+            Quantity REAL NOT NULL,
+            HorseId INTEGER NOT NULL,
+            Steam BOOLEAN NOT NULL,
+            FOREIGN KEY (FeedingTimeId) REFERENCES FeedingTimes(Id),
+            FOREIGN KEY (FeedId) REFERENCES Feeds(Id),
+            FOREIGN KEY (HorseId) REFERENCES Horses(Id)
+        );
+    """.trimIndent()
+        db.execSQL(queryFeedingSchedules)
+
+        // Таблица "Выполнение кормления" (FeedingExecution)
+        val queryFeedingExecutions = """
+        CREATE TABLE FeedingExecutions (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            FeedingScheduleId INTEGER NOT NULL,
+            ExecutionDate DATE NOT NULL,
+            FOREIGN KEY (FeedingScheduleId) REFERENCES FeedingSchedules(Id)
+        );
+    """.trimIndent()
+        db.execSQL(queryFeedingExecutions)
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
@@ -132,6 +296,19 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         db.execSQL("DROP TABLE IF EXISTS gender_horses")
         db.execSQL("DROP TABLE IF EXISTS horses")
         db.execSQL("DROP TABLE IF EXISTS feeds")
+        db.execSQL("DROP TABLE IF EXISTS Veterinarians")
+        db.execSQL("DROP TABLE IF EXISTS Farriers")
+        db.execSQL("DROP TABLE IF EXISTS Services")
+        db.execSQL("DROP TABLE IF EXISTS Appointments")
+        db.execSQL("DROP TABLE IF EXISTS TrainingLevels")
+        db.execSQL("DROP TABLE IF EXISTS EmployeeTrainingLevels")
+        db.execSQL("DROP TABLE IF EXISTS HorseTrainingLevels")
+        db.execSQL("DROP TABLE IF EXISTS Turnouts")
+        db.execSQL("DROP TABLE IF EXISTS TurnoutSchedules")
+        db.execSQL("DROP TABLE IF EXISTS TurnoutExecutions")
+        db.execSQL("DROP TABLE IF EXISTS FeedingTimes")
+        db.execSQL("DROP TABLE IF EXISTS FeedingSchedules")
+        db.execSQL("DROP TABLE IF EXISTS FeedingExecutions")
         onCreate(db)
     }
 
@@ -1169,6 +1346,27 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             return null
         } finally {
             cursor?.close()
+        }
+    }
+
+    fun deleteGenderHorse(id: Int){
+        val db = this.readableDatabase
+
+        try {
+            val selection = "id = ?"
+            val selectionArgs = arrayOf(id.toString())
+
+            val deletedRows = db.delete("gender_horses", selection, selectionArgs)
+
+            if (deletedRows > 0) {
+                Log.d("DBHelper", "Пол лошадей с ID $id успешно удален.")
+            } else {
+                Log.w("DBHelper", "Не удалось удалить пол лошадей с ID $id. Возможно, такого пола лошадей не существует.")
+            }
+        } catch (e: SQLException) {
+            Log.e("DBHelper", "Ошибка при удалении пола лошадей:", e)
+        } finally {
+            db.close()
         }
     }
 

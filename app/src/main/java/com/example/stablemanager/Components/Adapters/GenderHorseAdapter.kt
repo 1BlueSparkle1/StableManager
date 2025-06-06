@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stablemanager.Components.Managers.GenderHorseManager
 import com.example.stablemanager.Components.Managers.TypeBreedManager
+import com.example.stablemanager.EditGenderHorseFragment
 import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R
@@ -45,7 +46,7 @@ class GenderHorseAdapter(private var genderHorses: List<GenderHorse>, private va
                 if(idGenderHorse != null){
                     genderHorseManager.saveGenderHorseId(idGenderHorse)
                 }
-                activity.replaceFragment(EditRoleFragment.newInstance(), EditRoleFragment.TAG)
+                activity.replaceFragment(EditGenderHorseFragment.newInstance(), EditGenderHorseFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }
