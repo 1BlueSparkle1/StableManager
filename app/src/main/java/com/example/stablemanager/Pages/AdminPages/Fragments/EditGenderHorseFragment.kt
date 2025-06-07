@@ -1,4 +1,4 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages.AdminPages.Fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -12,14 +12,11 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.stablemanager.Components.Managers.GenderHorseManager
-import com.example.stablemanager.Components.Managers.TypeBreedManager
 import com.example.stablemanager.Components.setEditable
-import com.example.stablemanager.Pages.AdminPages.Fragments.GenderHorseAdminFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.TypeBreedAdminFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.GenderHorse
-import com.example.stablemanager.db.TypeBreed
 
 
 class EditGenderHorseFragment : Fragment() {

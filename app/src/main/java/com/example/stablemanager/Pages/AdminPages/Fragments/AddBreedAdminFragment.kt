@@ -1,4 +1,4 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages.AdminPages.Fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -11,13 +11,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.example.stablemanager.Pages.AdminPages.Fragments.AddRoleFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.BreedListAdminFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.RoleAdminPageFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.R
 import com.example.stablemanager.db.Breed
 import com.example.stablemanager.db.DBHelper
-import com.example.stablemanager.db.Role
 
 class AddBreedAdminFragment : Fragment() {
     companion object{
@@ -43,8 +40,8 @@ class AddBreedAdminFragment : Fragment() {
 
         addBreedBtn.setOnClickListener {
             val title = titleBreed.text.toString().trim()
-            if(title == "" || selectedTypeBreedId == -1){
-                Toast.makeText(requireContext(), "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show()
+            if(title == ""){
+                Toast.makeText(requireContext(), "Название должно быть заполнено", Toast.LENGTH_SHORT).show()
             }
             else{
                 db.addBreed(Breed(title, selectedTypeBreedId))

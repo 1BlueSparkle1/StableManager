@@ -1135,63 +1135,66 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         db.close()
     }
 
-//    fun getTypeBreedById(typeBreedId: Int) : TypeBreed?{
-//        val db = this.readableDatabase
-//        var cursor: Cursor? = null
-//        try {
-//            cursor = db.rawQuery("SELECT title FROM type_breeds WHERE id = ?", arrayOf(typeBreedId.toString()))
-//            if (cursor.moveToFirst()) {
-//                val titleColumnIndex = cursor.getColumnIndex("title")
-//
-//                if (titleColumnIndex == -1) {
-//                    Log.e("Database", "Один или несколько столбцов не найдены в таблице type_breeds!")
-//                    return null
-//                }
-//
-//                val title = cursor.getString(titleColumnIndex)
-//
-//
-//                return TypeBreed(title)
-//
-//            } else {
-//                Log.d("Database", "Тип породы с ID $typeBreedId не найдена")
-//                return null
-//            }
-//        } catch (e: Exception) {
-//            Log.e("Database", "Ошибка при получении типа породы: ${e.message}")
-//            return null
-//        } finally {
-//            cursor?.close()
-//        }
-//    }
-//
-//    fun updateTypeBreed(typeBreedId: Int, title: String): Boolean{
-//        val db = this.readableDatabase
-//        try {
-//            val values = ContentValues().apply {
-//                put("title", title)
-//            }
-//
-//            val rowsAffected = db.update(
-//                "type_breeds",
-//                values,
-//                "id = ?",
-//                arrayOf(typeBreedId.toString())
-//            )
-//
-//            if (rowsAffected > 0) {
-//                Log.d("Database", "Тип породы успешно обновлен.")
-//                return true
-//            } else {
-//                Log.w("Database", "Тип породы не найден для обновления.")
-//                return false
-//            }
-//
-//        } catch (e: Exception) {
-//            Log.e("Database", "Ошибка при обновлении типа породы: ${e.message}")
-//            return false
-//        }
-//    }
+    fun getBreedById(breedId: Int) : Breed?{
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT title, typeBreedId FROM breeds WHERE id = ?", arrayOf(breedId.toString()))
+            if (cursor.moveToFirst()) {
+                val titleColumnIndex = cursor.getColumnIndex("title")
+                val typeIdColumnIndex = cursor.getColumnIndex("typeBreedId")
+
+                if (titleColumnIndex == -1 || typeIdColumnIndex == -1) {
+                    Log.e("Database", "Один или несколько столбцов не найдены в таблице breeds!")
+                    return null
+                }
+
+                val title = cursor.getString(titleColumnIndex)
+                val typeId = cursor.getInt(typeIdColumnIndex)
+
+
+                return Breed(title, typeId)
+
+            } else {
+                Log.d("Database", "Порода с ID $breedId не найдена")
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении породы: ${e.message}")
+            return null
+        } finally {
+            cursor?.close()
+        }
+    }
+
+    fun updateBreed(breedId: Int, title: String, typeId: Int): Boolean{
+        val db = this.readableDatabase
+        try {
+            val values = ContentValues().apply {
+                put("title", title)
+                put("typeBreedId", typeId)
+            }
+
+            val rowsAffected = db.update(
+                "breeds",
+                values,
+                "id = ?",
+                arrayOf(breedId.toString())
+            )
+
+            if (rowsAffected > 0) {
+                Log.d("Database", "Порода успешно обновлена.")
+                return true
+            } else {
+                Log.w("Database", "Порода не найдена для обновления.")
+                return false
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при обновлении породы: ${e.message}")
+            return false
+        }
+    }
 
     fun getIdBreed(title: String, typeBreedId: Int): Int?{
         val db = this.readableDatabase
@@ -1219,6 +1222,27 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             return null
         } finally {
             cursor?.close()
+        }
+    }
+
+    fun deleteBreed(id: Int){
+        val db = this.readableDatabase
+
+        try {
+            val selection = "id = ?"
+            val selectionArgs = arrayOf(id.toString())
+
+            val deletedRows = db.delete("breeds", selection, selectionArgs)
+
+            if (deletedRows > 0) {
+                Log.d("DBHelper", "Порода с ID $id успешно удалена.")
+            } else {
+                Log.w("DBHelper", "Не удалось удалить породу с ID $id. Возможно, такой породы не существует.")
+            }
+        } catch (e: SQLException) {
+            Log.e("DBHelper", "Ошибка при удалении породы:", e)
+        } finally {
+            db.close()
         }
     }
 

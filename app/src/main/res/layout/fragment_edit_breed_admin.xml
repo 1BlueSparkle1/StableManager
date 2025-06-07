@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_brown_fon"
-    tools:context=".Pages.AdminPages.Fragments.EditGenderHorseFragment">
+    tools:context=".Pages.AdminPages.Fragments.EditBreedAdminFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,12 +19,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="Пол лошадей"
+            android:text="Порода"
             android:textColor="@color/brown_text"
             android:textSize="20pt" />
 
         <EditText
-            android:id="@+id/editTitleGenderHorse"
+            android:id="@+id/editTitleBreed"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:layout_marginTop="50dp"
@@ -37,22 +37,46 @@
             android:textColor="@color/brown_text"
             android:textSize="12pt" />
 
+        <EditText
+            android:id="@+id/editTypeIdBreed"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="Тип породы"
+            android:inputType="text"
+            android:textColor="@color/brown_text"
+            android:textSize="12pt" />
+
         <Button
-            android:id="@+id/editGenderHorseButton"
+            android:id="@+id/addTypeBreedButton"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:backgroundTint="@color/light_brown_text"
+            android:enabled="false"
+            android:text="Выбрать тип породы"
+            android:textColor="@color/light_brown_fon"
+            android:textSize="10pt" />
+
+        <Button
+            android:id="@+id/editBreedButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:backgroundTint="@color/brown_text"
             android:text="Изменить"
             android:textColor="@color/light_brown_fon"
             android:textSize="10pt" />
 
         <Button
-            android:id="@+id/SaveGenderHorseButton"
+            android:id="@+id/SaveBreedButton"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|top"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:backgroundTint="@color/brown_text"
             android:text="Сохранить"
             android:textColor="@color/light_brown_fon"
@@ -60,7 +84,7 @@
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/deleteGenderHorseButton"
+            android:id="@+id/deleteBreedButton"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"

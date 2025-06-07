@@ -1,22 +1,17 @@
 package com.example.stablemanager.Components.Adapters
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stablemanager.Components.Managers.HorseManager
 import com.example.stablemanager.Components.Managers.TypeBreedManager
-import com.example.stablemanager.EditTypeBreedFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
+import com.example.stablemanager.Pages.AdminPages.Fragments.EditTypeBreedFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
-import com.example.stablemanager.db.Horse
 import com.example.stablemanager.db.TypeBreed
 
 class TypeBreedAdapter(private var typeBreeds: List<TypeBreed>, private val activity: StartAdminPageActivity, private var context: Context) : RecyclerView.Adapter<TypeBreedAdapter.MyViewHolder>() {

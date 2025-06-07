@@ -1,4 +1,4 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages.AdminPages.Fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -11,15 +11,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.example.stablemanager.Components.Managers.RoleManagers
 import com.example.stablemanager.Components.Managers.TypeBreedManager
 import com.example.stablemanager.Components.setEditable
-import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.RoleAdminPageFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.TypeBreedAdminFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
-import com.example.stablemanager.db.Role
 import com.example.stablemanager.db.TypeBreed
 
 class EditTypeBreedFragment : Fragment() {

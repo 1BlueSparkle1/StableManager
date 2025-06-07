@@ -8,14 +8,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stablemanager.Components.Managers.GenderHorseManager
-import com.example.stablemanager.Components.Managers.TypeBreedManager
-import com.example.stablemanager.EditGenderHorseFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
+import com.example.stablemanager.Pages.AdminPages.Fragments.EditGenderHorseFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.GenderHorse
-import com.example.stablemanager.db.TypeBreed
 
 class GenderHorseAdapter(private var genderHorses: List<GenderHorse>, private val activity: StartAdminPageActivity, private var context: Context) : RecyclerView.Adapter<GenderHorseAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){

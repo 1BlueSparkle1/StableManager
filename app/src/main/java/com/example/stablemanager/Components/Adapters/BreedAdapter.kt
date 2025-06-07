@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stablemanager.Components.Managers.BreedManager
 import com.example.stablemanager.Components.Managers.GenderHorseManager
+import com.example.stablemanager.Pages.AdminPages.Fragments.EditBreedAdminFragment
 import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R
@@ -45,7 +46,7 @@ class BreedAdapter(private var breeds: List<Breed>, private val activity: StartA
                 if(idBreed != null){
                     breedManager.saveBreedId(idBreed)
                 }
-                activity.replaceFragment(EditRoleFragment.newInstance(), EditRoleFragment.TAG)
+                activity.replaceFragment(EditBreedAdminFragment.newInstance(), EditBreedAdminFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }
