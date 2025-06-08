@@ -116,6 +116,7 @@ class EditBreedAdminFragment : Fragment() {
             builder.setMessage("Вы уверены, что хотите удалить эту породу?\nОна будет убрана у всех лошадей.")
             builder.setPositiveButton("Да") { dialog, which ->
                 db.deleteBreed(breedId)
+                db.removeBreedFromHorses(breedId)
                 val activity = activity as? StartAdminPageActivity
 
                 if (activity != null) {

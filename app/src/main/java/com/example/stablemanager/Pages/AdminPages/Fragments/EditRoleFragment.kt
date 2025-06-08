@@ -73,7 +73,7 @@ class EditRoleFragment : Fragment() {
             val title = titleRole.text.toString().trim()
 
             if(title == ""){
-                Toast.makeText(requireContext(), "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Название должно быть заполнено", Toast.LENGTH_SHORT).show()
             }
             else{
                 titleRole.setEditable(false)
@@ -92,6 +92,7 @@ class EditRoleFragment : Fragment() {
             builder.setMessage("Вы уверены, что хотите удалить эту роль?\nОна будет убрана у всех сотрудников.")
             builder.setPositiveButton("Да") { dialog, which ->
                 db.deleteRole(roleId)
+                db.removeRoleFromEmployees(roleId)
                 val activity = activity as? StartAdminPageActivity
 
                 if (activity != null) {

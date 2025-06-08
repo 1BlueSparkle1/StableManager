@@ -43,7 +43,7 @@ class AddFeedAdminFragment : Fragment() {
 
         addFeedBtn.setOnClickListener {
             val title = titleFeed.text.toString().trim()
-            if(title == ""){
+            if(title == "" || selectedStableId == -1){
                 Toast.makeText(requireContext(), "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show()
             }
             else{
@@ -71,8 +71,6 @@ class AddFeedAdminFragment : Fragment() {
     }
 
     private fun showStableSelectionDialog() {
-        // TODO: Реализовать диалоговое окно для выбора конюшни
-        // Заменить на реальные данные из базы данных
         val db = DBHelper(requireContext(), null)
         val stables = db.getAllStables()
         val stableTitles = stables.map { it.title }.toTypedArray()

@@ -32,7 +32,7 @@ class AddTypeBreedFragment : Fragment() {
         addTypeBreedBtn.setOnClickListener {
             val title = titleTypeBreed.text.toString().trim()
             if(title == ""){
-                Toast.makeText(requireContext(), "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Название должно быть заполнено", Toast.LENGTH_SHORT).show()
             }
             else{
                 db.addTypeBreed(TypeBreed(title))

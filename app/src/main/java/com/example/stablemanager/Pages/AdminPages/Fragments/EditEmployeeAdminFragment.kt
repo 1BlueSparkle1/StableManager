@@ -25,6 +25,7 @@ import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Employee
+import org.mindrot.jbcrypt.BCrypt
 import java.io.ByteArrayOutputStream
 
 
@@ -42,6 +43,7 @@ class EditEmployeeAdminFragment : Fragment() {
     private lateinit var patronymicEditText: EditText
     private lateinit var emailEditText: EditText
     private lateinit var loginEditText: EditText
+    private lateinit var passwordEditText: EditText
     private lateinit var roleTextView: EditText
     private lateinit var roleButton: Button
     private lateinit var stableTextView: EditText
@@ -71,6 +73,7 @@ class EditEmployeeAdminFragment : Fragment() {
         patronymicEditText = view.findViewById(R.id.addPatronymicEmployee)
         emailEditText = view.findViewById(R.id.addEmailEmployee)
         loginEditText = view.findViewById(R.id.addLoginEmployee)
+        passwordEditText = view.findViewById(R.id.addPasswordEmployee)
         roleTextView = view.findViewById(R.id.addRoleIdEmployee)
         roleButton = view.findViewById(R.id.addRoleEmployeeButton)
         stableTextView = view.findViewById(R.id.addStableIdEmployee)
@@ -95,13 +98,14 @@ class EditEmployeeAdminFragment : Fragment() {
             patronymicEditText.setText(employee.patronymic)
             emailEditText.setText(employee.email)
             loginEditText.setText(employee.login)
+            passwordEditText.setText(employee.password)
             val role = db.getRolesById(employee.roleId)
             if (role != null){
                 roleTextView.setText(role.title)
             }
             val stable = db.getStableById(employee.stableId)
             if (stable != null){
-                roleTextView.setText(stable.title)
+                stableTextView.setText(stable.title)
             }
             val byteArray: ByteArray = employee.imageProfile
             val bitmap = byteArrayToBitmap(byteArray)
@@ -131,6 +135,7 @@ class EditEmployeeAdminFragment : Fragment() {
             patronymicEditText.setEditable(true)
             emailEditText.setEditable(true)
             loginEditText.setEditable(true)
+            passwordEditText.setEditable(true)
             dateOfBirthEditText.setEditable(true)
             salaryEditText.setEditable(true)
             roleButton.isEnabled = true
@@ -157,11 +162,21 @@ class EditEmployeeAdminFragment : Fragment() {
             val patronymic = patronymicEditText.text.toString().trim()
             val email = emailEditText.text.toString().trim()
             val login = loginEditText.text.toString().trim()
+            val password = passwordEditText.text.toString().trim()
             val birth = dateOfBirthEditText.text.toString().trim()
-            val salary = salaryEditText.text.toString().trim()
+            var salary = 0.0
 
-            if(surname == "" || name == "" || patronymic == "" || email == "" || login == "" || birth == "" || salary == ""){
-                Toast.makeText(requireContext(), "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show()
+            if(salaryEditText.text != null || salaryEditText.text.toString() != ""){
+                salary = salaryEditText.text.toString().toDoubleOrNull() ?: 0.0
+
+                if (salary <= 0.0) {
+                    Toast.makeText(requireContext(), "Зарплата не может быть равна или меньше 0", Toast.LENGTH_SHORT).show()
+
+                }
+            }
+
+            if(surname == "" || name == "" || email == "" || login == "" || password == "" || selectedRoleId == -1 || selectedStableId == -1){
+                Toast.makeText(requireContext(), "Поля фамилии, имени, почты, логина, пароля, роли и конюшни должны быть заполнены", Toast.LENGTH_SHORT).show()
             }
             else{
                 surnameEditText.setEditable(false)
@@ -169,6 +184,7 @@ class EditEmployeeAdminFragment : Fragment() {
                 patronymicEditText.setEditable(false)
                 emailEditText.setEditable(false)
                 loginEditText.setEditable(false)
+                passwordEditText.setEditable(false)
                 dateOfBirthEditText.setEditable(false)
                 salaryEditText.setEditable(false)
                 roleButton.isEnabled = false
@@ -193,8 +209,19 @@ class EditEmployeeAdminFragment : Fragment() {
                 if (selectedStableId == -1){
                     selectedStableId = employee.stableId
                 }
+                if (salary == 0.0){
+                    salary = employee.salary
+                }
+                var hashPassword = ""
+                if(password != employee.password){
+                    val saltRounds = 12
+                    hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(saltRounds))
+                }
+                else{
+                    hashPassword = employee.password
+                }
 
-                db.updateEmployee(employeeId, surname, name, patronymic, birth, email, login, imageByteArray!!, selectedRoleId, salary.toDouble(), selectedStableId)
+                db.updateEmployee(employeeId, surname, name, patronymic, birth, email, login, hashPassword, imageByteArray!!, selectedRoleId, salary, selectedStableId)
                 Toast.makeText(requireContext(), "Сотрудник изменен", Toast.LENGTH_SHORT).show()
 
                 editEmployeeButton.visibility = View.VISIBLE
@@ -207,7 +234,7 @@ class EditEmployeeAdminFragment : Fragment() {
             builder.setTitle("Удаление сотрудника")
             builder.setMessage("Вы уверены, что хотите уволить этого сотрудника?\nВместе с ним будут удалены все записи, в которых он участвует.")
             builder.setPositiveButton("Да") { dialog, which ->
-                db.removeEmployee(employeeId)
+                db.deleteEmployeeAndRelatedData(employeeId)
                 val activity = activity as? StartAdminPageActivity
 
                 if (activity != null) {
@@ -227,8 +254,6 @@ class EditEmployeeAdminFragment : Fragment() {
     }
 
     private fun showStableSelectionDialog() {
-        // TODO: Реализовать диалоговое окно для выбора конюшни
-        // Заменить на реальные данные из базы данных
         val db = DBHelper(requireContext(), null)
         val stables = db.getAllStables()
         val stableTitles = stables.map { it.title }.toTypedArray()
@@ -243,8 +268,6 @@ class EditEmployeeAdminFragment : Fragment() {
     }
 
     private fun showRoleSelectionDialog() {
-        // TODO: Реализовать диалоговое окно для выбора роли
-        // Заменить на реальные данные из базы данных
         val db = DBHelper(requireContext(), null)
         val roles = db.getRoles()
         val roleTitles = roles.map { it.title }.toTypedArray()

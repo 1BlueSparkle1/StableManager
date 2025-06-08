@@ -45,7 +45,7 @@ class AddOwnerAdminFragment : Fragment() {
             val login = loginOwner.text.toString().trim()
             val password = passwordOwner.text.toString().trim()
             if(surname == "" || name == "" || email == "" || login == "" || password == ""){
-                Toast.makeText(requireContext(), "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Поля фамилии, имени, почты, логина и пароля должны быть заполнены", Toast.LENGTH_SHORT).show()
             }
             else{
                 if(isValidEmail(email)){

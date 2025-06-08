@@ -71,7 +71,7 @@ class EditGenderHorseFragment : Fragment() {
             val title = titleGenderHorse.text.toString().trim()
 
             if(title == ""){
-                Toast.makeText(requireContext(), "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Название должно быть заполнено", Toast.LENGTH_SHORT).show()
             }
             else{
                 titleGenderHorse.setEditable(false)
@@ -90,6 +90,7 @@ class EditGenderHorseFragment : Fragment() {
             builder.setMessage("Вы уверены, что хотите удалить этот пол лошадей?\nОн будет убран у всех лошадей.")
             builder.setPositiveButton("Да") { dialog, which ->
                 db.deleteGenderHorse(genderHorseId)
+                db.removeGenderFromHorses(genderHorseId)
                 val activity = activity as? StartAdminPageActivity
 
                 if (activity != null) {

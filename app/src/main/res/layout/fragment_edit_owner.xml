@@ -34,9 +34,9 @@
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:text="Фамилия:"
+                android:text="Фамилия"
                 android:textColor="#908B8A"
-                android:textSize="8pt" />
+                android:textSize="10pt" />
 
             <EditText
                 android:id="@+id/editSurnameOwner"
@@ -53,9 +53,9 @@
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="Имя:"
+                android:text="Имя"
                 android:textColor="#908B8A"
-                android:textSize="8pt" />
+                android:textSize="10pt" />
 
             <EditText
                 android:id="@+id/editNameOwner"
@@ -72,9 +72,9 @@
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="Отчество:"
+                android:text="Отчество"
                 android:textColor="#908B8A"
-                android:textSize="8pt" />
+                android:textSize="10pt" />
 
             <EditText
                 android:id="@+id/editPatronymicOwner"
@@ -91,9 +91,9 @@
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="Почта:"
+                android:text="Почта"
                 android:textColor="#908B8A"
-                android:textSize="8pt" />
+                android:textSize="10pt" />
 
             <EditText
                 android:id="@+id/editEmailOwner"
@@ -110,18 +110,37 @@
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="Логин:"
+                android:text="Логин"
                 android:textColor="#908B8A"
-                android:textSize="8pt" />
+                android:textSize="10pt" />
 
             <EditText
                 android:id="@+id/editLoginOwner"
                 android:layout_width="350dp"
                 android:layout_height="50dp"
-                android:layout_marginBottom="50dp"
                 android:ems="10"
                 android:hint="Логин"
                 android:inputType="text"
+                android:textColor="@color/brown_text"
+                android:textSize="12pt" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Пароль"
+                android:textColor="#908B8A"
+                android:textSize="10pt" />
+
+            <EditText
+                android:id="@+id/editPasswordOwner"
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="50dp"
+                android:ems="10"
+                android:hint="Пароль"
+                android:inputType="textPassword"
                 android:textColor="@color/brown_text"
                 android:textSize="12pt" />
 

@@ -81,8 +81,6 @@ class AddEmployeeAdminFragment : Fragment() {
 
 
     private fun showRoleSelectionDialog() {
-        // TODO: Реализовать диалоговое окно для выбора роли
-        // Заменить на реальные данные из базы данных
         val db = DBHelper(requireContext(), null)
         val roles = db.getRoles()
         val roleTitles = roles.map { it.title }.toTypedArray()
@@ -97,8 +95,6 @@ class AddEmployeeAdminFragment : Fragment() {
     }
 
     private fun showStableSelectionDialog() {
-        // TODO: Реализовать диалоговое окно для выбора конюшни
-        // Заменить на реальные данные из базы данных
         val db = DBHelper(requireContext(), null)
         val stables = db.getAllStables()
         val stableTitles = stables.map { it.title }.toTypedArray()
@@ -152,43 +148,53 @@ class AddEmployeeAdminFragment : Fragment() {
         val login = loginEditText.text.toString()
         val password = passwordEditText.text.toString()
         val dateOfBirth = dateOfBirthEditText.text.toString()
-        val salary = salaryEditText.text.toString().toDoubleOrNull() ?: 0.0
+        var salary = 0.0
 
-        if (salary <= 0.0) {
-            Toast.makeText(requireContext(), "Зарплата не может быть равна или меньше 0", Toast.LENGTH_SHORT).show()
-            return
+        if(salaryEditText.text != null || salaryEditText.text.toString() != ""){
+            salary = salaryEditText.text.toString().toDoubleOrNull() ?: 0.0
+
+            if (salary <= 0.0) {
+                Toast.makeText(requireContext(), "Зарплата не может быть равна или меньше 0", Toast.LENGTH_SHORT).show()
+                return
+            }
         }
-        if (db.doesEmployeeExist(-1, login, email)){
-            Toast.makeText(requireContext(), "Пользователь с таким логином или почтой уже существует", Toast.LENGTH_SHORT).show()
+
+        if(surname == "" || name == "" || email == "" || login == "" || password == "" || selectedRoleId == -1 || selectedStableId == -1){
+            Toast.makeText(requireContext(), "Поля фамилии, имени, почты, логина, пароля, роли и конюшни должны быть заполнены", Toast.LENGTH_SHORT).show()
         }
         else{
-            if(isValidEmail(email)){
-                val saltRounds = 12
-                val hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(saltRounds))
-
-
-                val employee = Employee(surname, name, patronymic, email, login, hashPassword, selectedRoleId, dateOfBirth, salary, selectedStableId, imageByteArray ?: ByteArray(0))
-                db.addEmployee(employee)
-                Toast.makeText(requireContext(), "Сотрудник добавлен", Toast.LENGTH_SHORT).show()
-                surnameEditText.text.clear()
-                nameEditText.text.clear()
-                patronymicEditText.text.clear()
-                emailEditText.text.clear()
-                loginEditText.text.clear()
-                passwordEditText.text.clear()
-                dateOfBirthEditText.text.clear()
-                salaryEditText.text.clear()
-
-                val activity = activity as? StartAdminPageActivity
-
-                if (activity != null) {
-                    activity.replaceFragment(EmployeeListAdminFragment.newInstance(), EmployeeListAdminFragment.TAG)
-                } else {
-                    Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
-                }
+            if (db.doesEmployeeExist(-1, login, email)){
+                Toast.makeText(requireContext(), "Пользователь с таким логином или почтой уже существует", Toast.LENGTH_SHORT).show()
             }
             else{
-                Toast.makeText(context, "Поле почты заполнено некорректно. Заполните в формате mail@mail.ru", Toast.LENGTH_SHORT).show()
+                if(isValidEmail(email)){
+                    val saltRounds = 12
+                    val hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(saltRounds))
+
+
+                    val employee = Employee(surname, name, patronymic, email, login, hashPassword, selectedRoleId, dateOfBirth, salary, selectedStableId, imageByteArray ?: ByteArray(0))
+                    db.addEmployee(employee)
+                    Toast.makeText(requireContext(), "Сотрудник добавлен", Toast.LENGTH_SHORT).show()
+                    surnameEditText.text.clear()
+                    nameEditText.text.clear()
+                    patronymicEditText.text.clear()
+                    emailEditText.text.clear()
+                    loginEditText.text.clear()
+                    passwordEditText.text.clear()
+                    dateOfBirthEditText.text.clear()
+                    salaryEditText.text.clear()
+
+                    val activity = activity as? StartAdminPageActivity
+
+                    if (activity != null) {
+                        activity.replaceFragment(EmployeeListAdminFragment.newInstance(), EmployeeListAdminFragment.TAG)
+                    } else {
+                        Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
+                    }
+                }
+                else{
+                    Toast.makeText(context, "Поле почты заполнено некорректно. Заполните в формате mail@mail.ru", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

@@ -35,7 +35,7 @@
             android:id="@+id/horseListStable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Расположение: Конюшня"
+            android:text="Расположение: -"
             android:textColor="@color/brown_text"
             android:textSize="8pt" />
 

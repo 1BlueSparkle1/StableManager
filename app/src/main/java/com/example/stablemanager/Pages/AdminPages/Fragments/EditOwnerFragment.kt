@@ -18,6 +18,7 @@ import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Owner
+import org.mindrot.jbcrypt.BCrypt
 
 
 class EditOwnerFragment : Fragment() {
@@ -43,6 +44,7 @@ class EditOwnerFragment : Fragment() {
         val patronymicOwner: EditText = view.findViewById(R.id.editPatronymicOwner)
         val emailOwner: EditText = view.findViewById(R.id.editEmailOwner)
         val loginOwner: EditText = view.findViewById(R.id.editLoginOwner)
+        val passwordOwner: EditText = view.findViewById(R.id.editPasswordOwner)
         val deleteButton: Button = view.findViewById(R.id.deleteOwnerButton)
         val db = DBHelper(requireContext(), null)
         val ownerId = ownerManager.getOwnerId()
@@ -54,6 +56,7 @@ class EditOwnerFragment : Fragment() {
             patronymicOwner.setText(owner.patronymic)
             emailOwner.setText(owner.email)
             loginOwner.setText(owner.login)
+            passwordOwner.setText(owner.pass)
 
         } else {
             Toast.makeText(requireContext(), "Произошла ошибка загрузки роли.", Toast.LENGTH_SHORT).show()
@@ -75,6 +78,7 @@ class EditOwnerFragment : Fragment() {
             patronymicOwner.setEditable(true)
             emailOwner.setEditable(true)
             loginOwner.setEditable(true)
+            passwordOwner.setEditable(true)
 
             editOwnerButton.visibility = View.GONE
             saveOwnerButton.visibility = View.VISIBLE
@@ -86,9 +90,10 @@ class EditOwnerFragment : Fragment() {
             val patronymic = patronymicOwner.text.toString().trim()
             val email = emailOwner.text.toString().trim()
             val login = loginOwner.text.toString().trim()
+            val password = passwordOwner.text.toString().trim()
 
-            if(surname == "" || name == "" || email == "" || login == ""){
-                Toast.makeText(requireContext(), "Все основные поля должны быть заполнены", Toast.LENGTH_SHORT).show()
+            if(surname == "" || name == "" || email == "" || login == "" || password == ""){
+                Toast.makeText(requireContext(), "Поля фамилии, имени, почты, логина и пароля должны быть заполнены", Toast.LENGTH_SHORT).show()
             }
             else{
                 if(isValidEmail(email)){
@@ -98,7 +103,16 @@ class EditOwnerFragment : Fragment() {
                     emailOwner.setEditable(false)
                     loginOwner.setEditable(false)
 
-                    db.updateOwner(ownerId, surname, name, patronymic, email, login)
+                    var hashPassword = ""
+                    if(password != owner.pass){
+                        val saltRounds = 12
+                        hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(saltRounds))
+                    }
+                    else{
+                        hashPassword = owner.pass
+                    }
+
+                    db.updateOwner(ownerId, surname, name, patronymic, email, login, hashPassword)
 
                     editOwnerButton.visibility = View.VISIBLE
                     saveOwnerButton.visibility = View.GONE
@@ -116,7 +130,7 @@ class EditOwnerFragment : Fragment() {
             builder.setTitle("Удаление Владельца")
             builder.setMessage("Вы уверены, что хотите удалить этого владельца?\nВместе с ним будут удалены все его данные.")
             builder.setPositiveButton("Да") { dialog, which ->
-                db.deleteOwner(ownerId)
+                db.deleteOwnerAndAllRelatedData(ownerId)
                 val activity = activity as? StartAdminPageActivity
 
                 if (activity != null) {

@@ -6,9 +6,11 @@ import android.database.Cursor
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.icu.text.SimpleDateFormat
 import android.util.Log
 import com.example.stablemanager.Components.Managers.AuthManager
 import org.mindrot.jbcrypt.BCrypt
+import java.util.Locale
 
 class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, "horse_club", factory, 5) {
@@ -148,13 +150,14 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
     """.trimIndent()
         db.execSQL(queryFarriers)
 
-        // Таблица "Услуга" (Service)
         val queryServices = """
         CREATE TABLE Services (
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
             Title TEXT NOT NULL,
             Price REAL NOT NULL,
-            Description TEXT
+            Description TEXT,
+            StableId INTEGER NOT NULL,
+            FOREIGN KEY (StableId) REFERENCES Stables(Id)
         );
     """.trimIndent()
         db.execSQL(queryServices)
@@ -179,7 +182,6 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
     """.trimIndent()
         db.execSQL(queryAppointments)
 
-        // Таблица "Уровень подготовки" (TrainingLevel)
         val queryTrainingLevels = """
         CREATE TABLE TrainingLevels (
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -188,7 +190,6 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
     """.trimIndent()
         db.execSQL(queryTrainingLevels)
 
-        // Таблица "Уровень подготовки сотрудников" (EmployeeTrainingLevel)
         val queryEmployeeTrainingLevels = """
         CREATE TABLE EmployeeTrainingLevels (
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -200,7 +201,6 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
     """.trimIndent()
         db.execSQL(queryEmployeeTrainingLevels)
 
-        // Таблица "Уровень подготовки лошадей" (HorseTrainingLevel)
         val queryHorseTrainingLevels = """
         CREATE TABLE HorseTrainingLevels (
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -231,6 +231,8 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
             TurnoutId INTEGER NOT NULL,
             HorseId INTEGER NOT NULL,
+            StableId INTEGER NOT NULL,
+            FOREIGN KEY (StableId) REFERENCES Stables(Id),
             FOREIGN KEY (TurnoutId) REFERENCES Turnouts(Id),
             FOREIGN KEY (HorseId) REFERENCES Horses(Id)
         );
@@ -243,6 +245,8 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
             TurnoutScheduleId INTEGER NOT NULL,
             ExecutionDate DATE NOT NULL,
+            StableId INTEGER NOT NULL,
+            FOREIGN KEY (StableId) REFERENCES Stables(Id),
             FOREIGN KEY (TurnoutScheduleId) REFERENCES TurnoutSchedules(Id)
         );
     """.trimIndent()
@@ -252,7 +256,9 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         val queryFeedingTimes = """
         CREATE TABLE FeedingTimes (
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
-            Title TEXT NOT NULL
+            Title TEXT NOT NULL,
+            StableId INTEGER NOT NULL,
+            FOREIGN KEY (StableId) REFERENCES Stables(Id)
         );
     """.trimIndent()
         db.execSQL(queryFeedingTimes)
@@ -266,6 +272,8 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             Quantity REAL NOT NULL,
             HorseId INTEGER NOT NULL,
             Steam BOOLEAN NOT NULL,
+            StableId INTEGER NOT NULL,
+            FOREIGN KEY (StableId) REFERENCES Stables(Id),
             FOREIGN KEY (FeedingTimeId) REFERENCES FeedingTimes(Id),
             FOREIGN KEY (FeedId) REFERENCES Feeds(Id),
             FOREIGN KEY (HorseId) REFERENCES Horses(Id)
@@ -279,10 +287,30 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
             FeedingScheduleId INTEGER NOT NULL,
             ExecutionDate DATE NOT NULL,
+            StableId INTEGER NOT NULL,
+            FOREIGN KEY (StableId) REFERENCES Stables(Id),
             FOREIGN KEY (FeedingScheduleId) REFERENCES FeedingSchedules(Id)
         );
     """.trimIndent()
         db.execSQL(queryFeedingExecutions)
+
+        val queryNotifications = """
+        CREATE TABLE Notifications (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Description TEXT NOT NULL,
+            IsRead BOOLEAN DEFAULT 0,
+            EmployeeId INTEGER,
+            OwnerId INTEGER,
+            CreationDate TEXT DEFAULT (datetime('now', 'localtime')),
+            SenderEmployeeId INTEGER,
+            SenderOwnerId INTEGER,
+            FOREIGN KEY (EmployeeId) REFERENCES Employees(Id),
+            FOREIGN KEY (OwnerId) REFERENCES Owners(Id),
+            FOREIGN KEY (SenderEmployeeId) REFERENCES Employees(Id),
+            FOREIGN KEY (SenderOwnerId) REFERENCES Owners(Id)
+        );
+    """.trimIndent()
+        db.execSQL(queryNotifications)
 
     }
 
@@ -488,7 +516,7 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         }
     }
 
-    fun updateOwner(id: Int, surname: String, name: String, patronymic: String, email: String, login: String): Boolean{
+    fun updateOwner(id: Int, surname: String, name: String, patronymic: String, email: String, login: String, password: String): Boolean{
         val db = this.readableDatabase
         try {
             val values = ContentValues().apply {
@@ -497,6 +525,7 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
                 put("patronymic", patronymic)
                 put("email", email)
                 put("login", login)
+                put("password", password)
             }
 
             val rowsAffected = db.update(
@@ -595,23 +624,91 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         }
     }
 
-    fun deleteOwner(id: Int){
-        val db = this.readableDatabase
+    fun deleteOwnerAndAllRelatedData(ownerId: Int) {
+        val db = this.writableDatabase
+        db.beginTransaction()
 
         try {
-            val selection = "id = ?"
-            val selectionArgs = arrayOf(id.toString())
+            val stableIds = mutableListOf<Int>()
+            var cursorStables: Cursor? = null
 
-            val deletedRows = db.delete("owners", selection, selectionArgs)
+            try {
+                cursorStables = db.rawQuery("SELECT id FROM stables WHERE ownerId = ?", arrayOf(ownerId.toString()))
 
-            if (deletedRows > 0) {
-                Log.d("DBHelper", "Владелец с ID $id успешно удален.")
-            } else {
-                Log.w("DBHelper", "Не удалось удалить владельца с ID $id. Возможно, такого владельца не существует.")
+                if (cursorStables.moveToFirst()) {
+                    do {
+                        val id = cursorStables.getInt(cursorStables.getColumnIndexOrThrow("id"))
+                        stableIds.add(id)
+                    } while (cursorStables.moveToNext())
+                }
+            } finally {
+                cursorStables?.close()
             }
-        } catch (e: SQLException) {
-            Log.e("DBHelper", "Ошибка при удалении владельца:", e)
+
+            val employeeIdsToDelete = mutableListOf<Int>()
+            var cursorEmployees: Cursor? = null
+            try {
+                cursorEmployees = db.rawQuery("SELECT id FROM employees WHERE stableId IN (${stableIds.joinToString(",")})", null)
+                if (cursorEmployees.moveToFirst()) {
+                    do {
+                        employeeIdsToDelete.add(cursorEmployees.getInt(cursorEmployees.getColumnIndexOrThrow("id")))
+                    } while (cursorEmployees.moveToNext())
+                }
+            } finally {
+                cursorEmployees?.close()
+            }
+
+            if (employeeIdsToDelete.isNotEmpty()) {
+                db.delete("EmployeeTrainingLevels", "EmployeeId IN (${employeeIdsToDelete.joinToString(",")})", null)
+                db.delete("employees", "id IN (${employeeIdsToDelete.joinToString(",")})", null)
+            }
+
+            val horseIdsToDelete = mutableListOf<Int>()
+            var cursorHorses: Cursor? = null
+            try {
+                cursorHorses = db.rawQuery("SELECT id FROM horses WHERE BreedId IN (SELECT Id FROM Breeds WHERE StableId IN (${stableIds.joinToString(",")}))", null)
+                if (cursorHorses.moveToFirst()) {
+                    do {
+                        horseIdsToDelete.add(cursorHorses.getInt(cursorHorses.getColumnIndexOrThrow("id")))
+                    } while (cursorHorses.moveToNext())
+                }
+            } finally {
+                cursorHorses?.close()
+            }
+
+            if (horseIdsToDelete.isNotEmpty()) {
+                db.delete("HorseTrainingLevels", "HorseId IN (${horseIdsToDelete.joinToString(",")})", null)
+                db.delete("horses", "id IN (${horseIdsToDelete.joinToString(",")})", null)
+            }
+
+            for (stableId in stableIds) {
+                db.delete("Veterinarians", "StableId = ?", arrayOf(stableId.toString()))
+                db.delete("Farriers", "StableId = ?", arrayOf(stableId.toString()))
+
+                db.delete("Appointments", "StableId = ?", arrayOf(stableId.toString()))
+                db.delete("Turnouts", "StableId = ?", arrayOf(stableId.toString()))
+
+                db.delete("TurnoutSchedules", "TurnoutId IN (SELECT Id FROM Turnouts WHERE StableId = ?)", arrayOf(stableId.toString()))
+                db.delete("TurnoutExecutions", "TurnoutScheduleId IN (SELECT Id FROM TurnoutSchedules WHERE TurnoutId IN (SELECT Id FROM Turnouts WHERE StableId = ?))", arrayOf(stableId.toString()))
+
+                db.delete("FeedingSchedules", "HorseId IN (SELECT Id FROM Horses WHERE BreedId IN (SELECT Id FROM Breeds WHERE StableId IN (${stableIds.joinToString(",")})) )", arrayOf(stableId.toString()))
+                db.delete("FeedingExecutions", "FeedingScheduleId IN (SELECT Id FROM FeedingSchedules WHERE HorseId IN (SELECT Id FROM Horses WHERE BreedId IN (SELECT Id FROM Breeds WHERE StableId IN (${stableIds.joinToString(",")})) ))", arrayOf(stableId.toString()))
+
+            }
+
+            db.delete("Feeds", "StableId IN (${stableIds.joinToString(",")})", null)
+
+            db.delete("Services", "StableId IN (${stableIds.joinToString(",")})", null)
+
+            db.delete("stables", "ownerId = ?", arrayOf(ownerId.toString()))
+
+            db.delete("owners", "id = ?", arrayOf(ownerId.toString()))
+
+            db.setTransactionSuccessful()
+        } catch (e: Exception) {
+            Log.e("DBHelper", "Ошибка при удалении владельца и связанных данных: ${e.message}")
         } finally {
+            db.endTransaction()
             db.close()
         }
     }
@@ -797,6 +894,39 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         var cursor: Cursor? = null
         try {
             cursor = db.rawQuery("SELECT id, title FROM roles", null)
+            if (cursor.moveToFirst()) {
+                do {
+                    val idColumnIndex = cursor.getColumnIndex("id")
+                    val titleColumnIndex = cursor.getColumnIndex("title")
+
+                    if (idColumnIndex == -1 || titleColumnIndex == -1) {
+                        Log.e("Database", "Один или несколько столбцов не найдены!")
+                        return emptyList()
+                    }
+
+                    val title = cursor.getString(titleColumnIndex)
+                    val id = cursor.getInt(idColumnIndex)
+
+                    val role = Role(id, title)
+                    roles.add(role)
+
+                } while (cursor.moveToNext())
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении данных из roles: ${e.message}")
+        } finally {
+            cursor?.close()
+        }
+
+        return roles
+    }
+
+    fun getRolesNotAdmin(): List<Role> {
+        val db = this.readableDatabase
+        val roles = mutableListOf<Role>()
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT id, title FROM roles WHERE title != 'Администратор'", null)
             if (cursor.moveToFirst()) {
                 do {
                     val idColumnIndex = cursor.getColumnIndex("id")
@@ -1622,7 +1752,7 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         }
     }
 
-    fun updateEmployee(id: Int, surname: String, name: String, patronymic: String, dateOfBirth: String, email: String, login: String, image: ByteArray, roleId: Int, salary: Double, stableId: Int): Boolean{
+    fun updateEmployee(id: Int, surname: String, name: String, patronymic: String, dateOfBirth: String, email: String, login: String, password: String, image: ByteArray, roleId: Int, salary: Double, stableId: Int): Boolean{
         val db = this.readableDatabase
         try {
             val values = ContentValues().apply {
@@ -1632,6 +1762,7 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
                 put("dateOfBirth", dateOfBirth)
                 put("email", email)
                 put("login", login)
+                put("password", password)
                 put("roleId", roleId)
                 put("salary", salary)
                 put("stableId", stableId)
@@ -1659,23 +1790,133 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         }
     }
 
-    fun removeEmployee(id: Int) {
-        val db = this.readableDatabase
+    fun deleteEmployeeAndRelatedData(employeeIdToDelete: Int) {
+        val db = this.writableDatabase
+        db.beginTransaction()
 
         try {
-            val selection = "id = ?"
-            val selectionArgs = arrayOf(id.toString())
-
-            val deletedRows = db.delete("employees", selection, selectionArgs)
-
-            if (deletedRows > 0) {
-                Log.d("DBHelper", "Сотрудник с ID $id успешно удален.")
-            } else {
-                Log.w("DBHelper", "Не удалось удалить сотрудника с ID $id. Возможно, такого сотрудника не существует.")
+            var cursorEmployee: Cursor? = null
+            var stableId: Int? = null
+            try {
+                cursorEmployee = db.rawQuery("SELECT stableId FROM employees WHERE id = ?", arrayOf(employeeIdToDelete.toString()))
+                if (cursorEmployee.moveToFirst()) {
+                    stableId = cursorEmployee.getInt(cursorEmployee.getColumnIndexOrThrow("stableId"))
+                }
+            } finally {
+                cursorEmployee?.close()
             }
-        } catch (e: SQLException) {
-            Log.e("DBHelper", "Ошибка при удалении сотрудника:", e)
+
+            if (stableId == null) {
+                Log.e("DBHelper", "Сотрудник не найден или не имеет конюшни.")
+                return
+            }
+
+            val appointmentIdsToNotify = mutableListOf<Int>()
+            var cursorAppointments: Cursor? = null
+            try {
+                cursorAppointments = db.rawQuery("SELECT id FROM Appointments WHERE EmployeeId = ?", arrayOf(employeeIdToDelete.toString()))
+                if (cursorAppointments.moveToFirst()) {
+                    do {
+                        val appointmentId = cursorAppointments.getInt(cursorAppointments.getColumnIndexOrThrow("id"))
+                        appointmentIdsToNotify.add(appointmentId)
+                    } while (cursorAppointments.moveToNext())
+                }
+            } finally {
+                cursorAppointments?.close()
+            }
+
+            val values = ContentValues().apply {
+                putNull("EmployeeId")
+            }
+            val selection = "EmployeeId = ?"
+            val selectionArgs = arrayOf(employeeIdToDelete.toString())
+            val count = db.update("Appointments", values, selection, selectionArgs)
+
+            Log.d("DBHelper", "Обновлено $count записей в Appointments")
+
+
+            val registrarIds = mutableListOf<Int>()
+            var cursorRegistrars: Cursor? = null
+            try {
+                cursorRegistrars = db.rawQuery("SELECT id FROM employees WHERE stableId = ? AND roleId = (SELECT id FROM roles WHERE title = 'Регистратор')", arrayOf(stableId.toString()))
+                if (cursorRegistrars.moveToFirst()) {
+                    do {
+                        registrarIds.add(cursorRegistrars.getInt(cursorRegistrars.getColumnIndexOrThrow("id")))
+                    } while (cursorRegistrars.moveToNext())
+                }
+            } finally {
+                cursorRegistrars?.close()
+            }
+
+            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            for (appointmentId in appointmentIdsToNotify) {
+
+                var appointmentDate: String = ""
+                var cursorAppointmentDate: Cursor? = null
+                try {
+                    cursorAppointmentDate = db.rawQuery("SELECT AppointmentDateTime FROM Appointments WHERE id = ?", arrayOf(appointmentId.toString()))
+                    if (cursorAppointmentDate.moveToFirst()) {
+                        appointmentDate = cursorAppointmentDate.getString(cursorAppointmentDate.getColumnIndexOrThrow("AppointmentDateTime"))
+                    }
+                } finally {
+                    cursorAppointmentDate?.close()
+                }
+
+                for (registrarId in registrarIds) {
+                    val description = "Запись номер $appointmentId от $appointmentDate не имеет тренера, оповестите об этом клиента или назначьте нового тренера"
+                    val valuesNotification = ContentValues().apply {
+                        put("Description", description)
+                        put("EmployeeId", registrarId)
+                    }
+                    db.insert("Notifications", null, valuesNotification)
+                    Log.d("DBHelper", "Создано уведомление для регистратора $registrarId")
+                }
+            }
+
+
+            var ownerId: Int? = null
+            var cursorOwner: Cursor? = null
+            try {
+                cursorOwner = db.rawQuery("SELECT ownerId FROM stables WHERE id = ?", arrayOf(stableId.toString()))
+                if (cursorOwner.moveToFirst()) {
+                    ownerId = cursorOwner.getInt(cursorOwner.getColumnIndexOrThrow("ownerId"))
+                }
+            } finally {
+                cursorOwner?.close()
+            }
+
+            if (ownerId != null) {
+                for (appointmentId in appointmentIdsToNotify) {
+                    var appointmentDate: String = ""
+                    var cursorAppointmentDate: Cursor? = null
+                    try {
+                        cursorAppointmentDate = db.rawQuery("SELECT AppointmentDateTime FROM Appointments WHERE id = ?", arrayOf(appointmentId.toString()))
+                        if (cursorAppointmentDate.moveToFirst()) {
+                            appointmentDate = cursorAppointmentDate.getString(cursorAppointmentDate.getColumnIndexOrThrow("AppointmentDateTime"))
+                        }
+                    } finally {
+                        cursorAppointmentDate?.close()
+                    }
+
+                    val description = "Запись номер $appointmentId от $appointmentDate не имеет тренера, оповестите об этом клиента или назначьте нового тренера"
+                    val valuesNotification = ContentValues().apply {
+                        put("Description", description)
+                        put("OwnerId", ownerId)
+                    }
+                    db.insert("Notifications", null, valuesNotification)
+                    Log.d("DBHelper", "Создано уведомление для владельца $ownerId")
+                }
+            }
+
+            db.delete("EmployeeTrainingLevels", "EmployeeId = ?", arrayOf(employeeIdToDelete.toString()))
+
+            db.delete("employees", "id = ?", arrayOf(employeeIdToDelete.toString()))
+
+            db.setTransactionSuccessful()
+        } catch (e: Exception) {
+            Log.e("DBHelper", "Ошибка при удалении сотрудника и связанных данных: ${e.message}")
         } finally {
+            db.endTransaction()
             db.close()
         }
     }
@@ -1779,6 +2020,22 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         }
     }
 
+    fun removeRoleFromEmployees(roleId: Int) {
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.putNull("roleId")
+        val selection = "roleId = ?"
+        val selectionArgs = arrayOf(roleId.toString())
+        val count = db.update(
+            "employees",
+            values,
+            selection,
+            selectionArgs
+        )
+        Log.d("DBHelper", "Обновлено $count записей в employees")
+        db.close()
+    }
+
     fun getAllHorses(): List<Horse>{
         val db = this.readableDatabase
         val horses = mutableListOf<Horse>()
@@ -1850,6 +2107,38 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         } finally {
             cursor?.close()
         }
+    }
+
+    fun removeBreedFromHorses(breedId: Int) {
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.putNull("BreedId")
+        val selection = "BreedId = ?"
+        val selectionArgs = arrayOf(breedId.toString())
+        val count = db.update(
+            "horses",
+            values,
+            selection,
+            selectionArgs
+        )
+        Log.d("DBHelper", "Обновлено $count записей в horses")
+        db.close()
+    }
+
+    fun removeGenderFromHorses(genderId: Int) {
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.putNull("GenderId")
+        val selection = "GenderId = ?"
+        val selectionArgs = arrayOf(genderId.toString())
+        val count = db.update(
+            "horses",
+            values,
+            selection,
+            selectionArgs
+        )
+        Log.d("DBHelper", "Обновлено $count записей в horses")
+        db.close()
     }
 
     fun getAllFeeds(): List<Feed>{

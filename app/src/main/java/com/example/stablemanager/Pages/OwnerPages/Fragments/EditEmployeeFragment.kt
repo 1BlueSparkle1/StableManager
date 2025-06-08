@@ -143,10 +143,19 @@ class EditEmployeeFragment : Fragment() {
             val email = emailEditText.text.toString().trim()
             val login = loginEditText.text.toString().trim()
             val birth = dateOfBirthEditText.text.toString().trim()
-            val salary = salaryEditText.text.toString().trim()
+            var salary = 0.0
 
-            if(surname == "" || name == "" || patronymic == "" || email == "" || login == "" || birth == "" || salary == ""){
-                Toast.makeText(requireContext(), "Все поля должны быть заполнены", Toast.LENGTH_SHORT).show()
+            if(salaryEditText.text != null || salaryEditText.text.toString() != ""){
+                salary = salaryEditText.text.toString().toDoubleOrNull() ?: 0.0
+
+                if (salary <= 0.0) {
+                    Toast.makeText(requireContext(), "Зарплата не может быть равна или меньше 0", Toast.LENGTH_SHORT).show()
+
+                }
+            }
+
+            if(surname == "" || name == "" || email == "" || login == "" || selectedRoleId == -1){
+                Toast.makeText(requireContext(), "Поля фамилии, имени, почты, логина и роли должны быть заполнены", Toast.LENGTH_SHORT).show()
             }
             else{
                 surnameEditText.setEditable(false)
@@ -167,8 +176,11 @@ class EditEmployeeFragment : Fragment() {
                 if (imageByteArray == null){
                     imageByteArray = employee.imageProfile
                 }
+                if (salary == 0.0){
+                    salary = employee.salary
+                }
 
-                db.updateEmployee(employeeId, surname, name, patronymic, birth, email, login, imageByteArray!!, selectedRoleId, salary.toDouble(), employee.stableId)
+                db.updateEmployee(employeeId, surname, name, patronymic, birth, email, login, imageByteArray!!, selectedRoleId, salary, employee.stableId)
                 Toast.makeText(requireContext(), "Сотрудник изменен", Toast.LENGTH_SHORT).show()
 
                 editEmployeeButton.visibility = View.VISIBLE
@@ -181,7 +193,7 @@ class EditEmployeeFragment : Fragment() {
             builder.setTitle("Удаление сотрудника")
             builder.setMessage("Вы уверены, что хотите уволить этого сотрудника?\nВместе с ним будут удалены все записи, в которых он участвует.")
             builder.setPositiveButton("Да") { dialog, which ->
-                db.removeEmployee(employeeId)
+                db.deleteEmployeeAndRelatedData(employeeId)
                 val activity = activity as? StartOwnerPageActivity
 
                 if (activity != null) {
@@ -201,10 +213,8 @@ class EditEmployeeFragment : Fragment() {
     }
 
     private fun showRoleSelectionDialog() {
-        // TODO: Реализовать диалоговое окно для выбора роли
-        // Заменить на реальные данные из базы данных
         val db = DBHelper(requireContext(), null)
-        val roles = db.getRoles()
+        val roles = db.getRolesNotAdmin()
         val roleTitles = roles.map { it.title }.toTypedArray()
 
         val builder = AlertDialog.Builder(requireContext())
