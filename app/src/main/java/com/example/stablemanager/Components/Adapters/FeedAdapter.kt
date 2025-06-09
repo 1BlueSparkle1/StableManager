@@ -9,11 +9,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stablemanager.Components.Managers.BreedManager
+import com.example.stablemanager.Pages.AdminPages.Fragments.AddingFeedAdminFragment
+import com.example.stablemanager.Components.Managers.FeedManager
+import com.example.stablemanager.Pages.AdminPages.Fragments.DeductionFeedAdminFragment
 import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R
-import com.example.stablemanager.db.Breed
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Feed
 
@@ -41,11 +42,18 @@ class FeedAdapter(private var feeds: List<Feed>, private val activity: StartAdmi
         holder.title.text = feed.title
         holder.quantity.text = feed.quantity.toString()
 
+        val feedManager = FeedManager(context)
+        val db = DBHelper(context, null)
+        val idFeed = db.getIdFeed(feed.title, feed.quantity, feed.stableId)
+
         holder.plusQuantity.setOnClickListener {
             val activity = activity as? StartAdminPageActivity
 
             if (activity != null) {
-                activity.replaceFragment(EditRoleFragment.newInstance(), EditRoleFragment.TAG)
+                if(idFeed != null){
+                    feedManager.saveFeedId(idFeed)
+                }
+                activity.replaceFragment(AddingFeedAdminFragment.newInstance(), AddingFeedAdminFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }
@@ -55,7 +63,10 @@ class FeedAdapter(private var feeds: List<Feed>, private val activity: StartAdmi
             val activity = activity as? StartAdminPageActivity
 
             if (activity != null) {
-                activity.replaceFragment(EditRoleFragment.newInstance(), EditRoleFragment.TAG)
+                if(idFeed != null){
+                    feedManager.saveFeedId(idFeed)
+                }
+                activity.replaceFragment(DeductionFeedAdminFragment.newInstance(), DeductionFeedAdminFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }
@@ -65,6 +76,9 @@ class FeedAdapter(private var feeds: List<Feed>, private val activity: StartAdmi
             val activity = activity as? StartAdminPageActivity
 
             if (activity != null) {
+                if(idFeed != null){
+                    feedManager.saveFeedId(idFeed)
+                }
                 activity.replaceFragment(EditRoleFragment.newInstance(), EditRoleFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")

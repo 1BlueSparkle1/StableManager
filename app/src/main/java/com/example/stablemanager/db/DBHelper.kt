@@ -2241,4 +2241,153 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         db.close()
     }
 
+    fun addQuantityToFeed(feedId: Int, quantity: Double): Boolean {
+        val db = this.writableDatabase
+        val query = "UPDATE Feeds SET Quantity = Quantity + ? WHERE Id = ?"
+
+        try {
+            val statement = db.compileStatement(query)
+            statement.bindDouble(1, quantity)
+            statement.bindLong(2, feedId.toLong())
+
+            val affectedRows = statement.executeUpdateDelete()
+
+            if (affectedRows > 0) {
+                Log.d("DBHelper", "Количество корма с ID $feedId успешно увеличено на $quantity")
+                return true
+            } else {
+                Log.w("DBHelper", "Не удалось обновить количество корма с ID $feedId. Возможно, корма с таким ID не существует.")
+                return false
+            }
+        } catch (e: Exception) {
+            Log.e("DBHelper", "Ошибка при увеличении количества корма: ${e.message}")
+            return false
+        } finally {
+            db.close()
+        }
+    }
+
+    fun subtractQuantityFromFeed(feedId: Int, quantity: Double): Boolean {
+        val db = this.writableDatabase
+
+        var currentQuantity: Double = 0.0
+        var cursor: Cursor? = null
+
+        try {
+            cursor = db.rawQuery("SELECT quantity FROM Feeds WHERE Id = ?", arrayOf(feedId.toString()))
+
+            if (cursor.moveToFirst()) {
+                currentQuantity = cursor.getDouble(cursor.getColumnIndexOrThrow("quantity"))
+            } else {
+                Log.w("DBHelper", "Корм с ID $feedId не найден.")
+                return false
+            }
+        } catch (e: Exception) {
+            Log.e("DBHelper", "Ошибка при получении количества корма: ${e.message}")
+            return false
+        } finally {
+            cursor?.close()
+        }
+
+        if (currentQuantity < quantity) {
+            Log.w("DBHelper", "Недостаточно корма с ID $feedId для вычитания $quantity. Текущее количество: $currentQuantity")
+            return false
+        }
+
+        val query = "UPDATE Feeds SET quantity = quantity - ? WHERE Id = ?"
+
+        try {
+            val statement = db.compileStatement(query)
+            statement.bindDouble(1, quantity)
+            statement.bindLong(2, feedId.toLong())
+
+            val affectedRows = statement.executeUpdateDelete()
+
+            if (affectedRows > 0) {
+                Log.d("DBHelper", "Количество корма с ID $feedId успешно уменьшено на $quantity")
+                return true
+            } else {
+                Log.w("DBHelper", "Не удалось обновить количество корма с ID $feedId. Возможно, корма с таким ID не существует.")
+                return false
+            }
+        } catch (e: Exception) {
+            Log.e("DBHelper", "Ошибка при уменьшении количества корма: ${e.message}")
+            return false
+        } finally {
+            db.close()
+        }
+    }
+
+    fun getFeedById(feedId: Int): Feed? {
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+
+        try {
+            cursor = db.rawQuery("SELECT title, quantity, stableId FROM feeds WHERE id = ?", arrayOf(feedId.toString()))
+
+            if (cursor.moveToFirst()) {
+                val titleColumnIndex = cursor.getColumnIndex("title")
+                val quantityColumnIndex = cursor.getColumnIndex("quantity")
+                val stableIdColumnIndex = cursor.getColumnIndex("stableId")
+
+                if (titleColumnIndex == -1 || quantityColumnIndex == -1 || stableIdColumnIndex == -1) {
+                    Log.e("DBHelper", "Один или несколько столбцов не найдены в таблице feeds!")
+                    return null
+                }
+
+                val title = cursor.getString(titleColumnIndex)
+                val quantity = cursor.getDouble(quantityColumnIndex)
+                val stableId = if (cursor.isNull(stableIdColumnIndex)) {
+                    null
+                } else {
+                    cursor.getInt(stableIdColumnIndex)
+                }
+
+                return Feed(title, quantity, stableId!!)
+            } else {
+                Log.d("DBHelper", "Корм с ID $feedId не найден")
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("DBHelper", "Ошибка при получении корма: ${e.message}")
+            return null
+        } finally {
+            cursor?.close()
+            db.close()
+        }
+    }
+
+    fun getIdFeed(title: String, quantity: Double, stableId: Int?): Int? {
+        val db = this.readableDatabase
+        var feedId: Int? = null
+        var cursor: Cursor? = null
+
+        try {
+            val query = if (stableId == null) {
+                "SELECT id FROM feeds WHERE title = ? AND quantity = ? AND stableId IS NULL"
+            } else {
+                "SELECT id FROM feeds WHERE title = ? AND quantity = ? AND stableId = ?"
+            }
+
+            val selectionArgs = if (stableId == null) {
+                arrayOf(title, quantity.toString())
+            } else {
+                arrayOf(title, quantity.toString(), stableId.toString())
+            }
+
+            cursor = db.rawQuery(query, selectionArgs)
+
+            if (cursor.moveToFirst()) {
+                feedId = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
+            }
+        } catch (e: Exception) {
+            Log.e("DBHelper", "Ошибка при получении ID корма: ${e.message}")
+        } finally {
+            cursor?.close()
+            db.close()
+        }
+
+        return feedId
+    }
+
 }
