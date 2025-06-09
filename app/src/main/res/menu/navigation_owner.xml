@@ -13,7 +13,7 @@
         android:icon="@drawable/ic_record_menu"
         android:title="Записи"/>
     <item
-        android:id="@+id/warehouseMenu"
-        android:icon="@drawable/ic_warehouse_menu"
-        android:title="Склад"/>
+        android:id="@+id/optionsMenu"
+        android:icon="@drawable/ic_options_image"
+        android:title="Опции"/>
 </menu>

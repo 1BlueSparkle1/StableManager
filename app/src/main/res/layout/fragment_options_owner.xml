@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_brown_fon"
+    tools:context=".OptionsOwnerFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="11dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:gravity="center_horizontal"
+                android:text="Опции"
+                android:textColor="@color/brown_text"
+                android:textSize="20pt" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/options_round_corners"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:background="@color/light_brown_fon" />
+
+                <Button
+                    android:id="@+id/veterinariansOwnerButton"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Ветеринары"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:background="@color/light_brown_fon" />
+
+                <Button
+                    android:id="@+id/farriersOwnerButton"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Ковали"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/options_round_corners"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/feedOwnerButton"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Корма"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:background="@color/light_brown_fon" />
+
+                <Button
+                    android:id="@+id/feedingTimesOwnerButton"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Время кормления"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:background="@color/light_brown_fon" />
+
+                <Button
+                    android:id="@+id/feedingSchedulesOwnerButton"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Расписание кормления"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:background="@color/light_brown_fon" />
+
+                <Button
+                    android:id="@+id/feedingExecutionsOwnerButton"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Выполнение кормления"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/options_round_corners"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/turnoutsOwnerButton"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Выгул"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:background="@color/light_brown_fon" />
+
+                <Button
+                    android:id="@+id/turnoutSchedulesOwnerButton"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Расписание выгулов"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:background="@color/light_brown_fon" />
+
+                <Button
+                    android:id="@+id/turnoutExecutionsOwnerButton"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Выполнение выгулов"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/options_round_corners"
+                android:orientation="vertical"
+                android:layout_marginBottom="80dp">
+
+                <Button
+                    android:id="@+id/userAgreementOwnerButton"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Правила пользования"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:background="@color/light_brown_fon" />
+
+                <Button
+                    android:id="@+id/helpOwnerButton"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Помощь"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/topFlower"
+        android:layout_width="489dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="-40dp"
+        android:layout_marginTop="-30dp"
+        app:srcCompat="@drawable/flowers_top" />
+
+    <ImageView
+        android:id="@+id/buttomFlower"
+        app:srcCompat="@drawable/flowers_buttom"
+        android:layout_width="500dp"
+        android:layout_height="200dp"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="-45dp"
+        android:layout_marginBottom="-70dp" />
+
+</FrameLayout>
