@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import com.example.stablemanager.AddUserAgreementFragment
 import com.example.stablemanager.Components.Managers.AuthEmployeeManager
 import com.example.stablemanager.Components.Managers.BreedManager
 import com.example.stablemanager.Components.Managers.EmployeeManager
@@ -44,6 +45,7 @@ class OptionsFragment : Fragment() {
         val typeBreedButton : Button = view.findViewById(R.id.typeBreedAdminButton)
         val breedAdminButton : Button = view.findViewById(R.id.breedAdminButton)
         val feedAdminButton : Button = view.findViewById(R.id.feedAdminButton)
+        val userAgreementButton: Button = view.findViewById(R.id.userAgreementAdminButton)
 
         val genderHorseButton: Button = view.findViewById(R.id.genderHorseAdminButton)
 
@@ -132,6 +134,16 @@ class OptionsFragment : Fragment() {
 
             if (activity != null) {
                 activity.replaceFragment(FeedListAdminFragment.newInstance(), FeedListAdminFragment.TAG)
+            } else {
+                Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
+            }
+        }
+
+        userAgreementButton.setOnClickListener {
+            val activity = activity as? StartAdminPageActivity
+
+            if (activity != null) {
+                activity.replaceFragment(AddUserAgreementFragment.newInstance(), AddUserAgreementFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }

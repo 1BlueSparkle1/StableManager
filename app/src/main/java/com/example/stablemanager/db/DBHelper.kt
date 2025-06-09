@@ -13,7 +13,7 @@ import org.mindrot.jbcrypt.BCrypt
 import java.util.Locale
 
 class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorFactory?) :
-    SQLiteOpenHelper(context, "horse_club", factory, 5) {
+    SQLiteOpenHelper(context, "horse_club", factory, 6) {
     override fun onCreate(db: SQLiteDatabase?) {
         val queryOwners = """
         CREATE TABLE owners (
@@ -312,6 +312,15 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
     """.trimIndent()
         db.execSQL(queryNotifications)
 
+        val queryUserAgreementHistory = """
+        CREATE TABLE UserAgreementHistory (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Content TEXT NOT NULL,
+            EffectiveDate DATETIME DEFAULT (datetime('now', 'localtime'))
+        );
+    """.trimIndent()
+        db.execSQL(queryUserAgreementHistory)
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
@@ -337,7 +346,51 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         db.execSQL("DROP TABLE IF EXISTS FeedingTimes")
         db.execSQL("DROP TABLE IF EXISTS FeedingSchedules")
         db.execSQL("DROP TABLE IF EXISTS FeedingExecutions")
+        db.execSQL("DROP TABLE IF EXISTS Notifications")
+        db.execSQL("DROP TABLE IF EXISTS UserAgreementHistory")
         onCreate(db)
+    }
+
+    fun getLatestUserAgreement(): String? {
+        val db = this.readableDatabase
+        var agreement: String? = null
+        var cursor: Cursor? = null
+
+        try {
+            cursor = db.rawQuery("SELECT Content FROM UserAgreementHistory ORDER BY EffectiveDate DESC LIMIT 1", null)
+
+            if (cursor.moveToFirst()) {
+                agreement = cursor.getString(cursor.getColumnIndexOrThrow("Content"))
+            }
+        } catch (e: Exception) {
+            Log.e("DBHelper", "Ошибка при получении последнего пользовательского соглашения: ${e.message}")
+        } finally {
+            cursor?.close()
+            db.close()
+        }
+
+        return agreement
+    }
+
+    fun insertUserAgreement(content: String) {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put("Content", content)
+        }
+
+        try {
+            val newRowId = db.insert("UserAgreementHistory", null, values)
+
+            if (newRowId == -1L) {
+                Log.e("DBHelper", "Ошибка при добавлении пользовательского соглашения")
+            } else {
+                Log.d("DBHelper", "Пользовательское соглашение добавлено с ID: $newRowId")
+            }
+        } catch (e: Exception) {
+            Log.e("DBHelper", "Ошибка при добавлении пользовательского соглашения: ${e.message}")
+        } finally {
+            db.close()
+        }
     }
 
     fun addOwner(owner: Owner){

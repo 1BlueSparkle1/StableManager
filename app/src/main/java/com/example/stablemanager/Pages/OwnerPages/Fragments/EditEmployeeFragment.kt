@@ -29,6 +29,7 @@ import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Employee
 import com.example.stablemanager.db.Role
+import org.mindrot.jbcrypt.BCrypt
 import java.io.ByteArrayOutputStream
 
 
@@ -46,6 +47,7 @@ class EditEmployeeFragment : Fragment() {
     private lateinit var patronymicEditText: EditText
     private lateinit var emailEditText: EditText
     private lateinit var loginEditText: EditText
+    private lateinit var passwordEditText: EditText
     private lateinit var roleTextView: EditText
     private lateinit var roleButton: Button
     private lateinit var imageView: ImageView
@@ -72,6 +74,7 @@ class EditEmployeeFragment : Fragment() {
         patronymicEditText = view.findViewById(R.id.addPatronymicEmployee)
         emailEditText = view.findViewById(R.id.addEmailEmployee)
         loginEditText = view.findViewById(R.id.addLoginEmployee)
+        passwordEditText = view.findViewById(R.id.addPasswordEmployee)
         roleTextView = view.findViewById(R.id.addRoleIdEmployee)
         roleButton = view.findViewById(R.id.addRoleEmployeeButton)
         imageView = view.findViewById(R.id.AddEmployeeLogo)
@@ -93,6 +96,7 @@ class EditEmployeeFragment : Fragment() {
             patronymicEditText.setText(employee.patronymic)
             emailEditText.setText(employee.email)
             loginEditText.setText(employee.login)
+            passwordEditText.setText(employee.password)
             val role = db.getRolesById(employee.roleId)
             if (role != null){
                 roleTextView.setText(role.title)
@@ -125,6 +129,7 @@ class EditEmployeeFragment : Fragment() {
             patronymicEditText.setEditable(true)
             emailEditText.setEditable(true)
             loginEditText.setEditable(true)
+            passwordEditText.setEditable(true)
             dateOfBirthEditText.setEditable(true)
             salaryEditText.setEditable(true)
             roleButton.isEnabled = true
@@ -142,6 +147,7 @@ class EditEmployeeFragment : Fragment() {
             val patronymic = patronymicEditText.text.toString().trim()
             val email = emailEditText.text.toString().trim()
             val login = loginEditText.text.toString().trim()
+            val password = passwordEditText.text.toString().trim()
             val birth = dateOfBirthEditText.text.toString().trim()
             var salary = 0.0
 
@@ -154,7 +160,7 @@ class EditEmployeeFragment : Fragment() {
                 }
             }
 
-            if(surname == "" || name == "" || email == "" || login == "" || selectedRoleId == -1){
+            if(surname == "" || name == "" || email == "" || login == "" || password == "" || selectedRoleId == -1){
                 Toast.makeText(requireContext(), "Поля фамилии, имени, почты, логина и роли должны быть заполнены", Toast.LENGTH_SHORT).show()
             }
             else{
@@ -179,8 +185,16 @@ class EditEmployeeFragment : Fragment() {
                 if (salary == 0.0){
                     salary = employee.salary
                 }
+                var hashPassword = ""
+                if(password != employee.password){
+                    val saltRounds = 12
+                    hashPassword = BCrypt.hashpw(password, BCrypt.gensalt(saltRounds))
+                }
+                else{
+                    hashPassword = employee.password
+                }
 
-                db.updateEmployee(employeeId, surname, name, patronymic, birth, email, login, imageByteArray!!, selectedRoleId, salary, employee.stableId)
+                db.updateEmployee(employeeId, surname, name, patronymic, birth, email, login, hashPassword, imageByteArray!!, selectedRoleId, salary, employee.stableId)
                 Toast.makeText(requireContext(), "Сотрудник изменен", Toast.LENGTH_SHORT).show()
 
                 editEmployeeButton.visibility = View.VISIBLE

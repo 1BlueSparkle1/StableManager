@@ -19,8 +19,11 @@ import com.example.stablemanager.Components.setEditable
 import com.example.stablemanager.Pages.MainActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
+import com.example.stablemanager.db.Owner
 
 class ProfileOwnerActivity : AppCompatActivity() {
+    private lateinit var user: Owner
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -49,9 +52,9 @@ class ProfileOwnerActivity : AppCompatActivity() {
         var userId = -1
         if (authManager.isLoggedIn()) {
             userId = authManager.getUserId()
-            val user = db.getOwnerById(userId)
 
-            if (user != null) {
+            if (db.getOwnerById(userId) != null) {
+                user = db.getOwnerById(userId)!!
                 userSurname.setText(user.surname)
                 userName.setText(user.fullname)
                 userPatronymic.setText(user.patronymic)
@@ -110,7 +113,7 @@ class ProfileOwnerActivity : AppCompatActivity() {
                         userEmail.setEditable(false)
                         userLogin.setEditable(false)
 
-                        db.updateOwner(userId, surname, name, patronymic, email, login)
+                        db.updateOwner(userId, surname, name, patronymic, email, login, user.pass)
 
                         buttonEdit.visibility = View.VISIBLE
                         buttonSave.visibility = View.GONE

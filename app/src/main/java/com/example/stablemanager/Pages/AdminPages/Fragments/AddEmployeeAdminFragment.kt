@@ -150,7 +150,7 @@ class AddEmployeeAdminFragment : Fragment() {
         val dateOfBirth = dateOfBirthEditText.text.toString()
         var salary = 0.0
 
-        if(salaryEditText.text != null || salaryEditText.text.toString() != ""){
+        if(salaryEditText.text != null && salaryEditText.text.toString() != ""){
             salary = salaryEditText.text.toString().toDoubleOrNull() ?: 0.0
 
             if (salary <= 0.0) {
@@ -159,8 +159,8 @@ class AddEmployeeAdminFragment : Fragment() {
             }
         }
 
-        if(surname == "" || name == "" || email == "" || login == "" || password == "" || selectedRoleId == -1 || selectedStableId == -1){
-            Toast.makeText(requireContext(), "Поля фамилии, имени, почты, логина, пароля, роли и конюшни должны быть заполнены", Toast.LENGTH_SHORT).show()
+        if(surname == "" || name == "" || email == "" || login == "" || password == "" || selectedRoleId == -1){
+            Toast.makeText(requireContext(), "Поля фамилии, имени, почты, логина, пароля и роли должны быть заполнены", Toast.LENGTH_SHORT).show()
         }
         else{
             if (db.doesEmployeeExist(-1, login, email)){

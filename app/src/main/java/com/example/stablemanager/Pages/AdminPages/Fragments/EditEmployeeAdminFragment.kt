@@ -153,7 +153,6 @@ class EditEmployeeAdminFragment : Fragment() {
 
             editEmployeeButton.visibility = View.GONE
             saveEmployeeButton.visibility = View.VISIBLE
-            Toast.makeText(requireContext(), "Сотрудник изменен", Toast.LENGTH_SHORT).show()
         }
 
         saveEmployeeButton.setOnClickListener {
