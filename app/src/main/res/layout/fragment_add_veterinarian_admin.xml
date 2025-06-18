@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_brown_fon"
-    tools:context=".Pages.AdminPages.Fragments.AddFeedAdminFragment">
+    tools:context=".AddVeterinarianAdminFragment">
 
     <ImageView
         android:id="@+id/topFlower"
@@ -35,33 +35,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="Создание Корма"
+            android:text="Добавление ветеринара"
             android:textColor="@color/brown_text"
             android:textSize="20pt" />
 
         <EditText
-            android:id="@+id/addTitleFeed"
+            android:id="@+id/addFioVeterinarian"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:layout_marginTop="50dp"
             android:ems="10"
-            android:hint="Название"
+            android:hint="ФИО"
             android:inputType="text"
             android:textColor="@color/brown_text"
             android:textSize="12pt" />
 
         <EditText
-            android:id="@+id/addQuantityFeedAdmin"
+            android:id="@+id/phoneVeterinarianAdmin"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:ems="10"
-            android:hint="Количество"
-            android:inputType="numberDecimal"
+            android:hint="Телефон"
+            android:inputType="phone"
             android:textColor="@color/brown_text"
             android:textSize="12pt" />
 
         <EditText
-            android:id="@+id/addStableIdFeed"
+            android:id="@+id/addStableIdVeterinarian"
             android:layout_width="350dp"
             android:layout_height="50dp"
             android:clickable="false"
@@ -74,18 +74,18 @@
             android:textSize="12pt" />
 
         <Button
-            android:id="@+id/addStableFeedButton"
+            android:id="@+id/addStableVeterinarianButton"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="80dp"
             android:backgroundTint="@color/brown_text"
             android:text="Выбрать конюшню"
             android:textColor="@color/light_brown_fon"
-            android:textSize="10pt"
-            android:layout_marginBottom="80dp"/>
+            android:textSize="10pt" />
 
         <Button
-            android:id="@+id/SaveFeedAdminPage"
+            android:id="@+id/SaveVeterinarianAdminPage"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|top"

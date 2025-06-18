@@ -24,4 +24,71 @@
         android:layout_marginLeft="-45dp"
         android:layout_marginBottom="-70dp" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="top|center_horizontal"
+        android:orientation="vertical"
+        android:layout_marginTop="40dp">
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Отправить уведомление"
+            android:textColor="@color/brown_text"
+            android:textSize="18pt" />
+
+        <EditText
+            android:id="@+id/editTextAgreementContent"
+            android:layout_width="350dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_corners"
+            android:gravity="top|start"
+            android:hint="Введите текст уведомления"
+            android:inputType="textMultiLine"
+            android:maxLines="10"
+            android:padding="8dp"
+            android:scrollbars="vertical"
+            android:textColor="@color/brown_text"
+            android:textSize="8pt" />
+
+        <Button
+            android:id="@+id/addRoleEmployeeButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:backgroundTint="@color/brown_text"
+            android:text="Выбрать пользователя"
+            android:textColor="@color/light_brown_fon"
+            android:textSize="10pt" />
+
+        <EditText
+            android:id="@+id/addRoleIdEmployee"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="Пользователь"
+            android:inputType="text"
+            android:textColor="@color/brown_text"
+            android:textSize="12pt" />
+
+        <Button
+            android:id="@+id/buttonSaveAgreement"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/brown_text"
+            android:text="Отправить"
+            android:textColor="@color/light_brown_fon"
+            android:textSize="10pt" />
+    </LinearLayout>
+
 </FrameLayout>

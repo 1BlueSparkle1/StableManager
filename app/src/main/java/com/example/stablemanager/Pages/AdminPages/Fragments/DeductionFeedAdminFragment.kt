@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.example.stablemanager.Components.Managers.FeedManager
+import com.example.stablemanager.Components.Managers.OwnerManager
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
@@ -33,7 +34,7 @@ class DeductionFeedAdminFragment : Fragment() {
         val quantityEditText: EditText = view.findViewById(R.id.quantityDeductionFeedAdmin)
         val subtractButton: Button = view.findViewById(R.id.deductionQuantityFeedAdminButton)
         val titleFeed: TextView = view.findViewById(R.id.textViewNameFeedAdmin)
-        val feed = db.getFeedById(feedId)
+        var feed = db.getFeedById(feedId)
         titleFeed.text = "Вычетание ${feed!!.title}(кг)"
 
         subtractButton.setOnClickListener {
@@ -58,6 +59,14 @@ class DeductionFeedAdminFragment : Fragment() {
                 if (success) {
                     Toast.makeText(requireContext(), "Количество корма успешно вычтено!", Toast.LENGTH_SHORT).show()
                     quantityEditText.text.clear()
+
+                    val ownerManager = OwnerManager(requireContext())
+
+                    feed = db.getFeedById(feedId)
+                    if(feed!!.quantity <= 5){
+                        db.getUnreadNotificationsCount(ownerManager.getOwnerId(), true)
+                    }
+
                     val activity = activity as? StartAdminPageActivity
 
                     if (activity != null) {

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_brown_fon"
+    tools:context=".UserAgreementOwnerFragment">
+
+    <ImageView
+        android:id="@+id/topFlower"
+        android:layout_width="489dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="-40dp"
+        android:layout_marginTop="-30dp"
+        app:srcCompat="@drawable/flowers_top" />
+
+    <ImageView
+        android:id="@+id/buttomFlower"
+        app:srcCompat="@drawable/flowers_buttom"
+        android:layout_width="500dp"
+        android:layout_height="200dp"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="-45dp"
+        android:layout_marginBottom="-70dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="40dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/textUserAgreement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginBottom="20dp"
+                android:text="Пользовательское соглашение"
+                android:textSize="8pt" />
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

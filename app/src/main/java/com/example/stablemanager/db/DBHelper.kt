@@ -2390,4 +2390,78 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         return feedId
     }
 
+    fun getUnreadNotificationsCount(userId: Int, isOwner: Boolean): Int {
+        val db = this.readableDatabase
+        var count = 0
+        var cursor: Cursor? = null
+
+        try {
+            val query = if (isOwner) {
+                "SELECT COUNT(*) FROM Notifications WHERE OwnerId = ? AND IsRead = 0"
+            } else {
+                "SELECT COUNT(*) FROM Notifications WHERE EmployeeId = ? AND IsRead = 0"
+            }
+
+            cursor = db.rawQuery(query, arrayOf(userId.toString()))
+
+            if (cursor.moveToFirst()) {
+                count = cursor.getInt(0)
+            }
+        } catch (e: Exception) {
+            Log.e("DBHelper", "Ошибка при получении количества непрочитанных уведомлений: ${e.message}")
+        } finally {
+            cursor?.close()
+            db.close()
+        }
+
+        return count
+    }
+
+    fun getAllVeterinarians(): List<Veterinarian>{
+        val db = this.readableDatabase
+        val veterinarians = mutableListOf<Veterinarian>()
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT * FROM Veterinarians", null)
+            if (cursor.moveToFirst()) {
+                do {
+                    val nameColumnIndex = cursor.getColumnIndex("FullName")
+                    val phoneColumnIndex = cursor.getColumnIndex("PhoneNumber")
+                    val stableIdColumnIndex = cursor.getColumnIndex("StableId")
+
+                    if (nameColumnIndex == -1 || phoneColumnIndex == -1 || stableIdColumnIndex == -1) {
+                        Log.e("Database", "Один или несколько столбцов не найдены!")
+                        return emptyList()
+                    }
+
+                    val name = cursor.getString(nameColumnIndex)
+                    val phone = cursor.getString(phoneColumnIndex)
+                    val stableId = cursor.getInt(stableIdColumnIndex)
+
+                    val veterinarian = Veterinarian(name, phone, stableId)
+                    veterinarians.add(veterinarian)
+
+                } while (cursor.moveToNext())
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении данных из feeds: ${e.message}")
+        } finally {
+            cursor?.close()
+        }
+
+        return veterinarians
+    }
+
+    fun addVeterinarian(veterinarian: Veterinarian){
+        val values = ContentValues()
+        values.put("FullName", veterinarian.fullname)
+        values.put("PhoneNumber", veterinarian.phone)
+        values.put("StableId", veterinarian.stableId)
+
+        val db = this.writableDatabase
+        db.insert("Veterinarians", null, values)
+
+        db.close()
+    }
+
 }

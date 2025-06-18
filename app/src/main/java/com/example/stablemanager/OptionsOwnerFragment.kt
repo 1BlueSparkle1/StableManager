@@ -2,11 +2,15 @@ package com.example.stablemanager
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import com.example.stablemanager.Pages.AdminPages.Fragments.OptionsFragment
+import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
 
 
 class OptionsOwnerFragment : Fragment() {
@@ -18,6 +22,30 @@ class OptionsOwnerFragment : Fragment() {
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_options_owner, container, false)
+
+        val userAgreementOwnerButton: Button = view.findViewById(R.id.userAgreementOwnerButton)
+        val veterinariansOwnerButton: Button = view.findViewById(R.id.veterinariansOwnerButton)
+
+
+        userAgreementOwnerButton.setOnClickListener {
+            val activity = activity as? StartOwnerPageActivity
+
+            if (activity != null) {
+                activity.replaceFragment(UserAgreementOwnerFragment.newInstance(), UserAgreementOwnerFragment.TAG)
+            } else {
+                Log.e("OptionsFragment", "StartOwnerPageActivity не найдена")
+            }
+        }
+
+        veterinariansOwnerButton.setOnClickListener {
+            val activity = activity as? StartOwnerPageActivity
+
+            if (activity != null) {
+                activity.replaceFragment(ListVeterinarianOwnerFragment.newInstance(), ListVeterinarianOwnerFragment.TAG)
+            } else {
+                Log.e("OptionsFragment", "StartOwnerPageActivity не найдена")
+            }
+        }
 
         return view
     }

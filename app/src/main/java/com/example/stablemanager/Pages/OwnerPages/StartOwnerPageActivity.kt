@@ -1,5 +1,7 @@
 package com.example.stablemanager.Pages.OwnerPages
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
@@ -8,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.example.stablemanager.Components.Managers.OwnerManager
 import com.example.stablemanager.Pages.OwnerPages.Fragments.NotifyOwnerFragment
 import com.example.stablemanager.R
 import com.example.stablemanager.Pages.OwnerPages.Fragments.StartStableFragment
@@ -31,6 +34,13 @@ class StartOwnerPageActivity : AppCompatActivity() , BottomNavigationView.OnNavi
         notifyButton = findViewById(R.id.notifyBell)
         initBottomNavigation()
         setupImageViewClick()
+        val context: Context = this
+        val ownerManager = OwnerManager(this)
+
+        val intent = Intent("com.example.stablemanager.NEW_NOTIFICATION")
+        intent.putExtra("userId", ownerManager.getOwnerId())
+        intent.putExtra("isOwner", true)
+        context.sendBroadcast(intent)
 
         if (savedInstanceState == null) {
             replaceFragment(StartStableFragment.newInstance(), StartStableFragment.TAG)
