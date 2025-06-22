@@ -2417,6 +2417,22 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         return count
     }
 
+    fun addNotifications(notification: Notification){
+        val values = ContentValues()
+        values.put("Description", notification.description)
+        values.put("IsRead", notification.isRead)
+        values.put("EmployeeId", notification.employeeId)
+        values.put("OwnerId", notification.ownerId)
+        values.put("CreationDate", notification.creationDate)
+        values.put("SenderEmployeeId", notification.senderEmployeeId)
+        values.put("SenderOwnerId", notification.senderOwnerId)
+
+        val db = this.writableDatabase
+        db.insert("Veterinarians", null, values)
+
+        db.close()
+    }
+
     fun getAllVeterinarians(): List<Veterinarian>{
         val db = this.readableDatabase
         val veterinarians = mutableListOf<Veterinarian>()
@@ -2444,7 +2460,42 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
                 } while (cursor.moveToNext())
             }
         } catch (e: Exception) {
-            Log.e("Database", "Ошибка при получении данных из feeds: ${e.message}")
+            Log.e("Database", "Ошибка при получении данных из Veterinarians: ${e.message}")
+        } finally {
+            cursor?.close()
+        }
+
+        return veterinarians
+    }
+
+    fun getAllVeterinariansInStable(stableId: Int): List<Veterinarian>{
+        val db = this.readableDatabase
+        val veterinarians = mutableListOf<Veterinarian>()
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT * FROM Veterinarians WHERE StableId = ?", arrayOf(stableId.toString()))
+            if (cursor.moveToFirst()) {
+                do {
+                    val nameColumnIndex = cursor.getColumnIndex("FullName")
+                    val phoneColumnIndex = cursor.getColumnIndex("PhoneNumber")
+                    val stableIdColumnIndex = cursor.getColumnIndex("StableId")
+
+                    if (nameColumnIndex == -1 || phoneColumnIndex == -1 || stableIdColumnIndex == -1) {
+                        Log.e("Database", "Один или несколько столбцов не найдены!")
+                        return emptyList()
+                    }
+
+                    val name = cursor.getString(nameColumnIndex)
+                    val phone = cursor.getString(phoneColumnIndex)
+                    val stableId = cursor.getInt(stableIdColumnIndex)
+
+                    val veterinarian = Veterinarian(name, phone, stableId)
+                    veterinarians.add(veterinarian)
+
+                } while (cursor.moveToNext())
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении данных из Veterinarians: ${e.message}")
         } finally {
             cursor?.close()
         }
@@ -2462,6 +2513,93 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         db.insert("Veterinarians", null, values)
 
         db.close()
+    }
+
+    fun getServices(): List<Service>{
+        val db = this.readableDatabase
+        val services = mutableListOf<Service>()
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT * FROM Services", null)
+            if (cursor.moveToFirst()) {
+                do {
+                    val titleColumnIndex = cursor.getColumnIndex("Title")
+                    val priceColumnIndex = cursor.getColumnIndex("Price")
+                    val descriptionColumnIndex = cursor.getColumnIndex("Description")
+                    val stableIdColumnIndex = cursor.getColumnIndex("StableId")
+
+                    if (titleColumnIndex == -1 || priceColumnIndex == -1 || descriptionColumnIndex == -1 || stableIdColumnIndex == -1) {
+                        Log.e("Database", "Один или несколько столбцов не найдены!")
+                        return emptyList()
+                    }
+
+                    val title = cursor.getString(titleColumnIndex)
+                    val price = cursor.getDouble(priceColumnIndex)
+                    val description = cursor.getString(descriptionColumnIndex)
+                    val stableId = cursor.getInt(stableIdColumnIndex)
+
+                    val service = Service(title, price, description, stableId)
+                    services.add(service)
+
+                } while (cursor.moveToNext())
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении данных из Services: ${e.message}")
+        } finally {
+            cursor?.close()
+        }
+
+        return services
+    }
+
+    fun addService(service: Service){
+        val values = ContentValues()
+        values.put("Title", service.title)
+        values.put("Price", service.price)
+        values.put("Description", service.description)
+        values.put("StableId", service.stableId)
+
+        val db = this.writableDatabase
+        db.insert("Services", null, values)
+
+        db.close()
+    }
+
+    fun getServicesInStable(stableId: Int): List<Service>{
+        val db = this.readableDatabase
+        val services = mutableListOf<Service>()
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT * FROM Services WHERE StableId = ?", arrayOf(stableId.toString()))
+            if (cursor.moveToFirst()) {
+                do {
+                    val titleColumnIndex = cursor.getColumnIndex("Title")
+                    val priceColumnIndex = cursor.getColumnIndex("Price")
+                    val descriptionColumnIndex = cursor.getColumnIndex("Description")
+                    val stableIdColumnIndex = cursor.getColumnIndex("StableId")
+
+                    if (titleColumnIndex == -1 || priceColumnIndex == -1 || descriptionColumnIndex == -1 || stableIdColumnIndex == -1) {
+                        Log.e("Database", "Один или несколько столбцов не найдены!")
+                        return emptyList()
+                    }
+
+                    val title = cursor.getString(titleColumnIndex)
+                    val price = cursor.getDouble(priceColumnIndex)
+                    val description = cursor.getString(descriptionColumnIndex)
+                    val stableId = cursor.getInt(stableIdColumnIndex)
+
+                    val service = Service(title, price, description, stableId)
+                    services.add(service)
+
+                } while (cursor.moveToNext())
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении данных из Services: ${e.message}")
+        } finally {
+            cursor?.close()
+        }
+
+        return services
     }
 
 }

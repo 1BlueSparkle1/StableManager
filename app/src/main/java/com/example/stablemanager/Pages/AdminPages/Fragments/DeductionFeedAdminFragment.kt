@@ -16,6 +16,7 @@ import com.example.stablemanager.Components.Managers.OwnerManager
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
+import com.example.stablemanager.db.Notification
 
 
 class DeductionFeedAdminFragment : Fragment() {
@@ -64,6 +65,8 @@ class DeductionFeedAdminFragment : Fragment() {
 
                     feed = db.getFeedById(feedId)
                     if(feed!!.quantity <= 5){
+                        val ownerId = ownerManager.getOwnerId()
+                        db.addNotifications(Notification("Корм в вашей конюшне заканчивается, не забодьте пополнить запасы!", false, null, ownerId, "19/06/2025", null, null))
                         db.getUnreadNotificationsCount(ownerManager.getOwnerId(), true)
                     }
 

@@ -1,4 +1,4 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages.OwnerPages.Fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -8,9 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import com.example.stablemanager.Pages.AdminPages.Fragments.OptionsFragment
-import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.ListServiceOwnerFragment
 import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
+import com.example.stablemanager.R
 
 
 class OptionsOwnerFragment : Fragment() {
@@ -25,6 +25,7 @@ class OptionsOwnerFragment : Fragment() {
 
         val userAgreementOwnerButton: Button = view.findViewById(R.id.userAgreementOwnerButton)
         val veterinariansOwnerButton: Button = view.findViewById(R.id.veterinariansOwnerButton)
+        val serviceOwnerButton: Button = view.findViewById(R.id.serviceOwnerButton)
 
 
         userAgreementOwnerButton.setOnClickListener {
@@ -42,6 +43,16 @@ class OptionsOwnerFragment : Fragment() {
 
             if (activity != null) {
                 activity.replaceFragment(ListVeterinarianOwnerFragment.newInstance(), ListVeterinarianOwnerFragment.TAG)
+            } else {
+                Log.e("OptionsFragment", "StartOwnerPageActivity не найдена")
+            }
+        }
+
+        serviceOwnerButton.setOnClickListener {
+            val activity = activity as? StartOwnerPageActivity
+
+            if (activity != null) {
+                activity.replaceFragment(ListServiceOwnerFragment.newInstance(), ListServiceOwnerFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartOwnerPageActivity не найдена")
             }

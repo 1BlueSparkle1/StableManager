@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_brown_fon"
-    tools:context=".Pages.OwnerPages.Fragments.ListVeterinarianOwnerFragment">
+    tools:context=".Pages.AdminPages.Fragments.ListServicesAdminFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,24 +25,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="Ветеринары"
+                android:text="Услуги"
                 android:textColor="@color/brown_text"
                 android:textSize="20pt" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/veterinariansListView"
+                android:id="@+id/serviceAdminView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="100dp" />
 
-
         </LinearLayout>
     </ScrollView>
 
     <Button
-        android:id="@+id/addVeterinarianAdminButton"
+        android:id="@+id/addServiceButton"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"

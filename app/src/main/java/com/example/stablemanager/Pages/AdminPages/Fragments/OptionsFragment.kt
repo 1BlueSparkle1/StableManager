@@ -19,7 +19,6 @@ import com.example.stablemanager.Components.Managers.OwnerManager
 import com.example.stablemanager.Components.Managers.RoleManagers
 import com.example.stablemanager.Components.Managers.StableManager
 import com.example.stablemanager.Components.Managers.TypeBreedManager
-import com.example.stablemanager.ListVeterinarianAdminFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.Pages.MainActivity
 import com.example.stablemanager.R
@@ -47,6 +46,7 @@ class OptionsFragment : Fragment() {
         val feedAdminButton : Button = view.findViewById(R.id.feedAdminButton)
         val userAgreementButton: Button = view.findViewById(R.id.userAgreementAdminButton)
         val veterinariansAdminButton: Button = view.findViewById(R.id.veterinariansAdminButton)
+        val servicesAdminButton: Button = view.findViewById(R.id.servicesAdminButton)
 
         val genderHorseButton: Button = view.findViewById(R.id.genderHorseAdminButton)
 
@@ -155,6 +155,16 @@ class OptionsFragment : Fragment() {
 
             if (activity != null) {
                 activity.replaceFragment(ListVeterinarianAdminFragment.newInstance(), ListVeterinarianAdminFragment.TAG)
+            } else {
+                Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
+            }
+        }
+
+        servicesAdminButton.setOnClickListener {
+            val activity = activity as? StartAdminPageActivity
+
+            if (activity != null) {
+                activity.replaceFragment(ListServicesAdminFragment.newInstance(), ListServicesAdminFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }
