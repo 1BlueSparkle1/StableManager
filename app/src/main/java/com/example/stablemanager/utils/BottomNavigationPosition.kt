@@ -1,12 +1,11 @@
 package com.example.stablemanager.utils
 
 import androidx.fragment.app.Fragment
-import com.example.stablemanager.OptionsOwnerFragment
+import com.example.stablemanager.Pages.OwnerPages.Fragments.OptionsOwnerFragment
 import com.example.stablemanager.Pages.OwnerPages.Fragments.EmployeeFragment
 import com.example.stablemanager.Pages.OwnerPages.Fragments.HorseFragment
 import com.example.stablemanager.R
 import com.example.stablemanager.Pages.OwnerPages.Fragments.RecordFragment
-import com.example.stablemanager.Pages.OwnerPages.Fragments.WarehouseFragment
 
 enum class BottomNavigationPosition(val position: Int, val id: Int){
     FIRST(0, R.id.horseMenu),

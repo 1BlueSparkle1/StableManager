@@ -35,7 +35,7 @@ class ListServicesAdminFragment : Fragment() {
         val services = db.getServices()
         serviceList.layoutManager = LinearLayoutManager(requireContext())
         val activity = activity as StartAdminPageActivity
-        serviceList.adapter = ServiceAdapter(services, activity, requireContext())
+        serviceList.adapter = ServiceAdapter(services, activity, requireContext(), true)
 
         addServiceBtn.setOnClickListener {
             val activity = activity as? StartAdminPageActivity

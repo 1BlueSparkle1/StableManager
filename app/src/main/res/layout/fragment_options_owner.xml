@@ -122,7 +122,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginHorizontal="15dp"
-                    android:background="@color/light_brown_fon" />
+                    android:background="@color/light_brown_fon"
+                    android:visibility="gone"/>
 
                 <Button
                     android:id="@+id/feedingTimesOwnerButton"
@@ -135,13 +136,15 @@
                     android:gravity="center_vertical"
                     android:text="Время кормления"
                     android:textColor="@color/brown_text"
-                    android:textSize="10pt" />
+                    android:textSize="10pt"
+                    android:visibility="gone"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginHorizontal="15dp"
-                    android:background="@color/light_brown_fon" />
+                    android:background="@color/light_brown_fon"
+                    android:visibility="gone"/>
 
                 <Button
                     android:id="@+id/feedingSchedulesOwnerButton"
@@ -154,13 +157,15 @@
                     android:gravity="center_vertical"
                     android:text="Расписание кормления"
                     android:textColor="@color/brown_text"
-                    android:textSize="10pt" />
+                    android:textSize="10pt"
+                    android:visibility="gone"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginHorizontal="15dp"
-                    android:background="@color/light_brown_fon" />
+                    android:background="@color/light_brown_fon"
+                    android:visibility="gone"/>
 
                 <Button
                     android:id="@+id/feedingExecutionsOwnerButton"
@@ -173,7 +178,8 @@
                     android:gravity="center_vertical"
                     android:text="Выполнение кормления"
                     android:textColor="@color/brown_text"
-                    android:textSize="10pt" />
+                    android:textSize="10pt"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 
@@ -186,6 +192,26 @@
                 android:orientation="vertical">
 
                 <Button
+                    android:id="@+id/TrainingLevelsOwnerButton"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Уровни подготовки"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:background="@color/light_brown_fon"
+                    android:visibility="gone"/>
+
+                <Button
                     android:id="@+id/turnoutsOwnerButton"
                     app:icon="@drawable/ic_arrow_right"
                     app:iconGravity="end"
@@ -196,13 +222,15 @@
                     android:gravity="center_vertical"
                     android:text="Выгул"
                     android:textColor="@color/brown_text"
-                    android:textSize="10pt" />
+                    android:textSize="10pt"
+                    android:visibility="gone"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginHorizontal="15dp"
-                    android:background="@color/light_brown_fon" />
+                    android:background="@color/light_brown_fon"
+                    android:visibility="gone"/>
 
                 <Button
                     android:id="@+id/turnoutSchedulesOwnerButton"
@@ -215,13 +243,15 @@
                     android:gravity="center_vertical"
                     android:text="Расписание выгулов"
                     android:textColor="@color/brown_text"
-                    android:textSize="10pt" />
+                    android:textSize="10pt"
+                    android:visibility="gone"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginHorizontal="15dp"
-                    android:background="@color/light_brown_fon" />
+                    android:background="@color/light_brown_fon"
+                    android:visibility="gone"/>
 
                 <Button
                     android:id="@+id/turnoutExecutionsOwnerButton"
@@ -234,7 +264,8 @@
                     android:gravity="center_vertical"
                     android:text="Выполнение выгулов"
                     android:textColor="@color/brown_text"
-                    android:textSize="10pt" />
+                    android:textSize="10pt"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 

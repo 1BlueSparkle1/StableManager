@@ -37,7 +37,7 @@ class ListServiceOwnerFragment : Fragment() {
         val services = db.getServicesInStable(stableManager.getStableId())
         serviceList.layoutManager = LinearLayoutManager(requireContext())
         val activity = activity as StartOwnerPageActivity
-        serviceList.adapter = ServiceAdapter(services, activity, requireContext())
+        serviceList.adapter = ServiceAdapter(services, activity, requireContext(), false)
 
         addServiceBtn.setOnClickListener {
             val activity = activity as? StartOwnerPageActivity

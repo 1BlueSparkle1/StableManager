@@ -1,6 +1,7 @@
 package com.example.stablemanager.Pages.AdminPages.Fragments
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,12 +12,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.example.stablemanager.Components.Managers.FeedManager
 import com.example.stablemanager.Components.Managers.OwnerManager
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Notification
+import java.time.LocalDate
 
 
 class DeductionFeedAdminFragment : Fragment() {
@@ -25,6 +28,7 @@ class DeductionFeedAdminFragment : Fragment() {
         fun newInstance() = DeductionFeedAdminFragment()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId", "SetTextI18n")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_deduction_feed_admin, container, false)
@@ -61,13 +65,15 @@ class DeductionFeedAdminFragment : Fragment() {
                     Toast.makeText(requireContext(), "Количество корма успешно вычтено!", Toast.LENGTH_SHORT).show()
                     quantityEditText.text.clear()
 
-                    val ownerManager = OwnerManager(requireContext())
 
                     feed = db.getFeedById(feedId)
                     if(feed!!.quantity <= 5){
-                        val ownerId = ownerManager.getOwnerId()
-                        db.addNotifications(Notification("Корм в вашей конюшне заканчивается, не забодьте пополнить запасы!", false, null, ownerId, "19/06/2025", null, null))
-                        db.getUnreadNotificationsCount(ownerManager.getOwnerId(), true)
+                        val stable = db.getStableById(feed!!.stableId)
+                        if(stable != null){
+                            Log.e("OptionsFragment", stable.ownerId.toString())
+                            db.addNotifications(Notification( 0, "Корм - ${feed!!.title} в вашей конюшне ${stable.title} заканчивается, не забодьте пополнить запасы!",
+                                false, null, stable.ownerId, LocalDate.now().toString(), null, null))
+                        }
                     }
 
                     val activity = activity as? StartAdminPageActivity

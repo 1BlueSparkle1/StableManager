@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.stablemanager.Components.Managers.AuthManager
+import com.example.stablemanager.Components.Managers.OwnerManager
 import com.example.stablemanager.Components.Managers.StableManager
 import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
 import com.example.stablemanager.R
@@ -37,6 +39,7 @@ class StablesAdapter(private var stables: List<Stable>, private var context: Con
         holder.description.text = stable.description
 
         val stableManager = StableManager(context)
+        val authManager = AuthManager(context)
         val db = DBHelper(context, null)
         val idStable = db.getIdStable(stable.title, stable.description, stable.ownerId)
 
@@ -47,6 +50,7 @@ class StablesAdapter(private var stables: List<Stable>, private var context: Con
                 stableManager.saveStableId(idStable)
             }
             holder.itemView.context.startActivity(intent)
+            db.getUnreadNotificationsCount(authManager.getUserId(), true)
         }
     }
 }

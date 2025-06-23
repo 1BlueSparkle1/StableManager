@@ -2,18 +2,22 @@ package com.example.stablemanager.db
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.database.Cursor
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.icu.text.SimpleDateFormat
 import android.util.Log
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.stablemanager.Components.Managers.AuthManager
 import org.mindrot.jbcrypt.BCrypt
 import java.util.Locale
 
 class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, "horse_club", factory, 6) {
+    private val applicationContext: Context = context.applicationContext
+
     override fun onCreate(db: SQLiteDatabase?) {
         val queryOwners = """
         CREATE TABLE owners (
@@ -2396,22 +2400,32 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         var cursor: Cursor? = null
 
         try {
-            val query = if (isOwner) {
-                "SELECT COUNT(*) FROM Notifications WHERE OwnerId = ? AND IsRead = 0"
+            val query: String
+            val queryArgs: Array<String>
+
+            if (isOwner) {
+                query = "SELECT COUNT(*) FROM Notifications WHERE OwnerId = ? AND IsRead = 0"
+                queryArgs = arrayOf(userId.toString())
             } else {
-                "SELECT COUNT(*) FROM Notifications WHERE EmployeeId = ? AND IsRead = 0"
+                query = """
+                SELECT COUNT(*) FROM Notifications
+                WHERE IsRead = 0 AND (
+                    EmployeeId = ?
+                    OR (EmployeeId IS NULL AND OwnerId IS NULL)
+                )
+            """.trimIndent()
+                queryArgs = arrayOf(userId.toString())
             }
 
-            cursor = db.rawQuery(query, arrayOf(userId.toString()))
+            cursor = db.rawQuery(query, queryArgs)
 
             if (cursor.moveToFirst()) {
                 count = cursor.getInt(0)
             }
         } catch (e: Exception) {
-            Log.e("DBHelper", "Ошибка при получении количества непрочитанных уведомлений: ${e.message}")
+            Log.e("DBHelper", "Ошибка при получении количества непрочитанных уведомлений: ${e.message}", e)
         } finally {
             cursor?.close()
-            db.close()
         }
 
         return count
@@ -2428,9 +2442,180 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         values.put("SenderOwnerId", notification.senderOwnerId)
 
         val db = this.writableDatabase
-        db.insert("Veterinarians", null, values)
+        db.insert("Notifications", null, values)
 
         db.close()
+    }
+
+    fun getUnreadNotifications(userId: Int, isOwner: Boolean): List<Notification> {
+        val db = this.readableDatabase
+        val notifications = mutableListOf<Notification>()
+        var cursor: Cursor? = null
+
+        try {
+            val query: String
+            val queryArgs: Array<String>
+
+            if (isOwner) {
+                query = """
+                SELECT Id, Description, IsRead, EmployeeId, OwnerId, CreationDate, SenderEmployeeId, SenderOwnerId
+                FROM Notifications
+                WHERE OwnerId = ? AND IsRead = 0
+                ORDER BY CreationDate DESC
+            """.trimIndent()
+                queryArgs = arrayOf(userId.toString())
+            } else {
+                query = """
+                SELECT Id, Description, IsRead, EmployeeId, OwnerId, CreationDate, SenderEmployeeId, SenderOwnerId
+                FROM Notifications
+                WHERE IsRead = 0 AND (
+                    EmployeeId = ?
+                    OR (EmployeeId IS NULL AND OwnerId IS NULL)
+                )
+                ORDER BY CreationDate DESC
+            """.trimIndent()
+                queryArgs = arrayOf(userId.toString())
+            }
+
+            cursor = db.rawQuery(query, queryArgs)
+
+            if (cursor.moveToFirst()) {
+                val idColumnIndex = cursor.getColumnIndex("Id")
+                val descriptionColumnIndex = cursor.getColumnIndex("Description")
+                val isReadColumnIndex = cursor.getColumnIndex("IsRead")
+                val employeeIdColumnIndex = cursor.getColumnIndex("EmployeeId")
+                val ownerIdColumnIndex = cursor.getColumnIndex("OwnerId")
+                val creationDateColumnIndex = cursor.getColumnIndex("CreationDate")
+                val senderEmployeeIdColumnIndex = cursor.getColumnIndex("SenderEmployeeId")
+                val senderOwnerIdColumnIndex = cursor.getColumnIndex("SenderOwnerId")
+
+                if (idColumnIndex == -1 || descriptionColumnIndex == -1 || isReadColumnIndex == -1 ||
+                    employeeIdColumnIndex == -1 || ownerIdColumnIndex == -1 || creationDateColumnIndex == -1 ||
+                    senderEmployeeIdColumnIndex == -1 || senderOwnerIdColumnIndex == -1
+                ) {
+                    Log.e("Database", "Один или несколько столбцов не найдены в таблице Notifications!")
+                    return emptyList()
+                }
+
+                do {
+                    val id = cursor.getInt(idColumnIndex)
+                    val description = cursor.getString(descriptionColumnIndex)
+                    val isRead = cursor.getInt(isReadColumnIndex) == 1
+
+                    val employeeId = if (cursor.isNull(employeeIdColumnIndex)) null else cursor.getInt(employeeIdColumnIndex)
+                    val ownerId = if (cursor.isNull(ownerIdColumnIndex)) null else cursor.getInt(ownerIdColumnIndex)
+                    val creationDate = cursor.getString(creationDateColumnIndex)
+                    val senderEmployeeId = if (cursor.isNull(senderEmployeeIdColumnIndex)) null else cursor.getInt(senderEmployeeIdColumnIndex)
+                    val senderOwnerId = if (cursor.isNull(senderOwnerIdColumnIndex)) null else cursor.getInt(senderOwnerIdColumnIndex)
+
+                    notifications.add(
+                        Notification(
+                            id, description, isRead, employeeId, ownerId,
+                            creationDate, senderEmployeeId, senderOwnerId
+                        )
+                    )
+                } while (cursor.moveToNext())
+            } else {
+                Log.d("Database", "Непрочитанные уведомления для пользователя ID $userId (${if (isOwner) "владелец" else "сотрудник"}) не найдены.")
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении непрочитанных уведомлений: ${e.message}", e)
+        } finally {
+            cursor?.close()
+        }
+
+        return notifications
+    }
+
+    fun notifyIsRead(notificationId: Int): Boolean {
+        val db = this.writableDatabase
+        try {
+            val values = ContentValues().apply {
+                put("IsRead", 1)
+            }
+            val rowsAffected = db.update(
+                "Notifications",
+                values,
+                "Id = ?",
+                arrayOf(notificationId.toString())
+            )
+
+            return if (rowsAffected > 0) {
+                Log.d("Database", "Уведомление с ID $notificationId успешно отмечено прочитанным.")
+                val intent = Intent("com.example.stablemanager.NOTIFICATIONS_CHANGED")
+                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+                true
+            } else {
+                Log.w("Database", "Уведомление с ID $notificationId не найдено для обновления статуса или уже было прочитано.")
+                false
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при обновлении статуса уведомления ID $notificationId: ${e.message}", e)
+            return false
+        }
+    }
+
+    fun getAllNotify(): List<Notification> {
+        val db = this.readableDatabase
+        val notifications = mutableListOf<Notification>()
+        var cursor: Cursor? = null
+
+        try {
+            val query = """
+            SELECT Id, Description, IsRead, EmployeeId, OwnerId, CreationDate, SenderEmployeeId, SenderOwnerId
+            FROM Notifications
+            ORDER BY CreationDate DESC
+        """.trimIndent()
+
+            cursor = db.rawQuery(query, null)
+
+            if (cursor.moveToFirst()) {
+                val idColumnIndex = cursor.getColumnIndex("Id")
+                val descriptionColumnIndex = cursor.getColumnIndex("Description")
+                val isReadColumnIndex = cursor.getColumnIndex("IsRead")
+                val employeeIdColumnIndex = cursor.getColumnIndex("EmployeeId")
+                val ownerIdColumnIndex = cursor.getColumnIndex("OwnerId")
+                val creationDateColumnIndex = cursor.getColumnIndex("CreationDate")
+                val senderEmployeeIdColumnIndex = cursor.getColumnIndex("SenderEmployeeId")
+                val senderOwnerIdColumnIndex = cursor.getColumnIndex("SenderOwnerId")
+
+                if (idColumnIndex == -1 || descriptionColumnIndex == -1 || isReadColumnIndex == -1 ||
+                    employeeIdColumnIndex == -1 || ownerIdColumnIndex == -1 || creationDateColumnIndex == -1 ||
+                    senderEmployeeIdColumnIndex == -1 || senderOwnerIdColumnIndex == -1
+                ) {
+                    Log.e("Database", "Один или несколько столбцов не найдены в таблице Notifications при попытке получить все уведомления!")
+                    return emptyList()
+                }
+
+                do {
+                    val id = cursor.getInt(idColumnIndex)
+                    val description = cursor.getString(descriptionColumnIndex)
+                    val isRead = cursor.getInt(isReadColumnIndex) == 1 // 0=false, 1=true
+
+                    val employeeId = if (cursor.isNull(employeeIdColumnIndex)) null else cursor.getInt(employeeIdColumnIndex)
+                    val ownerId = if (cursor.isNull(ownerIdColumnIndex)) null else cursor.getInt(ownerIdColumnIndex)
+                    val creationDate = cursor.getString(creationDateColumnIndex)
+                    val senderEmployeeId = if (cursor.isNull(senderEmployeeIdColumnIndex)) null else cursor.getInt(senderEmployeeIdColumnIndex)
+                    val senderOwnerId = if (cursor.isNull(senderOwnerIdColumnIndex)) null else cursor.getInt(senderOwnerIdColumnIndex)
+
+                    notifications.add(
+                        Notification(
+                            id, description, isRead, employeeId, ownerId,
+                            creationDate, senderEmployeeId, senderOwnerId
+                        )
+                    )
+                } while (cursor.moveToNext())
+            } else {
+                Log.d("Database", "Уведомления в базе данных не найдены.")
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении всех уведомлений: ${e.message}", e)
+        } finally {
+            cursor?.close()
+        }
+
+        return notifications
     }
 
     fun getAllVeterinarians(): List<Veterinarian>{
@@ -2600,6 +2785,153 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         }
 
         return services
+    }
+
+    fun getIdService(title: String, price: Double, description: String, stableId: Int?): Int? {
+        val db = this.readableDatabase
+        var serviceId: Int? = null
+        var cursor: Cursor? = null
+
+        try {
+            val query = if (stableId == null) {
+                "SELECT Id FROM Services WHERE Title = ? AND Price = ? AND Description = ? AND stableId IS NULL"
+            } else {
+                "SELECT Id FROM Services WHERE Title = ? AND Price = ? AND Description = ? AND stableId = ?"
+            }
+
+            val selectionArgs = if (stableId == null) {
+                arrayOf(title, price.toString(), description)
+            } else {
+                arrayOf(title, price.toString(), description, stableId.toString())
+            }
+
+            cursor = db.rawQuery(query, selectionArgs)
+
+            if (cursor.moveToFirst()) {
+                serviceId = cursor.getInt(cursor.getColumnIndexOrThrow("Id"))
+            }
+        } catch (e: Exception) {
+            Log.e("DBHelper", "Ошибка при получении ID услуги: ${e.message}")
+        } finally {
+            cursor?.close()
+            db.close()
+        }
+
+        return serviceId
+    }
+
+    fun getServiceById(serviceId: Int): Service? {
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        try {
+            val query = """
+        SELECT Title, Price, Description, StableId
+        FROM Services
+        WHERE Id = ?
+        """.trimIndent()
+
+            cursor = db.rawQuery(query, arrayOf(serviceId.toString()))
+
+            if (cursor.moveToFirst()) {
+                val titleColumnIndex = cursor.getColumnIndex("Title")
+                val priceColumnIndex = cursor.getColumnIndex("Price")
+                val descriptionColumnIndex = cursor.getColumnIndex("Description")
+                val stableIdColumnIndex = cursor.getColumnIndex("StableId")
+
+                if (titleColumnIndex == -1 || priceColumnIndex == -1 || descriptionColumnIndex == -1 || stableIdColumnIndex == -1) {
+                    Log.e("Database", "Один или несколько столбцов (Title, Price, Description, StableId) не найдены в таблице Services!")
+                    return null
+                }
+
+                val title = cursor.getString(titleColumnIndex)
+                val price = cursor.getDouble(priceColumnIndex)
+                val description = cursor.getString(descriptionColumnIndex)
+                val stableId = cursor.getInt(stableIdColumnIndex)
+
+                return Service(title, price, description, stableId)
+
+            } else {
+                Log.d("Database", "Услуга с ID $serviceId не найдена")
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении услуги: ${e.message}")
+            return null
+        } finally {
+            cursor?.close()
+        }
+    }
+
+    fun updateService(
+        id: Int,
+        title: String,
+        price: Double,
+        description: String?,
+        stableId: Int
+    ): Boolean {
+        val db = this.writableDatabase
+        try {
+            val values = ContentValues().apply {
+                put("Title", title)
+                put("Price", price)
+                put("Description", description)
+                put("StableId", stableId)
+            }
+
+            val rowsAffected = db.update(
+                "Services",
+                values,
+                "Id = ?",
+                arrayOf(id.toString())
+            )
+
+            return if (rowsAffected > 0) {
+                Log.d("Database", "Услуга с ID $id успешно обновлена.")
+                true
+            } else {
+                Log.w("Database", "Услуга с ID $id не найдена для обновления или данные не изменились.")
+                false
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при обновлении услуги с ID $id: ${e.message}", e)
+            return false
+        }
+    }
+
+    fun deleteServiceAndRelatedAppointments(serviceId: Int): Boolean {
+        val db = this.writableDatabase
+        db.beginTransaction()
+
+        try {
+            val appointmentsDeletedCount = db.delete(
+                "Appointments",
+                "ServiceId = ?",
+                arrayOf(serviceId.toString())
+            )
+            Log.d("Database", "Удалено $appointmentsDeletedCount записей, связанных с услугой ID $serviceId.")
+
+            val servicesDeletedCount = db.delete(
+                "Services",
+                "Id = ?",
+                arrayOf(serviceId.toString())
+            )
+
+            if (servicesDeletedCount > 0) {
+                db.setTransactionSuccessful()
+                Log.d("Database", "Услуга с ID $serviceId и связанные записи успешно удалены.")
+                return true
+            } else {
+                Log.w("Database", "Услуга с ID $serviceId не найдена для удаления.")
+                return false
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при удалении услуги ID $serviceId и связанных записей: ${e.message}", e)
+            return false
+        } finally {
+            db.endTransaction()
+        }
     }
 
 }

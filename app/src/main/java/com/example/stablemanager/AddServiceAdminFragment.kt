@@ -47,16 +47,11 @@ class AddServiceAdminFragment : Fragment() {
             val title = titleService.text.toString().trim()
             val price = priceService.text.toString().trim()
             val description = descriptionService.text.toString().trim()
-            if(title == "" || price == ""){
+            if(title == "" || price == "" || selectedStableId == -1){
                 Toast.makeText(requireContext(), "Поля названия и цены должны быть заполнены", Toast.LENGTH_SHORT).show()
             }
             else{
-                if(selectedStableId == -1){
-                    db.addService(Service(title, price.toDouble(), description, null))
-                }
-                else{
-                    db.addService(Service(title, price.toDouble(), description, selectedStableId))
-                }
+                db.addService(Service(title, price.toDouble(), description, selectedStableId))
                 Toast.makeText(requireContext(), "Услуга сохранена", Toast.LENGTH_SHORT).show()
                 val activity = activity as? StartAdminPageActivity
 

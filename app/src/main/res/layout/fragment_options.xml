@@ -315,7 +315,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginHorizontal="15dp"
-                    android:background="@color/light_brown_fon" />
+                    android:background="@color/light_brown_fon"
+                    android:visibility="gone"/>
 
                 <Button
                     android:id="@+id/feedingTimesAdminButton"
@@ -328,13 +329,15 @@
                     android:textSize="10pt"
                     app:icon="@drawable/ic_arrow_right"
                     app:iconGravity="end"
-                    app:iconTint="@color/brown_text" />
+                    app:iconTint="@color/brown_text"
+                    android:visibility="gone"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginHorizontal="15dp"
-                    android:background="@color/light_brown_fon" />
+                    android:background="@color/light_brown_fon"
+                    android:visibility="gone"/>
 
                 <Button
                     android:id="@+id/feedingSchedulesAdminButton"
@@ -347,13 +350,15 @@
                     android:textSize="10pt"
                     app:icon="@drawable/ic_arrow_right"
                     app:iconGravity="end"
-                    app:iconTint="@color/brown_text" />
+                    app:iconTint="@color/brown_text"
+                    android:visibility="gone"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginHorizontal="15dp"
-                    android:background="@color/light_brown_fon" />
+                    android:background="@color/light_brown_fon"
+                    android:visibility="gone"/>
 
                 <Button
                     android:id="@+id/feedingExecutionsAdminButton"
@@ -366,7 +371,8 @@
                     android:textSize="10pt"
                     app:icon="@drawable/ic_arrow_right"
                     app:iconGravity="end"
-                    app:iconTint="@color/brown_text" />
+                    app:iconTint="@color/brown_text"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 
@@ -376,7 +382,8 @@
                 android:layout_gravity="center_horizontal|top"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/options_round_corners"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <Button
                     android:id="@+id/turnoutsAdminButton"
@@ -456,7 +463,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginHorizontal="15dp"
-                    android:background="@color/light_brown_fon" />
+                    android:background="@color/light_brown_fon"
+                    android:visibility="gone"/>
 
                 <Button
                     android:id="@+id/employeeTrainingLevelsAdminButton"
@@ -469,13 +477,15 @@
                     android:textSize="10pt"
                     app:icon="@drawable/ic_arrow_right"
                     app:iconGravity="end"
-                    app:iconTint="@color/brown_text" />
+                    app:iconTint="@color/brown_text"
+                    android:visibility="gone"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginHorizontal="15dp"
-                    android:background="@color/light_brown_fon" />
+                    android:background="@color/light_brown_fon"
+                    android:visibility="gone"/>
 
                 <Button
                     android:id="@+id/horseTrainingLevelsAdminButton"
@@ -484,6 +494,30 @@
                     android:backgroundTint="#00FFFFFF"
                     android:gravity="center_vertical"
                     android:text="Уровень лошадей"
+                    android:textColor="@color/brown_text"
+                    android:textSize="10pt"
+                    app:icon="@drawable/ic_arrow_right"
+                    app:iconGravity="end"
+                    app:iconTint="@color/brown_text"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/options_round_corners"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/NotificationAdminButton"
+                    android:layout_width="350dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:gravity="center_vertical"
+                    android:text="Уведомления"
                     android:textColor="@color/brown_text"
                     android:textSize="10pt"
                     app:icon="@drawable/ic_arrow_right"

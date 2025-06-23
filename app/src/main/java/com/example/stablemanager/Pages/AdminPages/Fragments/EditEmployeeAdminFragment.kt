@@ -117,12 +117,12 @@ class EditEmployeeAdminFragment : Fragment() {
 
         } else {
             Toast.makeText(requireContext(), "Произошла ошибка загрузки роли.", Toast.LENGTH_SHORT).show()
-            val activity = activity as? StartOwnerPageActivity
+            val activity = activity as? StartAdminPageActivity
 
             if (activity != null) {
                 activity.replaceFragment(RoleAdminPageFragment.newInstance(), RoleAdminPageFragment.TAG)
             } else {
-                Log.e("OptionsFragment", "StartOwnerPageActivity не найдена")
+                Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }
         }
 

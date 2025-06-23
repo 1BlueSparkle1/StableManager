@@ -10,14 +10,18 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stablemanager.Components.Managers.RoleManagers
+import com.example.stablemanager.Components.Managers.ServiceManager
+import com.example.stablemanager.Pages.AdminPages.Fragments.EditEmployeeAdminFragment
 import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.Pages.OwnerPages.Fragments.EditEmployeeFragment
+import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Role
 import com.example.stablemanager.db.Service
 
-class ServiceAdapter(private var services: List<Service>, private val activity: Activity, private var context: Context) : RecyclerView.Adapter<ServiceAdapter.MyViewHolder>() {
+class ServiceAdapter(private var services: List<Service>, private val activity: Activity, private var context: Context, private val admin: Boolean) : RecyclerView.Adapter<ServiceAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val title: TextView = itemView.findViewById(R.id.serviceAdminListTitle)
@@ -46,21 +50,30 @@ class ServiceAdapter(private var services: List<Service>, private val activity: 
             holder.stableId.text = "Расположение: " + stable.title
         }
 
-//        val serviceManager = RoleManagers(context)
-//
-//        val idRole = db.getIdRole(role.title)
-//
-//        holder.itemView.setOnClickListener {
-//            val activity = activity as? StartAdminPageActivity
-//
-//            if (activity != null) {
-//                if(idRole != null){
-//                    roleManager.saveRoleId(idRole)
-//                }
-//                activity.replaceFragment(EditRoleFragment.newInstance(), EditRoleFragment.TAG)
-//            } else {
-//                Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
-//            }
-//        }
+        val serviceManager = ServiceManager(context)
+
+        val idService = db.getIdService(service.title, service.price, service.description, service.stableId)
+
+        holder.itemView.setOnClickListener {
+            if(idService != null){
+                serviceManager.saveServiceId(idService)
+            }
+            if(admin){
+                val activity = activity as? StartAdminPageActivity
+                if (activity != null) {
+                    activity.replaceFragment(EditEmployeeAdminFragment.newInstance(), EditEmployeeAdminFragment.TAG)
+                } else {
+                    Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
+                }
+            }
+            else{
+                val activity = activity as? StartOwnerPageActivity
+                if (activity != null) {
+                    activity.replaceFragment(EditEmployeeFragment.newInstance(), EditEmployeeFragment.TAG)
+                } else {
+                    Log.e("OptionsFragment", "StartOwnerPageActivity не найдена")
+                }
+            }
+        }
     }
 }

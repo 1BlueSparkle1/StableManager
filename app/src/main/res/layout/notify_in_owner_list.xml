@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corners"
+    android:orientation="vertical"
+    android:layout_margin="10dp"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/notifyListDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Очень длинное описание, которое содержится в уведомлении"
+        android:textColor="@color/brown_text"
+        android:textSize="10pt"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/notifyListDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:text="11.02.2005"
+        android:textColor="@color/brown_text"
+        android:textSize="8pt" />
+
+    <TextView
+        android:id="@+id/NotifyListSender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Администратор: Назарычева В. Д."
+        android:textColor="@color/brown_text"
+        android:textSize="8pt" />
+
+    <Button
+        android:id="@+id/ReadButton"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/brown_text"
+        android:gravity="center"
+        android:text="Прочитать"
+        android:textColor="@color/light_light_brown_element"
+        android:textSize="10pt" />
+
+</LinearLayout>
