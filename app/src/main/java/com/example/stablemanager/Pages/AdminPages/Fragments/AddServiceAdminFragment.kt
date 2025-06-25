@@ -1,4 +1,4 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages.AdminPages.Fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -11,12 +11,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.example.stablemanager.Pages.AdminPages.Fragments.ListServicesAdminFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.ListVeterinarianAdminFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Service
-import com.example.stablemanager.db.Veterinarian
 
 
 class AddServiceAdminFragment : Fragment() {

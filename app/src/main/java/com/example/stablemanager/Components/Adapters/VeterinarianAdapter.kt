@@ -9,15 +9,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stablemanager.Components.Managers.BreedManager
 import com.example.stablemanager.Components.Managers.VeterinarianManager
-import com.example.stablemanager.EditVeterinarianAdminFragment
-import com.example.stablemanager.EditVeterinarianOwnerFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.EditBreedAdminFragment
+import com.example.stablemanager.Pages.AdminPages.Fragments.EditVeterinarianAdminFragment
+import com.example.stablemanager.Pages.OwnerPages.Fragments.EditVeterinarianOwnerFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
 import com.example.stablemanager.R
-import com.example.stablemanager.db.Breed
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Veterinarian
 

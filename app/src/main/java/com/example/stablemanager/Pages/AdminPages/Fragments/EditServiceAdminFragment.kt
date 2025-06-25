@@ -1,10 +1,7 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages.AdminPages.Fragments
 
 import android.annotation.SuppressLint
-import android.app.Activity.RESULT_OK
-import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,25 +10,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import com.example.stablemanager.Components.Managers.EmployeeManager
 import com.example.stablemanager.Components.Managers.ServiceManager
-import com.example.stablemanager.Components.byteArrayToBitmap
 import com.example.stablemanager.Components.setEditable
-import com.example.stablemanager.Pages.AdminPages.Fragments.EditEmployeeAdminFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.EmployeeListAdminFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.ListServicesAdminFragment
-import com.example.stablemanager.Pages.AdminPages.Fragments.RoleAdminPageFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
-import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
+import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
-import com.example.stablemanager.db.Employee
 import com.example.stablemanager.db.Service
-import org.mindrot.jbcrypt.BCrypt
-import java.io.ByteArrayOutputStream
 
 
 class EditServiceAdminFragment : Fragment() {
@@ -104,7 +91,7 @@ class EditServiceAdminFragment : Fragment() {
             stableButton.isEnabled = true
             stableButton.backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(requireContext(),
-                R.color.brown_text
+                    R.color.brown_text
             ))
 
             editServiceButton.visibility = View.GONE
@@ -134,7 +121,7 @@ class EditServiceAdminFragment : Fragment() {
                 stableButton.isEnabled = false
                 stableButton.backgroundTintList = ColorStateList.valueOf(
                     ContextCompat.getColor(requireContext(),
-                    R.color.light_brown_text
+                        R.color.light_brown_text
                 ))
 
 

@@ -1,4 +1,4 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages.OwnerPages.Fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -12,9 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stablemanager.Components.Adapters.ServiceAdapter
 import com.example.stablemanager.Components.Managers.StableManager
-import com.example.stablemanager.Pages.AdminPages.Fragments.ListServicesAdminFragment
-import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
+import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 
 

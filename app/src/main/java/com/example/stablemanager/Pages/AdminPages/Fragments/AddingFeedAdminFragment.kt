@@ -12,7 +12,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.example.stablemanager.Components.Managers.FeedManager
-import com.example.stablemanager.FeedListOwnerFragment
+import com.example.stablemanager.Pages.OwnerPages.Fragments.FeedListOwnerFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
 import com.example.stablemanager.R

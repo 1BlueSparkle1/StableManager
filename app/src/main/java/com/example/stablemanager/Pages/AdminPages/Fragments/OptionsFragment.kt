@@ -19,7 +19,6 @@ import com.example.stablemanager.Components.Managers.OwnerManager
 import com.example.stablemanager.Components.Managers.RoleManagers
 import com.example.stablemanager.Components.Managers.StableManager
 import com.example.stablemanager.Components.Managers.TypeBreedManager
-import com.example.stablemanager.ListNotifyFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.Pages.MainActivity
 import com.example.stablemanager.R

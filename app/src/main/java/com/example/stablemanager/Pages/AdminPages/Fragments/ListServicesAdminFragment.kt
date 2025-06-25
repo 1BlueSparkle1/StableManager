@@ -10,8 +10,6 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stablemanager.AddServiceAdminFragment
-import com.example.stablemanager.Components.Adapters.RoleAdapter
 import com.example.stablemanager.Components.Adapters.ServiceAdapter
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.R

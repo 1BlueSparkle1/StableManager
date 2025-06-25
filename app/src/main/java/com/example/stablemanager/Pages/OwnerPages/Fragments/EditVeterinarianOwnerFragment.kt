@@ -1,7 +1,6 @@
-package com.example.stablemanager
+package com.example.stablemanager.Pages.OwnerPages.Fragments
 
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,16 +11,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
-import com.example.stablemanager.Components.Managers.ServiceManager
 import com.example.stablemanager.Components.Managers.VeterinarianManager
 import com.example.stablemanager.Components.setEditable
-import com.example.stablemanager.Pages.AdminPages.Fragments.ListServicesAdminFragment
-import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
-import com.example.stablemanager.Pages.OwnerPages.Fragments.ListVeterinarianOwnerFragment
 import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
+import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
-import com.example.stablemanager.db.Service
 import com.example.stablemanager.db.Veterinarian
 
 
