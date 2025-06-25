@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import com.example.stablemanager.FeedListOwnerFragment
 import com.example.stablemanager.ListServiceOwnerFragment
 import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
 import com.example.stablemanager.R
@@ -26,6 +27,7 @@ class OptionsOwnerFragment : Fragment() {
         val userAgreementOwnerButton: Button = view.findViewById(R.id.userAgreementOwnerButton)
         val veterinariansOwnerButton: Button = view.findViewById(R.id.veterinariansOwnerButton)
         val serviceOwnerButton: Button = view.findViewById(R.id.serviceOwnerButton)
+        val feedOwnerButton: Button = view.findViewById(R.id.feedOwnerButton)
 
 
         userAgreementOwnerButton.setOnClickListener {
@@ -53,6 +55,16 @@ class OptionsOwnerFragment : Fragment() {
 
             if (activity != null) {
                 activity.replaceFragment(ListServiceOwnerFragment.newInstance(), ListServiceOwnerFragment.TAG)
+            } else {
+                Log.e("OptionsFragment", "StartOwnerPageActivity не найдена")
+            }
+        }
+
+        feedOwnerButton.setOnClickListener {
+            val activity = activity as? StartOwnerPageActivity
+
+            if (activity != null) {
+                activity.replaceFragment(FeedListOwnerFragment.newInstance(), FeedListOwnerFragment.TAG)
             } else {
                 Log.e("OptionsFragment", "StartOwnerPageActivity не найдена")
             }

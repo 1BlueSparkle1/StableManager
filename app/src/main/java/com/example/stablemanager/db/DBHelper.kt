@@ -15,7 +15,7 @@ import org.mindrot.jbcrypt.BCrypt
 import java.util.Locale
 
 class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorFactory?) :
-    SQLiteOpenHelper(context, "horse_club", factory, 6) {
+    SQLiteOpenHelper(context, "horse_club", factory, 7) {
     private val applicationContext: Context = context.applicationContext
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -105,16 +105,14 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             BirthDate TEXT,
             GenderId INTEGER,
             BreedId INTEGER,
-            FeedingConditionId INTEGER,
-            TurnoutConditionId INTEGER,
+            FeedingConditionId TEXT,
+            TurnoutConditionId TEXT,
             HealthCondition TEXT,
             FarrierId INTEGER,
             VeterinarianId INTEGER,
             Image BLOB,
-            FOREIGN KEY (GenderId) REFERENCES Genders(Id),
-            FOREIGN KEY (BreedId) REFERENCES Breeds(Id),
-            FOREIGN KEY (FeedingConditionId) REFERENCES FeedingConditions(Id),
-            FOREIGN KEY (TurnoutConditionId) REFERENCES TurnoutConditions(Id),
+            FOREIGN KEY (GenderId) REFERENCES gender_horses(Id),
+            FOREIGN KEY (BreedId) REFERENCES breeds(Id),
             FOREIGN KEY (FarrierId) REFERENCES Farriers(Id),
             FOREIGN KEY (VeterinarianId) REFERENCES Veterinarians(Id)
         )
@@ -138,7 +136,7 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             FullName TEXT NOT NULL,
             PhoneNumber TEXT,
             StableId INTEGER,
-            FOREIGN KEY (StableId) REFERENCES Stables(Id)
+            FOREIGN KEY (StableId) REFERENCES stables(Id)
         );
     """.trimIndent()
         db.execSQL(queryVeterinarians)
@@ -149,7 +147,7 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             FullName TEXT NOT NULL,
             PhoneNumber TEXT,
             StableId INTEGER,
-            FOREIGN KEY (StableId) REFERENCES Stables(Id)
+            FOREIGN KEY (StableId) REFERENCES stables(Id)
         );
     """.trimIndent()
         db.execSQL(queryFarriers)
@@ -161,7 +159,7 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             Price REAL NOT NULL,
             Description TEXT,
             StableId INTEGER NOT NULL,
-            FOREIGN KEY (StableId) REFERENCES Stables(Id)
+            FOREIGN KEY (StableId) REFERENCES stables(Id)
         );
     """.trimIndent()
         db.execSQL(queryServices)
@@ -179,9 +177,9 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             StableId INTEGER NOT NULL,
             Confirmation INTEGER DEFAULT 0, 
             FOREIGN KEY (ServiceId) REFERENCES Services(Id),
-            FOREIGN KEY (HorseId) REFERENCES Horses(Id),
-            FOREIGN KEY (EmployeeId) REFERENCES Employees(Id),
-            FOREIGN KEY (StableId) REFERENCES Stables(Id)
+            FOREIGN KEY (HorseId) REFERENCES horses(Id),
+            FOREIGN KEY (EmployeeId) REFERENCES employees(Id),
+            FOREIGN KEY (StableId) REFERENCES stables(Id)
         );
     """.trimIndent()
         db.execSQL(queryAppointments)
@@ -200,7 +198,7 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             TrainingLevelId INTEGER NOT NULL,
             EmployeeId INTEGER NOT NULL,
             FOREIGN KEY (TrainingLevelId) REFERENCES TrainingLevels(Id),
-            FOREIGN KEY (EmployeeId) REFERENCES Employees(Id)
+            FOREIGN KEY (EmployeeId) REFERENCES employees(Id)
         );
     """.trimIndent()
         db.execSQL(queryEmployeeTrainingLevels)
@@ -211,7 +209,7 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             TrainingLevelId INTEGER NOT NULL,
             HorseId INTEGER NOT NULL,
             FOREIGN KEY (TrainingLevelId) REFERENCES TrainingLevels(Id),
-            FOREIGN KEY (HorseId) REFERENCES Horses(Id)
+            FOREIGN KEY (HorseId) REFERENCES horses(Id)
         );
     """.trimIndent()
         db.execSQL(queryHorseTrainingLevels)
@@ -224,7 +222,7 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             StartTime TIME NOT NULL,
             EndTime TIME NOT NULL,
             StableId INTEGER NOT NULL,
-            FOREIGN KEY (StableId) REFERENCES Stables(Id)
+            FOREIGN KEY (StableId) REFERENCES stables(Id)
         );
     """.trimIndent()
         db.execSQL(queryTurnouts)
@@ -236,9 +234,9 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             TurnoutId INTEGER NOT NULL,
             HorseId INTEGER NOT NULL,
             StableId INTEGER NOT NULL,
-            FOREIGN KEY (StableId) REFERENCES Stables(Id),
+            FOREIGN KEY (StableId) REFERENCES stables(Id),
             FOREIGN KEY (TurnoutId) REFERENCES Turnouts(Id),
-            FOREIGN KEY (HorseId) REFERENCES Horses(Id)
+            FOREIGN KEY (HorseId) REFERENCES horses(Id)
         );
     """.trimIndent()
         db.execSQL(queryTurnoutSchedules)
@@ -250,7 +248,7 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             TurnoutScheduleId INTEGER NOT NULL,
             ExecutionDate DATE NOT NULL,
             StableId INTEGER NOT NULL,
-            FOREIGN KEY (StableId) REFERENCES Stables(Id),
+            FOREIGN KEY (StableId) REFERENCES stables(Id),
             FOREIGN KEY (TurnoutScheduleId) REFERENCES TurnoutSchedules(Id)
         );
     """.trimIndent()
@@ -262,7 +260,7 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
             Title TEXT NOT NULL,
             StableId INTEGER NOT NULL,
-            FOREIGN KEY (StableId) REFERENCES Stables(Id)
+            FOREIGN KEY (StableId) REFERENCES stables(Id)
         );
     """.trimIndent()
         db.execSQL(queryFeedingTimes)
@@ -277,10 +275,10 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             HorseId INTEGER NOT NULL,
             Steam BOOLEAN NOT NULL,
             StableId INTEGER NOT NULL,
-            FOREIGN KEY (StableId) REFERENCES Stables(Id),
+            FOREIGN KEY (StableId) REFERENCES stables(Id),
             FOREIGN KEY (FeedingTimeId) REFERENCES FeedingTimes(Id),
             FOREIGN KEY (FeedId) REFERENCES Feeds(Id),
-            FOREIGN KEY (HorseId) REFERENCES Horses(Id)
+            FOREIGN KEY (HorseId) REFERENCES horses(Id)
         );
     """.trimIndent()
         db.execSQL(queryFeedingSchedules)
@@ -292,7 +290,7 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             FeedingScheduleId INTEGER NOT NULL,
             ExecutionDate DATE NOT NULL,
             StableId INTEGER NOT NULL,
-            FOREIGN KEY (StableId) REFERENCES Stables(Id),
+            FOREIGN KEY (StableId) REFERENCES stables(Id),
             FOREIGN KEY (FeedingScheduleId) REFERENCES FeedingSchedules(Id)
         );
     """.trimIndent()
@@ -308,10 +306,10 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
             CreationDate TEXT DEFAULT (datetime('now', 'localtime')),
             SenderEmployeeId INTEGER,
             SenderOwnerId INTEGER,
-            FOREIGN KEY (EmployeeId) REFERENCES Employees(Id),
-            FOREIGN KEY (OwnerId) REFERENCES Owners(Id),
-            FOREIGN KEY (SenderEmployeeId) REFERENCES Employees(Id),
-            FOREIGN KEY (SenderOwnerId) REFERENCES Owners(Id)
+            FOREIGN KEY (EmployeeId) REFERENCES employees(Id),
+            FOREIGN KEY (OwnerId) REFERENCES owners(Id),
+            FOREIGN KEY (SenderEmployeeId) REFERENCES employees(Id),
+            FOREIGN KEY (SenderOwnerId) REFERENCES owners(Id)
         );
     """.trimIndent()
         db.execSQL(queryNotifications)
@@ -2394,6 +2392,55 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         return feedId
     }
 
+    fun getFeedsInStable(stableId: Int): List<Feed> {
+        val db = this.readableDatabase
+        val feeds = mutableListOf<Feed>()
+        var cursor: Cursor? = null
+
+        try {
+            val query = """
+            SELECT Id, Title, Quantity, StableId
+            FROM feeds
+            WHERE stableId = ?
+            ORDER BY Title ASC
+        """.trimIndent()
+
+            cursor = db.rawQuery(query, arrayOf(stableId.toString()))
+
+            if (cursor.moveToFirst()) {
+                val idColumnIndex = cursor.getColumnIndex("id")
+                val titleColumnIndex = cursor.getColumnIndex("title")
+                val quantityColumnIndex = cursor.getColumnIndex("quantity")
+                val stableIdColumnIndex = cursor.getColumnIndex("stableId")
+
+                if (idColumnIndex == -1 || titleColumnIndex == -1 || quantityColumnIndex == -1 || stableIdColumnIndex == -1) {
+                    Log.e("Database", "Один или несколько столбцов не найдены в таблице 'feeds'!")
+                    return emptyList()
+                }
+
+                do {
+                    val id = cursor.getInt(idColumnIndex)
+                    val title = cursor.getString(titleColumnIndex)
+                    val quantity = cursor.getDouble(quantityColumnIndex)
+
+                    val feedStableId = if (cursor.isNull(stableIdColumnIndex)) null else cursor.getInt(stableIdColumnIndex)
+
+                    feeds.add(
+                        Feed(title, quantity, feedStableId!!)
+                    )
+                } while (cursor.moveToNext())
+            } else {
+                Log.d("Database", "Кормов для конюшни с ID $stableId не найдено.")
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении кормов для конюшни ID $stableId: ${e.message}", e)
+        } finally {
+            cursor?.close()
+        }
+
+        return feeds
+    }
+
     fun getUnreadNotificationsCount(userId: Int, isOwner: Boolean): Int {
         val db = this.readableDatabase
         var count = 0
@@ -2657,30 +2704,42 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         val db = this.readableDatabase
         val veterinarians = mutableListOf<Veterinarian>()
         var cursor: Cursor? = null
+
         try {
-            cursor = db.rawQuery("SELECT * FROM Veterinarians WHERE StableId = ?", arrayOf(stableId.toString()))
+            val query = """
+            SELECT Id, FullName, PhoneNumber, StableId
+            FROM Veterinarians
+            WHERE StableId = ? OR StableId IS NULL
+            ORDER BY FullName ASC 
+        """.trimIndent()
+
+            cursor = db.rawQuery(query, arrayOf(stableId.toString()))
+
             if (cursor.moveToFirst()) {
+                val idColumnIndex = cursor.getColumnIndex("Id")
+                val fullNameColumnIndex = cursor.getColumnIndex("FullName")
+                val phoneNumberColumnIndex = cursor.getColumnIndex("PhoneNumber")
+                val stableIdColumnIndex = cursor.getColumnIndex("StableId")
+
+                if (idColumnIndex == -1 || fullNameColumnIndex == -1 || phoneNumberColumnIndex == -1 || stableIdColumnIndex == -1) {
+                    Log.e("Database", "Один или несколько столбцов (Id, FullName, PhoneNumber, StableId) не найдены в таблице 'Veterinarians'!")
+                    return emptyList()
+                }
+
                 do {
-                    val nameColumnIndex = cursor.getColumnIndex("FullName")
-                    val phoneColumnIndex = cursor.getColumnIndex("PhoneNumber")
-                    val stableIdColumnIndex = cursor.getColumnIndex("StableId")
+                    val fullName = cursor.getString(fullNameColumnIndex)
+                    val phoneNumber = if (cursor.isNull(phoneNumberColumnIndex)) null else cursor.getString(phoneNumberColumnIndex)
+                    val vetStableId = if (cursor.isNull(stableIdColumnIndex)) null else cursor.getInt(stableIdColumnIndex)
 
-                    if (nameColumnIndex == -1 || phoneColumnIndex == -1 || stableIdColumnIndex == -1) {
-                        Log.e("Database", "Один или несколько столбцов не найдены!")
-                        return emptyList()
-                    }
-
-                    val name = cursor.getString(nameColumnIndex)
-                    val phone = cursor.getString(phoneColumnIndex)
-                    val stableId = cursor.getInt(stableIdColumnIndex)
-
-                    val veterinarian = Veterinarian(name, phone, stableId)
+                    val veterinarian = Veterinarian(fullName, phoneNumber!!, vetStableId)
                     veterinarians.add(veterinarian)
 
                 } while (cursor.moveToNext())
+            } else {
+                Log.d("Database", "Ветеринаров для конюшни с ID $stableId (и глобальных) не найдено.")
             }
         } catch (e: Exception) {
-            Log.e("Database", "Ошибка при получении данных из Veterinarians: ${e.message}")
+            Log.e("Database", "Ошибка при получении ветеринаров: ${e.message}", e)
         } finally {
             cursor?.close()
         }

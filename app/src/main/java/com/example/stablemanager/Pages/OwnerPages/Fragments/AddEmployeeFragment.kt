@@ -19,6 +19,7 @@ import com.example.stablemanager.Components.Managers.StableManager
 import com.example.stablemanager.Components.isValidEmail
 import com.example.stablemanager.Pages.AdminPages.Fragments.EmployeeListAdminFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Employee
@@ -166,10 +167,10 @@ class AddEmployeeFragment : Fragment() {
                     dateOfBirthEditText.text.clear()
                     salaryEditText.text.clear()
 
-                    val activity = activity as? StartAdminPageActivity
+                    val activity = activity as? StartOwnerPageActivity
 
                     if (activity != null) {
-                        activity.replaceFragment(EmployeeListAdminFragment.newInstance(), EmployeeListAdminFragment.TAG)
+                        activity.replaceFragment(EmployeeFragment.newInstance(), EmployeeFragment.TAG)
                     } else {
                         Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
                     }

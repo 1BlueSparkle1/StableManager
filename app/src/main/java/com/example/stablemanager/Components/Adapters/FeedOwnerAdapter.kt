@@ -9,27 +9,26 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stablemanager.Pages.AdminPages.Fragments.AddingFeedAdminFragment
 import com.example.stablemanager.Components.Managers.FeedManager
+import com.example.stablemanager.Pages.AdminPages.Fragments.AddingFeedAdminFragment
 import com.example.stablemanager.Pages.AdminPages.Fragments.DeductionFeedAdminFragment
 import com.example.stablemanager.Pages.AdminPages.Fragments.EditRoleFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Feed
 
-class FeedAdapter(private var feeds: List<Feed>, private val activity: StartAdminPageActivity, private var context: Context) : RecyclerView.Adapter<FeedAdapter.MyViewHolder>() {
+class FeedOwnerAdapter(private var feeds: List<Feed>, private val activity: StartOwnerPageActivity, private var context: Context) : RecyclerView.Adapter<FeedOwnerAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title: TextView = itemView.findViewById(R.id.feedsListTitle)
         val quantity: TextView = itemView.findViewById(R.id.feedsListQuantity)
-        val stableFeed: TextView = itemView.findViewById(R.id.feedsListStable)
-        val ownerFeed: TextView = itemView.findViewById(R.id.feedsListOwner)
         val plusQuantity: Button = itemView.findViewById(R.id.AddQuantityFeed)
         val minusQuantity: Button = itemView.findViewById(R.id.downQuantityFeed)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.feeds_admin_in_list, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.feed_owner_in_list, parent, false)
         return MyViewHolder(view)
     }
 
@@ -47,13 +46,8 @@ class FeedAdapter(private var feeds: List<Feed>, private val activity: StartAdmi
         val db = DBHelper(context, null)
         val idFeed = db.getIdFeed(feed.title, feed.quantity, feed.stableId)
 
-        val stable = db.getStableById(feed.stableId)
-        holder.stableFeed.text = stable!!.title
-        val owner = db.getOwnerById(stable.ownerId)
-        holder.ownerFeed.text = "${owner!!.surname} ${owner.fullname} ${owner.patronymic}"
-
         holder.plusQuantity.setOnClickListener {
-            val activity = activity as? StartAdminPageActivity
+            val activity = activity as? StartOwnerPageActivity
 
             if (activity != null) {
                 if(idFeed != null){
@@ -66,7 +60,7 @@ class FeedAdapter(private var feeds: List<Feed>, private val activity: StartAdmi
         }
 
         holder.minusQuantity.setOnClickListener {
-            val activity = activity as? StartAdminPageActivity
+            val activity = activity as? StartOwnerPageActivity
 
             if (activity != null) {
                 if(idFeed != null){
@@ -79,7 +73,7 @@ class FeedAdapter(private var feeds: List<Feed>, private val activity: StartAdmi
         }
 
         holder.itemView.setOnClickListener {
-            val activity = activity as? StartAdminPageActivity
+            val activity = activity as? StartOwnerPageActivity
 
             if (activity != null) {
                 if(idFeed != null){

@@ -12,7 +12,9 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.example.stablemanager.Components.Managers.FeedManager
+import com.example.stablemanager.FeedListOwnerFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 
@@ -59,12 +61,15 @@ class AddingFeedAdminFragment : Fragment() {
                 if (success) {
                     Toast.makeText(requireContext(), "Количество корма успешно добавлено!", Toast.LENGTH_SHORT).show()
                     quantityEditText.text.clear()
-                    val activity = activity as? StartAdminPageActivity
+                    val activityAdm = activity as? StartAdminPageActivity
+                    val activityOwn = activity as? StartOwnerPageActivity
 
-                    if (activity != null) {
-                        activity.replaceFragment(FeedListAdminFragment.newInstance(), FeedListAdminFragment.TAG)
+                    if (activityAdm != null) {
+                        activityAdm.replaceFragment(FeedListAdminFragment.newInstance(), FeedListAdminFragment.TAG)
+                    } else if (activityOwn != null) {
+                        activityOwn.replaceFragment(FeedListOwnerFragment.newInstance(), FeedListOwnerFragment.TAG)
                     } else {
-                        Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
+                        Log.e("OptionsFragment", "Activity не найдены")
                     }
                 } else {
                     Toast.makeText(requireContext(), "Не удалось добавить количество корма.", Toast.LENGTH_SHORT).show()

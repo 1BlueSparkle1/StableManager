@@ -15,7 +15,9 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.stablemanager.Components.Managers.FeedManager
 import com.example.stablemanager.Components.Managers.OwnerManager
+import com.example.stablemanager.FeedListOwnerFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
+import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
 import com.example.stablemanager.R
 import com.example.stablemanager.db.DBHelper
 import com.example.stablemanager.db.Notification
@@ -76,12 +78,15 @@ class DeductionFeedAdminFragment : Fragment() {
                         }
                     }
 
-                    val activity = activity as? StartAdminPageActivity
+                    val activityAdm = activity as? StartAdminPageActivity
+                    val activityOwn = activity as? StartOwnerPageActivity
 
-                    if (activity != null) {
-                        activity.replaceFragment(FeedListAdminFragment.newInstance(), FeedListAdminFragment.TAG)
+                    if (activityAdm != null) {
+                        activityAdm.replaceFragment(FeedListAdminFragment.newInstance(), FeedListAdminFragment.TAG)
+                    } else if (activityOwn != null) {
+                        activityOwn.replaceFragment(FeedListOwnerFragment.newInstance(), FeedListOwnerFragment.TAG)
                     } else {
-                        Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
+                        Log.e("OptionsFragment", "Activity не найдены")
                     }
                 } else {
                     Toast.makeText(requireContext(), "Не удалось вычесть количество корма. Возможно, недостаточно корма.", Toast.LENGTH_SHORT).show()

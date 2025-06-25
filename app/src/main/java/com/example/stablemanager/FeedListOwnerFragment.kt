@@ -10,42 +10,43 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stablemanager.Components.Adapters.ServiceAdapter
+import com.example.stablemanager.Components.Adapters.FeedAdapter
+import com.example.stablemanager.Components.Adapters.FeedOwnerAdapter
 import com.example.stablemanager.Components.Managers.StableManager
-import com.example.stablemanager.Pages.AdminPages.Fragments.ListServicesAdminFragment
+import com.example.stablemanager.Pages.AdminPages.Fragments.AddFeedAdminFragment
+import com.example.stablemanager.Pages.AdminPages.Fragments.FeedListAdminFragment
 import com.example.stablemanager.Pages.AdminPages.StartAdminPageActivity
 import com.example.stablemanager.Pages.OwnerPages.StartOwnerPageActivity
 import com.example.stablemanager.db.DBHelper
 
 
-class ListServiceOwnerFragment : Fragment() {
+class FeedListOwnerFragment : Fragment() {
     companion object{
-        val TAG: String = ListServiceOwnerFragment::class.java.simpleName
-        fun newInstance() = ListServiceOwnerFragment()
+        val TAG: String = FeedListOwnerFragment::class.java.simpleName
+        fun newInstance() = FeedListOwnerFragment()
     }
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_list_service_owner, container, false)
+        val view = inflater.inflate(R.layout.fragment_feed_list_owner, container, false)
 
         val db = DBHelper(requireContext(), null)
-        val serviceList: RecyclerView = view.findViewById(R.id.serviceAdminView)
-        val addServiceBtn: Button = view.findViewById(R.id.addServiceButton)
-
+        val feedList: RecyclerView = view.findViewById(R.id.feedListView)
+        val addFeedBtn: Button = view.findViewById(R.id.addFeedAdminButton)
         val stableManager = StableManager(requireContext())
 
-        val services = db.getServicesInStable(stableManager.getStableId())
-        serviceList.layoutManager = LinearLayoutManager(requireContext())
+        val feeds = db.getFeedsInStable(stableManager.getStableId())
+        feedList.layoutManager = LinearLayoutManager(requireContext())
         val activity = activity as StartOwnerPageActivity
-        serviceList.adapter = ServiceAdapter(services, activity, requireContext(), false)
+        feedList.adapter = FeedOwnerAdapter(feeds, activity, requireContext())
 
-        addServiceBtn.setOnClickListener {
+        addFeedBtn.setOnClickListener {
             val activity = activity as? StartOwnerPageActivity
 
             if (activity != null) {
-                activity.replaceFragment(AddServiceOwnerFragment.newInstance(), AddServiceOwnerFragment.TAG)
+                activity.replaceFragment(AddFeedAdminFragment.newInstance(), AddFeedAdminFragment.TAG)
             } else {
-                Log.e("OptionsFragment", "StartOwnerPageActivity не найдена")
+                Log.e("OptionsFragment", "StartAdminPageActivity не найдена")
             }
         }
 

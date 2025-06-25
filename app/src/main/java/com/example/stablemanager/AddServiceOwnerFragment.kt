@@ -21,14 +21,14 @@ import com.example.stablemanager.db.Service
 
 class AddServiceOwnerFragment : Fragment() {
     companion object{
-        val TAG: String = AddServiceAdminFragment::class.java.simpleName
-        fun newInstance() = AddServiceAdminFragment()
+        val TAG: String = AddServiceOwnerFragment::class.java.simpleName
+        fun newInstance() = AddServiceOwnerFragment()
     }
 
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_add_service_admin, container, false)
+        val view = inflater.inflate(R.layout.fragment_add_service_owner, container, false)
 
         val db = DBHelper(requireContext(), null)
         val titleService: EditText = view.findViewById(R.id.addTitleService)
@@ -54,8 +54,8 @@ class AddServiceOwnerFragment : Fragment() {
 
                 if (activity != null) {
                     activity.replaceFragment(
-                        ListServicesAdminFragment.newInstance(),
-                        ListServicesAdminFragment.TAG
+                        ListServiceOwnerFragment.newInstance(),
+                        ListServiceOwnerFragment.TAG
                     )
                 } else {
                     Log.e("OptionsFragment", "StartOwnerPageActivity не найдена")
