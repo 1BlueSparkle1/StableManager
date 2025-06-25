@@ -2759,6 +2759,222 @@ class DBHelper(val context: Context, private val factory: SQLiteDatabase.CursorF
         db.close()
     }
 
+    fun getIdVeterinarian(fullName: String, phoneNumber: String?, stableId: Int?): Int? {
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+        var veterinarianId: Int? = null
+
+        try {
+            val whereClauses = mutableListOf<String>()
+            val selectionArgs = mutableListOf<String>()
+
+            whereClauses.add("FullName = ?")
+            selectionArgs.add(fullName)
+
+            if (phoneNumber != null) {
+                whereClauses.add("PhoneNumber = ?")
+                selectionArgs.add(phoneNumber)
+            } else {
+                whereClauses.add("PhoneNumber IS NULL")
+            }
+
+            if (stableId != null) {
+                whereClauses.add("StableId = ?")
+                selectionArgs.add(stableId.toString())
+            } else {
+                whereClauses.add("StableId IS NULL")
+            }
+
+            val whereClause = whereClauses.joinToString(" AND ")
+
+            val query = """
+            SELECT Id
+            FROM Veterinarians
+            WHERE $whereClause
+            LIMIT 1
+        """.trimIndent()
+
+            Log.d("DBHelper", "Executing getIdVeterinarian query: $query with args: ${selectionArgs.joinToString()}")
+
+            cursor = db.rawQuery(query, selectionArgs.toTypedArray())
+
+            if (cursor.moveToFirst()) {
+                val idColumnIndex = cursor.getColumnIndex("Id")
+                if (idColumnIndex == -1) {
+                    Log.e("Database", "Столбец 'Id' не найден в таблице 'Veterinarians' при поиске ID ветеринара!")
+                    return null
+                }
+                veterinarianId = cursor.getInt(idColumnIndex)
+            } else {
+                Log.d("Database", "Ветеринар с данными FullName: '$fullName', PhoneNumber: '$phoneNumber', StableId: '$stableId' не найден.")
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при поиске ID ветеринара: ${e.message}", e)
+        } finally {
+            cursor?.close()
+        }
+
+        return veterinarianId
+    }
+
+    fun updateVeterinarian(
+        id: Int,
+        fullName: String,
+        phoneNumber: String?,
+        stableId: Int?
+    ): Boolean {
+        val db = this.writableDatabase
+        try {
+            val values = ContentValues().apply {
+                put("FullName", fullName)
+
+                if (phoneNumber != null) {
+                    put("PhoneNumber", phoneNumber)
+                } else {
+                    putNull("PhoneNumber")
+                }
+
+                if (stableId != null) {
+                    put("StableId", stableId)
+                } else {
+                    putNull("StableId")
+                }
+            }
+
+            val rowsAffected = db.update(
+                "Veterinarians",
+                values,
+                "Id = ?",
+                arrayOf(id.toString())
+            )
+
+            return if (rowsAffected > 0) {
+                Log.d("Database", "Ветеринар с ID $id успешно обновлен.")
+                true
+            } else {
+                Log.w("Database", "Ветеринар с ID $id не найден для обновления или данные не изменились.")
+                false
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при обновлении ветеринара с ID $id: ${e.message}", e)
+            return false
+        }
+    }
+
+    fun deleteVeterinarianAndReassignHorses(veterinarianIdToDelete: Int): Boolean {
+        val db = this.writableDatabase
+        db.beginTransaction()
+
+        try {
+            var systemVeterinarianId: Int? = null
+
+            val findOtherSystemVetQuery = """
+            SELECT Id FROM Veterinarians
+            WHERE StableId IS NULL AND Id != ? LIMIT 1
+        """.trimIndent()
+
+            var cursor: Cursor? = null
+            try {
+                cursor = db.rawQuery(findOtherSystemVetQuery, arrayOf(veterinarianIdToDelete.toString()))
+                if (cursor.moveToFirst()) {
+                    val idColumnIndex = cursor.getColumnIndex("Id")
+                    if (idColumnIndex != -1) {
+                        systemVeterinarianId = cursor.getInt(idColumnIndex)
+                        Log.d("DBHelper", "Найден другой системный ветеринар для переназначения: ID $systemVeterinarianId")
+                    } else {
+                        Log.w("DBHelper", "Столбец 'Id' не найден при поиске другого системного ветеринара.")
+                    }
+                } else {
+                    Log.d("DBHelper", "Другой системный ветеринар для переназначения не найден.")
+                }
+            } finally {
+                cursor?.close()
+            }
+
+            val values = ContentValues()
+            if (systemVeterinarianId != null) {
+                values.put("VeterinarianId", systemVeterinarianId)
+                Log.d("DBHelper", "Лошадям будет назначен системный ветеринар ID $systemVeterinarianId.")
+            } else {
+                values.putNull("VeterinarianId")
+                Log.d("DBHelper", "Лошадям будет назначен NULL в качестве ветеринара.")
+            }
+
+            val horsesUpdatedCount = db.update(
+                "horses",
+                values,
+                "VeterinarianId = ?",
+                arrayOf(veterinarianIdToDelete.toString())
+            )
+            Log.d("DBHelper", "Обновлено $horsesUpdatedCount лошадей, ранее привязанных к ветеринару ID $veterinarianIdToDelete.")
+
+            val veterinarianDeletedCount = db.delete(
+                "Veterinarians",
+                "Id = ?",
+                arrayOf(veterinarianIdToDelete.toString())
+            )
+
+            if (veterinarianDeletedCount > 0) {
+                db.setTransactionSuccessful()
+                Log.d("DBHelper", "Ветеринар с ID $veterinarianIdToDelete успешно удален.")
+                return true
+            } else {
+                Log.w("DBHelper", "Ветеринар с ID $veterinarianIdToDelete не найден для удаления.")
+                return false
+            }
+
+        } catch (e: Exception) {
+            Log.e("DBHelper", "Ошибка при удалении ветеринара ID $veterinarianIdToDelete: ${e.message}", e)
+            return false
+        } finally {
+            db.endTransaction()
+        }
+    }
+
+    fun getVeterinarianById(veterinarianId: Int): Veterinarian? {
+        val db = this.readableDatabase
+        var cursor: Cursor? = null
+
+        try {
+            val query = """
+            SELECT Id, FullName, PhoneNumber, StableId
+            FROM Veterinarians
+            WHERE Id = ?
+        """.trimIndent()
+
+            cursor = db.rawQuery(query, arrayOf(veterinarianId.toString()))
+
+            if (cursor.moveToFirst()) {
+                val idColumnIndex = cursor.getColumnIndex("Id")
+                val fullNameColumnIndex = cursor.getColumnIndex("FullName")
+                val phoneNumberColumnIndex = cursor.getColumnIndex("PhoneNumber")
+                val stableIdColumnIndex = cursor.getColumnIndex("StableId")
+
+                if (idColumnIndex == -1 || fullNameColumnIndex == -1 || phoneNumberColumnIndex == -1 || stableIdColumnIndex == -1) {
+                    Log.e("Database", "Один или несколько столбцов (Id, FullName, PhoneNumber, StableId) не найдены в таблице 'Veterinarians'!")
+                    return null
+                }
+
+                val fullName = cursor.getString(fullNameColumnIndex)
+                val phoneNumber = if (cursor.isNull(phoneNumberColumnIndex)) null else cursor.getString(phoneNumberColumnIndex)
+                val stableId = if (cursor.isNull(stableIdColumnIndex)) null else cursor.getInt(stableIdColumnIndex)
+
+                return Veterinarian(fullName, phoneNumber!!, stableId)
+
+            } else {
+                Log.d("Database", "Ветеринар с ID $veterinarianId не найден.")
+                return null
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Ошибка при получении ветеринара ID $veterinarianId: ${e.message}", e)
+            return null
+        } finally {
+            cursor?.close()
+        }
+    }
+
     fun getServices(): List<Service>{
         val db = this.readableDatabase
         val services = mutableListOf<Service>()

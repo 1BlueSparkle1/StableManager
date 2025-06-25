@@ -36,7 +36,7 @@ class ListVeterinarianOwnerFragment : Fragment() {
         val veterinarians = db.getAllVeterinariansInStable(stableManager.getStableId())
         veterinarianList.layoutManager = LinearLayoutManager(requireContext())
         val activity = activity as StartOwnerPageActivity
-        veterinarianList.adapter = VeterinarianAdapter(veterinarians, activity, requireContext())
+        veterinarianList.adapter = VeterinarianAdapter(veterinarians, activity, requireContext(), false)
 
         addVeterinarianBtn.setOnClickListener {
             val activity = activity as? StartOwnerPageActivity

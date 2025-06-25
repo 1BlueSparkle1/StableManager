@@ -52,8 +52,8 @@ class AddVeterinarianOwnerFragment : Fragment() {
 
                 if (activity != null) {
                     activity.replaceFragment(
-                        ListVeterinarianAdminFragment.newInstance(),
-                        ListVeterinarianAdminFragment.TAG
+                        ListVeterinarianOwnerFragment.newInstance(),
+                        ListVeterinarianOwnerFragment.TAG
                     )
                 } else {
                     Log.e("OptionsFragment", "StartOwnerPageActivity не найдена")

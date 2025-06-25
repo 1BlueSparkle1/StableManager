@@ -33,7 +33,7 @@ class ListVeterinarianAdminFragment : Fragment() {
         val veterinarians = db.getAllVeterinarians()
         veterinarianList.layoutManager = LinearLayoutManager(requireContext())
         val activity = activity as StartAdminPageActivity
-        veterinarianList.adapter = VeterinarianAdapter(veterinarians, activity, requireContext())
+        veterinarianList.adapter = VeterinarianAdapter(veterinarians, activity, requireContext(), true)
 
         addVeterinarianBtn.setOnClickListener {
             val activity = activity as? StartAdminPageActivity
